@@ -4,11 +4,13 @@ import { FOOD_CATEGORIES } from './heroCategories';
 interface FoodHeroSectionProps {
   activeCategory: string | null;
   onSelectCategory: (cat: string | null) => void;
+  isMobileView?: boolean;
 }
 
 export const FoodHeroSection: React.FC<FoodHeroSectionProps> = ({
   activeCategory,
   onSelectCategory,
+  isMobileView,
 }) => {
   const [scrollProgress, setScrollProgress] = React.useState(0);
 
@@ -102,7 +104,7 @@ export const FoodHeroSection: React.FC<FoodHeroSectionProps> = ({
       {/* Horizontal Food Category Bar */}
       <div style={{ padding: '4px 0 2px', marginBottom: '0px' }}>
         <div
-          onScroll={handleScroll}
+          onScroll={isMobileView ? handleScroll : undefined}
           className="no-scrollbar"
           style={{
             display: 'flex',
@@ -191,41 +193,43 @@ export const FoodHeroSection: React.FC<FoodHeroSectionProps> = ({
           })}
         </div>
 
-        {/* Scroll Indicator */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingTop: '3px',
-            paddingBottom: '0px'
-          }}
-        >
+        {/* Scroll Indicator (Mobile Only) */}
+        {isMobileView && (
           <div
             style={{
-              width: '34px',
-              height: '3.5px',
-              backgroundColor: 'var(--border-color, #E2E8F0)',
-              borderRadius: '999px',
-              position: 'relative',
-              overflow: 'hidden'
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingTop: '3px',
+              paddingBottom: '0px'
             }}
           >
             <div
               style={{
-                width: '15px',
-                height: '100%',
-                backgroundColor: '#EF4444',
+                width: '34px',
+                height: '3.5px',
+                backgroundColor: 'var(--border-color, #E2E8F0)',
                 borderRadius: '999px',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                transform: `translateX(${scrollProgress * 19}px)`,
-                transition: 'transform 0.08s ease-out'
+                position: 'relative',
+                overflow: 'hidden'
               }}
-            />
+            >
+              <div
+                style={{
+                  width: '15px',
+                  height: '100%',
+                  backgroundColor: '#EF4444',
+                  borderRadius: '999px',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  transform: `translateX(${scrollProgress * 19}px)`,
+                  transition: 'transform 0.08s ease-out'
+                }}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

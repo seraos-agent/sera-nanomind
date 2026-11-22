@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Briefcase, Check, ChevronLeft, Package, RefreshCw, UtensilsCrossed } from "lucide-react";
 import type { ThemeType } from "../../../../theme";
 import type {
@@ -54,6 +55,7 @@ interface ProductModalProps {
   isSaving?: boolean;
   isSuccess?: boolean;
   isMobileView?: boolean;
+  inline?: boolean;
 }
 
 export function ProductModal({
@@ -94,7 +96,8 @@ export function ProductModal({
   onSave,
   isSaving = false,
   isSuccess = false,
-  isMobileView
+  isMobileView,
+  inline = false
 }: ProductModalProps) {
   const [isScannerOpen, setIsScannerOpen] = useState(false);
 
@@ -152,6 +155,238 @@ export function ProductModal({
       : storeType === "JASA"
         ? Briefcase
         : Package;
+
+  const showTwoColumnForm = !inline && !isMobileView;
+
+  const formFields = (
+    <>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14, minWidth: 0 }}>
+        {/* Product Basic Info Card */}
+        <ProductBasicInfo
+          theme={theme}
+          storeType={storeType}
+          store={store}
+          isMobileView={isMobileView}
+          prodName={prodName}
+          setProdName={setProdName}
+          prodCategory={prodCategory}
+          setProdCategory={setProdCategory}
+          prodDescription={prodDescription}
+          setProdDescription={setProdDescription}
+          prodBarcode={prodBarcode}
+          setProdBarcode={setProdBarcode}
+          onOpenScanner={() => setIsScannerOpen(true)}
+        />
+
+        {showTwoColumnForm && (
+          <ProductImagePicker
+            theme={theme}
+            storeType={storeType}
+            prodImages={prodImages}
+            setProdImages={setProdImages}
+          />
+        )}
+      </div>
+
+      {/* Pricing, Stock & Variants Card */}
+      <div
+        style={{
+          background: theme.surface,
+          border: `1px solid ${theme.border}`,
+          borderRadius: 12,
+          padding: 16,
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
+          minWidth: 0
+        }}
+      >
+        <ProductVariantManager
+          theme={theme}
+          storeType={storeType}
+          hasVariants={hasVariants}
+          setHasVariants={setHasVariants}
+          variants={variants}
+          setVariants={setVariants}
+          calculatedFinalPrice={discountResult.calculatedFinalPrice}
+          prodStock={prodStock}
+        />
+
+        <ProductPricingSection
+          theme={theme}
+          storeType={storeType}
+          hasVariants={hasVariants}
+          prodNormalPrice={prodNormalPrice}
+          setProdNormalPrice={setProdNormalPrice}
+          prodCostPrice={prodCostPrice}
+          setProdCostPrice={setProdCostPrice}
+          prodDiscountType={prodDiscountType}
+          setProdDiscountType={setProdDiscountType}
+          prodDiscountValue={prodDiscountValue}
+          setProdDiscountValue={setProdDiscountValue}
+          prodStock={prodStock}
+          setProdStock={setProdStock}
+          prodWeight={prodWeight}
+          setProdWeight={setProdWeight}
+          prodWeightUnit={prodWeightUnit}
+          setProdWeightUnit={setProdWeightUnit}
+          discountResult={discountResult}
+          isMobileView={isMobileView}
+        />
+      </div>
+
+      {!showTwoColumnForm && (
+        <ProductImagePicker
+          theme={theme}
+          storeType={storeType}
+          prodImages={prodImages}
+          setProdImages={setProdImages}
+        />
+      )}
+    </>
+  );
+
+  const actionButtons = (
+    <>
+      <button
+        type="button"
+        onClick={onClose}
+        disabled={isSaving || isSuccess}
+        style={{
+          flex: 1,
+          padding: "11px 16px",
+          borderRadius: 10,
+          background: theme.surface2,
+          color: theme.ink,
+          border: `1px solid ${theme.border}`,
+          fontSize: 13,
+          fontWeight: 600,
+          cursor: isSaving || isSuccess ? "not-allowed" : "pointer",
+          opacity: isSaving || isSuccess ? 0.6 : 1,
+          transition: "all 0.15s ease"
+        }}
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        form="product-form"
+        disabled={isSaving || isSuccess}
+        style={{
+          flex: 2,
+          padding: "11px 18px",
+          borderRadius: 10,
+          background: isSuccess ? theme.ink : isSaving ? theme.surface2 : theme.ink,
+          color: isSuccess ? theme.surface : isSaving ? theme.inkSoft : theme.surface,
+          border: isSaving ? `1px solid ${theme.border}` : `1px solid ${theme.ink}`,
+          fontSize: 13,
+          fontWeight: 700,
+          cursor: isSaving || isSuccess ? "default" : "pointer",
+          boxShadow: "none",
+          transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+          transform: isSuccess ? "scale(1.01)" : "scale(1)"
+        }}
+      >
+        {isSuccess ? (
+          <>
+            <Check size={15} strokeWidth={2.5} />
+            <span>Saved</span>
+          </>
+        ) : isSaving ? (
+          <>
+            <RefreshCw size={14} className="animate-spin" />
+            <span>Saving...</span>
+          </>
+        ) : (
+          <span>
+            {prodImages.length === 0
+              ? "Save as Draft"
+              : editingProduct?.status === "DRAFT"
+                ? "Publish"
+                : "Save"}
+          </span>
+        )}
+      </button>
+    </>
+  );
+
+  const scannerNode = (
+    <BarcodeScannerModal
+      isOpen={isScannerOpen}
+      onClose={() => setIsScannerOpen(false)}
+      onDetected={(code) => {
+        setProdBarcode(code);
+        setIsScannerOpen(false);
+      }}
+      theme={theme}
+      title="Scan Product Barcode"
+    />
+  );
+
+  const scannerPortal =
+    typeof document !== "undefined" ? createPortal(scannerNode, document.body) : scannerNode;
+
+  // Desktop inline left-column editor matching clean Restaurant Info form style
+  if (inline) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+          paddingBottom: 24,
+          width: "100%",
+          boxSizing: "border-box"
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: theme.ink }}>
+            {modalTitle}
+          </div>
+          <div style={{ fontSize: 12.5, color: theme.inkSoft, marginTop: 2 }}>
+            {modalSubtitle}
+          </div>
+        </div>
+
+        <form
+          id="product-form"
+          noValidate
+          onSubmit={onSave}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 14,
+            width: "100%",
+            boxSizing: "border-box"
+          }}
+        >
+          {formFields}
+        </form>
+
+        <div
+          style={{
+            background: theme.surface,
+            border: `1px solid ${theme.border}`,
+            borderRadius: 14,
+            padding: "12px 16px",
+            display: "flex",
+            justifyContent: "flex-end",
+            boxSizing: "border-box"
+          }}
+        >
+          <div style={{ display: "flex", gap: 10, width: "100%", maxWidth: 320 }}>
+            {actionButtons}
+          </div>
+        </div>
+
+        {scannerPortal}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -214,292 +449,136 @@ export function ProductModal({
               }
         }
       >
-      {/* HEADER (Sticky Top) */}
-      <div
-        style={{
-          background: theme.surface,
-          borderBottom: `1px solid ${theme.border}`,
-          padding: isMobileView ? "12px 16px" : "14px 20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          boxSizing: "border-box",
-          flexShrink: 0
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isSaving || isSuccess}
-            title="Back"
-            style={{
-              background: "transparent",
-              border: "none",
-              cursor: isSaving || isSuccess ? "not-allowed" : "pointer",
-              color: theme.inkSoft,
-              padding: 4,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 6,
-              transition: "color 0.15s ease"
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.color = theme.ink;
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.color = theme.inkSoft;
-            }}
-          >
-            <ChevronLeft size={20} />
-          </button>
-          {!isMobileView && (
-            <div
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: 10,
-                background: `${theme.accent}14`,
-                border: `1px solid ${theme.accent}28`,
-                color: theme.accent,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0
-              }}
-            >
-              <StoreHeaderIcon size={17} strokeWidth={2} />
-            </div>
-          )}
-          <div>
-            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: theme.ink }}>
-              {modalTitle}
-            </h3>
-            <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 1 }}>
-              {modalSubtitle}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* SCROLLABLE FORM BODY */}
-      <form
-        id="product-form"
-        noValidate
-        onSubmit={onSave}
-        style={
-          isMobileView
-            ? {
-                flex: 1,
-                overflowY: "auto",
-                padding: "16px 16px 32px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 14,
-                maxWidth: 640,
-                width: "100%",
-                margin: "0 auto",
-                boxSizing: "border-box"
-              }
-            : {
-                flex: 1,
-                overflowY: "auto",
-                padding: "18px 20px 22px",
-                display: "grid",
-                gridTemplateColumns: "minmax(0, 1.08fr) minmax(0, 0.92fr)",
-                gap: 16,
-                alignItems: "start",
-                width: "100%",
-                boxSizing: "border-box"
-              }
-        }
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, minWidth: 0 }}>
-          {/* CARD 1: INFORMASI MENU / PRODUK */}
-          <ProductBasicInfo
-            theme={theme}
-            storeType={storeType}
-            store={store}
-            isMobileView={isMobileView}
-            prodName={prodName}
-            setProdName={setProdName}
-            prodCategory={prodCategory}
-            setProdCategory={setProdCategory}
-            prodDescription={prodDescription}
-            setProdDescription={setProdDescription}
-            prodBarcode={prodBarcode}
-            setProdBarcode={setProdBarcode}
-            onOpenScanner={() => setIsScannerOpen(true)}
-          />
-
-          {!isMobileView && (
-            /* CARD 3 (DESKTOP LEFT COLUMN): FOTO MENU / PRODUK */
-            <ProductImagePicker
-              theme={theme}
-              storeType={storeType}
-              prodImages={prodImages}
-              setProdImages={setProdImages}
-            />
-          )}
-        </div>
-
-        {/* CARD 2: HARGA, STOK & VARIAN */}
+        {/* HEADER (Sticky Top) */}
         <div
           style={{
             background: theme.surface,
-            border: `1px solid ${theme.border}`,
-            borderRadius: 12,
-            padding: 16,
+            borderBottom: `1px solid ${theme.border}`,
+            padding: isMobileView ? "12px 16px" : "14px 20px",
             display: "flex",
-            flexDirection: "column",
-            gap: 14,
-            minWidth: 0
+            alignItems: "center",
+            justifyContent: "space-between",
+            boxSizing: "border-box",
+            flexShrink: 0
           }}
         >
-          <ProductVariantManager
-            theme={theme}
-            storeType={storeType}
-            hasVariants={hasVariants}
-            setHasVariants={setHasVariants}
-            variants={variants}
-            setVariants={setVariants}
-            calculatedFinalPrice={discountResult.calculatedFinalPrice}
-            prodStock={prodStock}
-          />
-
-          <ProductPricingSection
-            theme={theme}
-            storeType={storeType}
-            hasVariants={hasVariants}
-            prodNormalPrice={prodNormalPrice}
-            setProdNormalPrice={setProdNormalPrice}
-            prodCostPrice={prodCostPrice}
-            setProdCostPrice={setProdCostPrice}
-            prodDiscountType={prodDiscountType}
-            setProdDiscountType={setProdDiscountType}
-            prodDiscountValue={prodDiscountValue}
-            setProdDiscountValue={setProdDiscountValue}
-            prodStock={prodStock}
-            setProdStock={setProdStock}
-            prodWeight={prodWeight}
-            setProdWeight={setProdWeight}
-            prodWeightUnit={prodWeightUnit}
-            setProdWeightUnit={setProdWeightUnit}
-            discountResult={discountResult}
-            isMobileView={isMobileView}
-          />
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={isSaving || isSuccess}
+              title="Back"
+              style={{
+                background: "transparent",
+                border: "none",
+                cursor: isSaving || isSuccess ? "not-allowed" : "pointer",
+                color: theme.inkSoft,
+                padding: 4,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 6,
+                transition: "color 0.15s ease"
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.color = theme.ink;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.color = theme.inkSoft;
+              }}
+            >
+              <ChevronLeft size={20} />
+            </button>
+            {!isMobileView && (
+              <div
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 10,
+                  background: `${theme.accent}14`,
+                  border: `1px solid ${theme.accent}28`,
+                  color: theme.accent,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0
+                }}
+              >
+                <StoreHeaderIcon size={17} strokeWidth={2} />
+              </div>
+            )}
+            <div>
+              <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: theme.ink }}>
+                {modalTitle}
+              </h3>
+              <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 1 }}>
+                {modalSubtitle}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {isMobileView && (
-          /* CARD 3 (MOBILE STACK): FOTO MENU / PRODUK */
-          <ProductImagePicker
-            theme={theme}
-            storeType={storeType}
-            prodImages={prodImages}
-            setProdImages={setProdImages}
-          />
-        )}
-      </form>
-
-      {/* STICKY BOTTOM ACTION BAR */}
-      <div
-        style={{
-          background: theme.surface,
-          borderTop: `1px solid ${theme.border}`,
-          padding: isMobileView ? "12px 16px" : "12px 20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: isMobileView ? "center" : "flex-end",
-          boxSizing: "border-box",
-          boxShadow: "0 -4px 16px rgba(0,0,0,0.06)",
-          flexShrink: 0
-        }}
-      >
-        <div
+        {/* SCROLLABLE FORM BODY */}
+        <form
+          id="product-form"
+          noValidate
+          onSubmit={onSave}
           style={
             isMobileView
-              ? { maxWidth: 640, width: "100%", display: "flex", gap: 10 }
-              : { display: "flex", gap: 10, width: "100%", maxWidth: 320 }
+              ? {
+                  flex: 1,
+                  overflowY: "auto",
+                  padding: "16px 16px 32px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 14,
+                  maxWidth: 640,
+                  width: "100%",
+                  margin: "0 auto",
+                  boxSizing: "border-box"
+                }
+              : {
+                  flex: 1,
+                  overflowY: "auto",
+                  padding: "18px 20px 22px",
+                  display: "grid",
+                  gridTemplateColumns: "minmax(0, 1.08fr) minmax(0, 0.92fr)",
+                  gap: 16,
+                  alignItems: "start",
+                  width: "100%",
+                  boxSizing: "border-box"
+                }
           }
         >
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isSaving || isSuccess}
-            style={{
-              flex: 1,
-              padding: "11px 16px",
-              borderRadius: 10,
-              background: theme.surface2,
-              color: theme.ink,
-              border: `1px solid ${theme.border}`,
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: isSaving || isSuccess ? "not-allowed" : "pointer",
-              opacity: isSaving || isSuccess ? 0.6 : 1,
-              transition: "all 0.15s ease"
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            form="product-form"
-            disabled={isSaving || isSuccess}
-            style={{
-              flex: 2,
-              padding: "11px 18px",
-              borderRadius: 10,
-              background: isSuccess ? theme.ink : isSaving ? theme.surface2 : theme.ink,
-              color: isSuccess ? theme.surface : isSaving ? theme.inkSoft : theme.surface,
-              border: isSaving ? `1px solid ${theme.border}` : `1px solid ${theme.ink}`,
-              fontSize: 13,
-              fontWeight: 700,
-              cursor: isSaving || isSuccess ? "default" : "pointer",
-              boxShadow: "none",
-              transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              transform: isSuccess ? "scale(1.01)" : "scale(1)"
-            }}
-          >
-            {isSuccess ? (
-              <>
-                <Check size={15} strokeWidth={2.5} />
-                <span>Saved</span>
-              </>
-            ) : isSaving ? (
-              <>
-                <RefreshCw size={14} className="animate-spin" />
-                <span>Saving...</span>
-              </>
-            ) : (
-              <span>
-                {prodImages.length === 0
-                  ? "Save as Draft"
-                  : editingProduct?.status === "DRAFT"
-                    ? "Publish"
-                    : "Save"}
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
+          {formFields}
+        </form>
 
-      {/* Barcode Scanner Modal */}
-      <BarcodeScannerModal
-        isOpen={isScannerOpen}
-        onClose={() => setIsScannerOpen(false)}
-        onDetected={(code) => {
-          setProdBarcode(code);
-          setIsScannerOpen(false);
-        }}
-        theme={theme}
-        title="Scan Product Barcode"
-      />
+        {/* STICKY BOTTOM ACTION BAR */}
+        <div
+          style={{
+            background: theme.surface,
+            borderTop: `1px solid ${theme.border}`,
+            padding: isMobileView ? "12px 16px" : "12px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: isMobileView ? "center" : "flex-end",
+            boxSizing: "border-box",
+            boxShadow: "0 -4px 16px rgba(0,0,0,0.06)",
+            flexShrink: 0
+          }}
+        >
+          <div
+            style={
+              isMobileView
+                ? { maxWidth: 640, width: "100%", display: "flex", gap: 10 }
+                : { display: "flex", gap: 10, width: "100%", maxWidth: 320 }
+            }
+          >
+            {actionButtons}
+          </div>
+        </div>
+
+        {scannerPortal}
       </div>
     </div>
   );

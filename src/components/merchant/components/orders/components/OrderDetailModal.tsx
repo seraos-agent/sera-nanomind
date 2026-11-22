@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   ArrowLeft,
   MapPin,
@@ -25,6 +26,7 @@ interface OrderDetailModalProps {
   isMobileView?: boolean;
   onUpdateOrderStatus?: (orderId: string, nextStatus: MerchantOrder["status"]) => void;
   onRequestCourier?: (order: MerchantOrder) => void;
+  inline?: boolean;
 }
 
 export function OrderDetailModal({
@@ -35,7 +37,8 @@ export function OrderDetailModal({
   store,
   isMobileView,
   onUpdateOrderStatus,
-  onRequestCourier
+  onRequestCourier,
+  inline = false
 }: OrderDetailModalProps) {
   const [isProofZoomed, setIsProofZoomed] = useState(false);
   const [isActionPending, setIsActionPending] = useState(false);
@@ -64,6 +67,9 @@ export function OrderDetailModal({
   const isPickupOnline = !isOfflinePos && order.shippingMethod === "PICKUP";
   const isFoodStore = store?.type === "FOOD";
   const entity = getStoreEntityLabel(store?.type);
+
+  const cardBg = inline ? theme.surface : theme.surface2;
+  const innerBg = inline ? theme.surface2 : theme.surface;
 
   const getStatusBadge = () => {
     switch (currentStatus) {
@@ -95,6 +101,502 @@ export function OrderDetailModal({
     );
     window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
   };
+
+  const detailSections = (
+    <>
+      {/* 1. ORDER IDENTIFIER & LIVE STATUS PILL */}
+      <div
+        style={{
+          background: cardBg,
+          borderRadius: 14,
+          padding: "12px 16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          border: `1px solid ${theme.border}`
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink, fontFamily: "monospace" }}>
+            {order.id}
+          </div>
+          <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 2 }}>
+            {formatOrderDateTime(order.createdAt)}
+          </div>
+        </div>
+
+        <span
+          style={{
+            padding: "4px 10px",
+            borderRadius: 20,
+            fontSize: 11,
+            fontWeight: 700,
+            background: statusBadge.bg,
+            color: statusBadge.text,
+            border: `1px solid ${statusBadge.border}`
+          }}
+        >
+          {statusBadge.label}
+        </span>
+      </div>
+
+      {/* 2. PAYMENT PROOF / POS STATUS */}
+      <div
+        style={{
+          background: cardBg,
+          borderRadius: 14,
+          border: `1px solid ${theme.border}`,
+          padding: "14px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 12
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+            <ShieldCheck size={16} color={theme.status} />
+            <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
+              {isOfflinePos ? "POS Payment Status" : "Payment Proof"}
+            </span>
+          </div>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              padding: "2px 8px",
+              borderRadius: 6,
+              background: innerBg,
+              border: `1px solid ${theme.border}`,
+              color: theme.ink
+            }}
+          >
+            {order.paymentMethod}
+          </span>
+        </div>
+
+        {isOfflinePos ? (
+          <div
+            style={{
+              padding: "10px 12px",
+              borderRadius: 8,
+              background: innerBg,
+              border: `1px solid ${theme.border}`,
+              fontSize: 12,
+              color: theme.inkSoft,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center"
+            }}
+          >
+            <span>Payment received at POS register</span>
+            <strong style={{ color: "#10B981" }}>PAID</strong>
+          </div>
+        ) : proofUrl ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div
+              onClick={() => setIsProofZoomed(true)}
+              style={{
+                position: "relative",
+                background: "#000000",
+                borderRadius: 10,
+                overflow: "hidden",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: `1px solid ${theme.border}`,
+                maxHeight: 220
+              }}
+            >
+              <img
+                src={proofUrl}
+                alt="Buyer Payment Proof"
+                style={{ width: "100%", maxHeight: 220, objectFit: "contain" }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 8,
+                  right: 8,
+                  background: "rgba(0,0,0,0.75)",
+                  color: "#FFFFFF",
+                  padding: "4px 8px",
+                  borderRadius: 6,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4
+                }}
+              >
+                <Eye size={12} />
+                <span>Zoom</span>
+              </div>
+            </div>
+            <div style={{ fontSize: 11.5, color: theme.inkSoft, lineHeight: 1.4 }}>
+              Receipt/screenshot was attached by the buyer at checkout.
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              padding: "12px",
+              borderRadius: 8,
+              background: innerBg,
+              border: `1px dashed ${theme.border}`,
+              fontSize: 12,
+              color: theme.inkSoft,
+              textAlign: "center"
+            }}
+          >
+            No digital transfer proof uploaded (Cash / Pay on Pickup).
+          </div>
+        )}
+      </div>
+
+      {/* 3. ORDER ITEMS LIST */}
+      <div
+        style={{
+          background: cardBg,
+          borderRadius: 14,
+          border: `1px solid ${theme.border}`,
+          padding: "14px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 10
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+          <ShoppingBag size={16} color={theme.accent} />
+          <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
+            {isFoodStore ? "Ordered Menu Items" : "Ordered Items"}
+          </span>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {parsedItems.map((itemStr, idx) => (
+            <div
+              key={idx}
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 8,
+                background: innerBg,
+                border: `1px solid ${theme.border}`,
+                borderRadius: 10,
+                padding: "10px 12px"
+              }}
+            >
+              <span
+                style={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: "50%",
+                  background: cardBg,
+                  border: `1px solid ${theme.border}`,
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  color: theme.ink,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  marginTop: 1
+                }}
+              >
+                {idx + 1}
+              </span>
+              <div style={{ flex: 1, fontSize: 13, color: theme.ink, fontWeight: 600, lineHeight: 1.4 }}>
+                {itemStr}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {order.customerNote && (
+          <div
+            style={{
+              background: innerBg,
+              border: `1px solid ${theme.border}`,
+              borderRadius: 10,
+              padding: "10px 12px",
+              fontSize: 12,
+              color: theme.ink,
+              display: "flex",
+              gap: 8,
+              lineHeight: 1.45
+            }}
+          >
+            <FileText size={15} color={theme.accent} style={{ flexShrink: 0, marginTop: 2 }} />
+            <div>
+              <strong style={{ color: theme.ink }}>Buyer Special Note:</strong>
+              <div style={{ marginTop: 2, color: theme.inkSoft }}>&ldquo;{order.customerNote}&rdquo;</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 4. BUYER & SHIPPING DETAILS */}
+      <div
+        style={{
+          background: cardBg,
+          borderRadius: 14,
+          border: `1px solid ${theme.border}`,
+          padding: "14px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 12
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+            <MapPin size={16} color={theme.accent} />
+            <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
+              {isOfflinePos
+                ? "Service & Customer"
+                : isPickupOnline
+                  ? `${entity} Pickup & Customer`
+                  : "Shipping & Customer"}
+            </span>
+          </div>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              padding: "2px 8px",
+              borderRadius: 6,
+              background: innerBg,
+              border: `1px solid ${theme.border}`,
+              color: theme.ink,
+              whiteSpace: "nowrap"
+            }}
+          >
+            {isOfflinePos
+              ? order.tableOrQueueNumber
+                ? order.tableOrQueueNumber === "Takeaway"
+                  ? "Takeaway (POS)"
+                  : `Dine-In • ${order.tableOrQueueNumber}`
+                : "POS Transaction"
+              : isPickupOnline
+                ? `${entity} Pickup`
+                : order.shippingMethod === "STORE_DELIVERY"
+                  ? `${entity} Courier`
+                  : order.shippingMethod === "REGULAR"
+                    ? "Standard Shipping"
+                    : "SERA Courier"}
+          </span>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: innerBg,
+            border: `1px solid ${theme.border}`,
+            borderRadius: 10,
+            padding: "10px 12px",
+            flexWrap: "wrap",
+            gap: 8
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
+              {order.customerName}
+            </div>
+            {isOfflinePos ? (
+              <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
+                Cashier: {order.cashierName || "Store Owner"}
+              </div>
+            ) : order.customerPhone && String(order.customerPhone) !== "-" ? (
+              <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
+                {order.customerPhone}
+              </div>
+            ) : null}
+          </div>
+
+          {order.customerPhone && String(order.customerPhone) !== "-" && (
+            <button
+              type="button"
+              onClick={handleWhatsApp}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "6px 12px",
+                borderRadius: 8,
+                background: "#25D366",
+                color: "#FFFFFF",
+                border: "none",
+                fontSize: 11.5,
+                fontWeight: 700,
+                cursor: "pointer"
+              }}
+            >
+              <WhatsAppIcon size={14} color="#FFFFFF" />
+              <span>Chat WhatsApp</span>
+            </button>
+          )}
+        </div>
+
+        {!isOfflinePos && !isPickupOnline && order.shippingAddress && order.shippingAddress !== "-" && (
+          <div
+            style={{
+              background: innerBg,
+              border: `1px solid ${theme.border}`,
+              borderRadius: 10,
+              padding: "10px 12px",
+              fontSize: 12,
+              color: theme.ink,
+              lineHeight: 1.45
+            }}
+          >
+            <div style={{ fontSize: 11, fontWeight: 600, color: theme.inkSoft, marginBottom: 3 }}>
+              Delivery Destination Address:
+            </div>
+            <div>{order.shippingAddress}</div>
+          </div>
+        )}
+      </div>
+
+      {/* 5. FEE BREAKDOWN & PAYMENT TOTAL */}
+      <div
+        style={{
+          background: cardBg,
+          borderRadius: 14,
+          border: `1px solid ${theme.border}`,
+          padding: "14px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 8
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 2 }}>
+          <Receipt size={16} color={theme.accent} />
+          <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
+            Payment Summary
+          </span>
+        </div>
+
+        {isOfflinePos ? (
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
+            <span>Payment Method</span>
+            <span style={{ color: theme.ink, fontWeight: 600 }}>
+              {order.paymentMethod}
+            </span>
+          </div>
+        ) : isPickupOnline ? (
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
+            <span>Fulfillment</span>
+            <span style={{ color: theme.ink, fontWeight: 600 }}>
+              {entity} Pickup (Rp 0)
+            </span>
+          </div>
+        ) : (
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
+            <span>{entity} Shipping Fee</span>
+            <span style={{ color: theme.ink, fontWeight: 600 }}>
+              {order.shippingCost && order.shippingCost > 0
+                ? `Rp ${order.shippingCost.toLocaleString("id-ID")}`
+                : "Free Shipping"}
+            </span>
+          </div>
+        )}
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingTop: 8,
+            marginTop: 4,
+            borderTop: `1px dashed ${theme.border}`,
+            fontSize: 14,
+            fontWeight: 700
+          }}
+        >
+          <span style={{ color: theme.ink }}>Total Amount</span>
+          <span style={{ fontSize: 17, fontWeight: 800, color: theme.accent }}>
+            Rp {(order.totalAmount || 0).toLocaleString("id-ID")}
+          </span>
+        </div>
+      </div>
+    </>
+  );
+
+  const lightboxNode = isProofZoomed && proofUrl ? (
+    <OrderProofLightboxModal
+      proofUrl={proofUrl}
+      orderId={order.id}
+      onClose={() => setIsProofZoomed(false)}
+    />
+  ) : null;
+
+  const lightboxPortal =
+    lightboxNode && typeof document !== "undefined"
+      ? createPortal(lightboxNode, document.body)
+      : lightboxNode;
+
+  // Desktop inline left-column order detail
+  if (inline) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
+          paddingBottom: 24,
+          width: "100%",
+          boxSizing: "border-box"
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 10
+          }}
+        >
+          <div style={{ fontSize: 17, fontWeight: 700, color: theme.ink }}>
+            Order Details
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              padding: "6px 12px",
+              borderRadius: 8,
+              background: theme.surface,
+              border: `1px solid ${theme.border}`,
+              color: theme.inkSoft,
+              fontSize: 12.5,
+              fontWeight: 600,
+              cursor: "pointer"
+            }}
+          >
+            Close
+          </button>
+        </div>
+
+        {detailSections}
+
+        <OrderDetailActionBar
+          order={order}
+          currentStatus={currentStatus}
+          isActionPending={isActionPending}
+          setIsActionPending={setIsActionPending}
+          theme={theme}
+          onClose={onClose}
+          onUpdateOrderStatus={onUpdateOrderStatus}
+          onRequestCourier={onRequestCourier}
+          inline={true}
+        />
+
+        {lightboxPortal}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -183,423 +685,7 @@ export function OrderDetailModal({
             gap: 12
           }}
         >
-          {/* 1. ORDER IDENTIFIER & LIVE STATUS PILL */}
-          <div
-            style={{
-              background: theme.surface2,
-              borderRadius: 12,
-              padding: "11px 14px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              border: `1px solid ${theme.border}`
-            }}
-          >
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink, fontFamily: "monospace" }}>
-                {order.id}
-              </div>
-              <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 2 }}>
-                {formatOrderDateTime(order.createdAt)}
-              </div>
-            </div>
-
-            <span
-              style={{
-                padding: "4px 10px",
-                borderRadius: 20,
-                fontSize: 11,
-                fontWeight: 700,
-                background: statusBadge.bg,
-                color: statusBadge.text,
-                border: `1px solid ${statusBadge.border}`
-              }}
-            >
-              {statusBadge.label}
-            </span>
-          </div>
-
-          {/* 2. SEKSI BUKTI PEMBAYARAN */}
-          <div
-            style={{
-              background: theme.surface2,
-              borderRadius: 14,
-              border: `1px solid ${theme.border}`,
-              padding: "14px 16px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                <ShieldCheck size={16} color={theme.status} />
-                <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                  {isOfflinePos ? "POS Payment Status" : "Payment Proof"}
-                </span>
-              </div>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  padding: "2px 8px",
-                  borderRadius: 6,
-                  background: theme.surface,
-                  border: `1px solid ${theme.border}`,
-                  color: theme.ink
-                }}
-              >
-                {order.paymentMethod}
-              </span>
-            </div>
-
-            {isOfflinePos ? (
-              <div
-                style={{
-                  padding: "10px 12px",
-                  borderRadius: 8,
-                  background: theme.surface,
-                  border: `1px solid ${theme.border}`,
-                  fontSize: 12,
-                  color: theme.inkSoft,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <span>Payment received at POS register</span>
-                <strong style={{ color: "#10B981" }}>PAID</strong>
-              </div>
-            ) : proofUrl ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <div
-                  onClick={() => setIsProofZoomed(true)}
-                  style={{
-                    position: "relative",
-                    background: "#000000",
-                    borderRadius: 10,
-                    overflow: "hidden",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: `1px solid ${theme.border}`,
-                    maxHeight: 220
-                  }}
-                >
-                  <img
-                    src={proofUrl}
-                    alt="Buyer Payment Proof"
-                    style={{ width: "100%", maxHeight: 220, objectFit: "contain" }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 8,
-                      right: 8,
-                      background: "rgba(0,0,0,0.75)",
-                      color: "#FFFFFF",
-                      padding: "4px 8px",
-                      borderRadius: 6,
-                      fontSize: 11,
-                      fontWeight: 600,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 4
-                    }}
-                  >
-                    <Eye size={12} />
-                    <span>Zoom</span>
-                  </div>
-                </div>
-                <div style={{ fontSize: 11.5, color: theme.inkSoft, lineHeight: 1.4 }}>
-                  Receipt/screenshot was attached by the buyer at checkout.
-                </div>
-              </div>
-            ) : (
-              <div
-                style={{
-                  padding: "12px",
-                  borderRadius: 8,
-                  background: theme.surface,
-                  border: `1px dashed ${theme.border}`,
-                  fontSize: 12,
-                  color: theme.inkSoft,
-                  textAlign: "center"
-                }}
-              >
-                No digital transfer proof uploaded (Cash / Pay on Pickup).
-              </div>
-            )}
-          </div>
-
-          {/* 3. ORDER ITEMS LIST */}
-          <div
-            style={{
-              background: theme.surface2,
-              borderRadius: 14,
-              border: `1px solid ${theme.border}`,
-              padding: "14px 16px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 10
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <ShoppingBag size={16} color={theme.accent} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                {isFoodStore ? "Ordered Menu Items" : "Ordered Items"}
-              </span>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {parsedItems.map((itemStr, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 8,
-                    background: theme.surface,
-                    border: `1px solid ${theme.border}`,
-                    borderRadius: 10,
-                    padding: "10px 12px"
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: "50%",
-                      background: theme.surface2,
-                      border: `1px solid ${theme.border}`,
-                      fontSize: 10.5,
-                      fontWeight: 700,
-                      color: theme.ink,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                      marginTop: 1
-                    }}
-                  >
-                    {idx + 1}
-                  </span>
-                  <div style={{ flex: 1, fontSize: 13, color: theme.ink, fontWeight: 600, lineHeight: 1.4 }}>
-                    {itemStr}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {order.customerNote && (
-              <div
-                style={{
-                  background: theme.surface,
-                  border: `1px solid ${theme.border}`,
-                  borderRadius: 10,
-                  padding: "10px 12px",
-                  fontSize: 12,
-                  color: theme.ink,
-                  display: "flex",
-                  gap: 8,
-                  lineHeight: 1.45
-                }}
-              >
-                <FileText size={15} color={theme.accent} style={{ flexShrink: 0, marginTop: 2 }} />
-                <div>
-                  <strong style={{ color: theme.ink }}>Buyer Special Note:</strong>
-                  <div style={{ marginTop: 2, color: theme.inkSoft }}>&ldquo;{order.customerNote}&rdquo;</div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* 4. BUYER & SHIPPING DETAILS */}
-          <div
-            style={{
-              background: theme.surface2,
-              borderRadius: 14,
-              border: `1px solid ${theme.border}`,
-              padding: "14px 16px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                <MapPin size={16} color={theme.accent} />
-                <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                  {isOfflinePos
-                    ? "Service & Customer"
-                    : isPickupOnline
-                      ? `${entity} Pickup & Customer`
-                      : "Shipping & Customer"}
-                </span>
-              </div>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  padding: "2px 8px",
-                  borderRadius: 6,
-                  background: theme.surface,
-                  border: `1px solid ${theme.border}`,
-                  color: theme.ink,
-                  whiteSpace: "nowrap"
-                }}
-              >
-                {isOfflinePos
-                  ? order.tableOrQueueNumber
-                    ? order.tableOrQueueNumber === "Takeaway"
-                      ? "Takeaway (POS)"
-                      : `Dine-In • ${order.tableOrQueueNumber}`
-                    : "POS Transaction"
-                  : isPickupOnline
-                    ? `${entity} Pickup`
-                    : order.shippingMethod === "STORE_DELIVERY"
-                      ? `${entity} Courier`
-                      : order.shippingMethod === "REGULAR"
-                        ? "Standard Shipping"
-                        : "SERA Courier"}
-              </span>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                background: theme.surface,
-                border: `1px solid ${theme.border}`,
-                borderRadius: 10,
-                padding: "10px 12px",
-                flexWrap: "wrap",
-                gap: 8
-              }}
-            >
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                  {order.customerName}
-                </div>
-                {isOfflinePos ? (
-                  <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
-                    Cashier: {order.cashierName || "Store Owner"}
-                  </div>
-                ) : order.customerPhone && String(order.customerPhone) !== "-" ? (
-                  <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
-                    {order.customerPhone}
-                  </div>
-                ) : null}
-              </div>
-
-              {order.customerPhone && String(order.customerPhone) !== "-" && (
-                <button
-                  type="button"
-                  onClick={handleWhatsApp}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "6px 12px",
-                    borderRadius: 8,
-                    background: "#25D366",
-                    color: "#FFFFFF",
-                    border: "none",
-                    fontSize: 11.5,
-                    fontWeight: 700,
-                    cursor: "pointer"
-                  }}
-                >
-                  <WhatsAppIcon size={14} color="#FFFFFF" />
-                  <span>Chat WhatsApp</span>
-                </button>
-              )}
-            </div>
-
-            {!isOfflinePos && !isPickupOnline && order.shippingAddress && order.shippingAddress !== "-" && (
-              <div
-                style={{
-                  background: theme.surface,
-                  border: `1px solid ${theme.border}`,
-                  borderRadius: 10,
-                  padding: "10px 12px",
-                  fontSize: 12,
-                  color: theme.ink,
-                  lineHeight: 1.45
-                }}
-              >
-                <div style={{ fontSize: 11, fontWeight: 600, color: theme.inkSoft, marginBottom: 3 }}>
-                  Delivery Destination Address:
-                </div>
-                <div>{order.shippingAddress}</div>
-              </div>
-            )}
-          </div>
-
-          {/* 5. FEE BREAKDOWN & PAYMENT TOTAL */}
-          <div
-            style={{
-              background: theme.surface2,
-              borderRadius: 14,
-              border: `1px solid ${theme.border}`,
-              padding: "14px 16px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 8
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 2 }}>
-              <Receipt size={16} color={theme.accent} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                Payment Summary
-              </span>
-            </div>
-
-            {isOfflinePos ? (
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
-                <span>Payment Method</span>
-                <span style={{ color: theme.ink, fontWeight: 600 }}>
-                  {order.paymentMethod}
-                </span>
-              </div>
-            ) : isPickupOnline ? (
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
-                <span>Fulfillment</span>
-                <span style={{ color: theme.ink, fontWeight: 600 }}>
-                  {entity} Pickup (Rp 0)
-                </span>
-              </div>
-            ) : (
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
-                <span>{entity} Shipping Fee</span>
-                <span style={{ color: theme.ink, fontWeight: 600 }}>
-                  {order.shippingCost && order.shippingCost > 0
-                    ? `Rp ${order.shippingCost.toLocaleString("id-ID")}`
-                    : "Free Shipping"}
-                </span>
-              </div>
-            )}
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                paddingTop: 8,
-                marginTop: 4,
-                borderTop: `1px dashed ${theme.border}`,
-                fontSize: 14,
-                fontWeight: 700
-              }}
-            >
-              <span style={{ color: theme.ink }}>Total Amount</span>
-              <span style={{ fontSize: 17, fontWeight: 800, color: theme.accent }}>
-                Rp {(order.totalAmount || 0).toLocaleString("id-ID")}
-              </span>
-            </div>
-          </div>
+          {detailSections}
         </div>
 
         <OrderDetailActionBar
@@ -614,13 +700,7 @@ export function OrderDetailModal({
         />
       </div>
 
-      {isProofZoomed && proofUrl && (
-        <OrderProofLightboxModal
-          proofUrl={proofUrl}
-          orderId={order.id}
-          onClose={() => setIsProofZoomed(false)}
-        />
-      )}
+      {lightboxPortal}
     </div>
   );
 }

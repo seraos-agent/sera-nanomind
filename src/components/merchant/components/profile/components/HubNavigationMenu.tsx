@@ -1,13 +1,17 @@
-import React from "react";
-import { Store, MapPin, Clock, QrCode, Truck, Calculator, ChevronRight, CheckCircle2 } from "lucide-react";
+import React, { useState } from "react";
+import { Store, MapPin, Clock, QrCode, Truck, Calculator, ChevronRight, CheckCircle2, LayoutGrid } from "lucide-react";
 import type { ThemeType } from "../../../../../theme";
 import { type StoreType, getStoreEntityLabel } from "../../../types";
+
+export type HubNavigationMode = "hub" | "profile" | "location" | "schedule" | "payments" | "shipping" | "pos";
 
 export interface HubNavigationMenuProps {
   theme: ThemeType;
   storeType?: StoreType;
-  onNavigate: (mode: "profile" | "location" | "schedule" | "payments" | "pos") => void;
+  onNavigate: (mode: HubNavigationMode) => void;
   onOpenShippingModal: () => void;
+  activeMode?: HubNavigationMode;
+  isDesktopSplit?: boolean;
   isRegistered?: boolean;
   completionStatus?: {
     profile: boolean;
@@ -22,13 +26,24 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
   storeType,
   onNavigate,
   onOpenShippingModal,
+  activeMode,
+  isDesktopSplit = false,
   isRegistered = true,
   completionStatus
 }) => {
+  const [hoveredId, setHoveredId] = useState<HubNavigationMode | null>(null);
   const entity = getStoreEntityLabel(storeType);
-  const menuItems = [
+
+  const settingsItems: Array<{
+    id: HubNavigationMode;
+    label: string;
+    icon: typeof Store;
+    onClick: () => void;
+    isComplete: boolean | undefined;
+    isRequired: boolean;
+  }> = [
     {
-      id: "profile" as const,
+      id: "profile",
       label: "Profile & Identity",
       icon: Store,
       onClick: () => onNavigate("profile"),
@@ -36,7 +51,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
       isRequired: true
     },
     {
-      id: "payments" as const,
+      id: "payments",
       label: "Payment Methods",
       icon: QrCode,
       onClick: () => onNavigate("payments"),
@@ -44,7 +59,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
       isRequired: true
     },
     {
-      id: "location" as const,
+      id: "location",
       label: "Address & GPS Location",
       icon: MapPin,
       onClick: () => onNavigate("location"),
@@ -52,7 +67,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
       isRequired: true
     },
     {
-      id: "schedule" as const,
+      id: "schedule",
       label: "Operating Hours",
       icon: Clock,
       onClick: () => onNavigate("schedule"),
@@ -60,15 +75,15 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
       isRequired: true
     },
     {
-      id: "shipping" as const,
+      id: "shipping",
       label: `${entity} Shipping`,
       icon: Truck,
-      onClick: onOpenShippingModal,
+      onClick: isDesktopSplit ? () => onNavigate("shipping") : onOpenShippingModal,
       isComplete: false,
       isRequired: false
     },
     {
-      id: "pos" as const,
+      id: "pos",
       label: "POS & Cashier Settings",
       icon: Calculator,
       onClick: () => onNavigate("pos"),
@@ -76,6 +91,130 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
       isRequired: false
     }
   ];
+
+  const menuItems = isDesktopSplit
+    ? [
+        {
+          id: "hub" as const,
+          label: `${entity} Overview`,
+          icon: LayoutGrid,
+          onClick: () => onNavigate("hub"),
+          isComplete: undefined,
+          isRequired: false
+        },
+        ...settingsItems
+      ]
+    : settingsItems;
+
+  if (isDesktopSplit) {
+    return (
+      <div
+        style={{
+          background: theme.surface,
+          border: `1px solid ${theme.border}`,
+          borderRadius: 18,
+          padding: 12,
+          display: "flex",
+          flexDirection: "column",
+          gap: 4
+        }}
+      >
+        <div
+          style={{
+            padding: "4px 10px 10px",
+            fontSize: 13,
+            fontWeight: 700,
+            color: theme.inkSoft
+          }}
+        >
+          {entity} Settings
+        </div>
+
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeMode === item.id;
+          const isHovered = hoveredId === item.id;
+          const activeBg = theme.isDark ? theme.surface2 : theme.bg;
+
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={item.onClick}
+              aria-current={isActive ? "page" : undefined}
+              onMouseEnter={() => setHoveredId(item.id)}
+              onMouseLeave={() => setHoveredId((prev) => (prev === item.id ? null : prev))}
+              style={{
+                width: "100%",
+                textAlign: "left",
+                background: isActive ? activeBg : isHovered ? theme.surface2 : "transparent",
+                border: `1px solid ${isActive ? theme.border : "transparent"}`,
+                borderRadius: 10,
+                padding: "10px 12px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 10,
+                cursor: "pointer",
+                transition: "background 0.15s ease, color 0.15s ease, border-color 0.15s ease"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+                <div
+                  style={{
+                    color: isActive || isHovered ? theme.ink : theme.inkSoft,
+                    display: "flex",
+                    alignItems: "center",
+                    flexShrink: 0,
+                    transition: "color 0.15s ease"
+                  }}
+                >
+                  <Icon size={17} />
+                </div>
+                <div
+                  style={{
+                    fontSize: 13.5,
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive || isHovered ? theme.ink : theme.inkSoft,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    transition: "color 0.15s ease"
+                  }}
+                >
+                  {item.label}
+                </div>
+              </div>
+
+              {!isRegistered && item.isRequired && (
+                item.isComplete ? (
+                  <span
+                    title="Complete"
+                    style={{ display: "inline-flex", alignItems: "center", color: "#10B981", flexShrink: 0 }}
+                  >
+                    <CheckCircle2 size={16} />
+                  </span>
+                ) : (
+                  <span
+                    title="Required"
+                    style={{
+                      fontSize: 15,
+                      fontWeight: 700,
+                      color: "#EF4444",
+                      lineHeight: 1,
+                      flexShrink: 0
+                    }}
+                  >
+                    *
+                  </span>
+                )
+              )}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -91,36 +230,48 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
       {menuItems.map((item, idx) => {
         const Icon = item.icon;
         const isLast = idx === menuItems.length - 1;
+        const isHovered = hoveredId === item.id;
 
         return (
-          <div
+          <button
             key={item.id}
+            type="button"
             onClick={item.onClick}
+            onMouseEnter={() => setHoveredId(item.id)}
+            onMouseLeave={() => setHoveredId((prev) => (prev === item.id ? null : prev))}
             style={{
+              width: "100%",
+              textAlign: "left",
+              background: isHovered ? theme.surface2 : "transparent",
+              border: "none",
               padding: "16px 20px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
+              gap: 10,
               cursor: "pointer",
               transition: "background 0.15s ease",
               borderBottom: isLast ? "none" : `1px solid ${theme.border}`
             }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = theme.surface2;
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "transparent";
-            }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <div style={{ color: theme.ink, display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, minWidth: 0 }}>
+              <div style={{ color: theme.ink, display: "flex", alignItems: "center", flexShrink: 0 }}>
                 <Icon size={22} />
               </div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>
+              <div
+                style={{
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: theme.ink,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }}
+              >
                 {item.label}
               </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
               {!isRegistered && item.isRequired && (
                 item.isComplete ? (
                   <span
@@ -159,10 +310,9 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
               )}
               <ChevronRight size={18} color={theme.inkSoft} />
             </div>
-          </div>
+          </button>
         );
       })}
     </div>
   );
 };
-

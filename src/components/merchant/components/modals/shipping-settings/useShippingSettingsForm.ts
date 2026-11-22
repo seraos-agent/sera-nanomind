@@ -7,6 +7,8 @@ interface UseShippingSettingsFormParams {
   onClose: () => void;
   shippingConfig?: StoreShippingConfig;
   onSave: (config: StoreShippingConfig) => void;
+  closeOnSave?: boolean;
+  skipBackHandler?: boolean;
 }
 
 export function useShippingSettingsForm({
@@ -14,6 +16,8 @@ export function useShippingSettingsForm({
   onClose,
   shippingConfig,
   onSave,
+  closeOnSave = true,
+  skipBackHandler = false,
 }: UseShippingSettingsFormParams) {
   const [storeDelivery, setStoreDelivery] = useState(shippingConfig?.storeDelivery ?? true);
   const [storeDeliveryPricingType, setStoreDeliveryPricingType] = useState<'FLAT' | 'PER_KM'>(
@@ -41,12 +45,12 @@ export function useShippingSettingsForm({
 
   // Register sequential back handler for shipping settings modal
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || skipBackHandler) return;
     return registerBackHandler('shipping_settings_modal', 80, () => {
       onClose();
       return true;
     });
-  }, [isOpen, onClose]);
+  }, [isOpen, skipBackHandler, onClose]);
 
   useEffect(() => {
     if (isOpen && shippingConfig) {
@@ -70,9 +74,11 @@ export function useShippingSettingsForm({
         shippingConfig.pickupInstructions ??
           'Please show the buyer name or order number to the cashier when picking up your order.'
       );
-      setIsSaved(false);
+      if (closeOnSave) {
+        setIsSaved(false);
+      }
     }
-  }, [isOpen, shippingConfig]);
+  }, [isOpen, shippingConfig, closeOnSave]);
 
   const atLeastOneActive = storeDelivery || selfPickup || regularCourier;
 
@@ -91,9 +97,15 @@ export function useShippingSettingsForm({
       pickupInstructions: pickupInstructions.trim(),
     });
     setIsSaved(true);
-    setTimeout(() => {
-      onClose();
-    }, 400);
+    if (closeOnSave) {
+      setTimeout(() => {
+        onClose();
+      }, 400);
+    } else {
+      setTimeout(() => {
+        setIsSaved(false);
+      }, 1800);
+    }
   };
 
   return {

@@ -7,6 +7,7 @@ interface ShippingFooterBarProps {
   isSaved: boolean;
   onClose: () => void;
   onSave: () => void;
+  inline?: boolean;
 }
 
 export function ShippingFooterBar({
@@ -15,24 +16,37 @@ export function ShippingFooterBar({
   isSaved,
   onClose,
   onSave,
+  inline = false,
 }: ShippingFooterBarProps) {
   return (
     <div
-      style={{
-        flexShrink: 0,
-        background: theme.surface,
-        borderTop: `1px solid ${theme.border}`,
-        padding: '12px 16px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 10,
-        boxShadow: '0 -4px 16px rgba(0,0,0,0.06)',
-      }}
+      style={
+        inline
+          ? {
+              background: theme.surface,
+              border: `1px solid ${theme.border}`,
+              borderRadius: 16,
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }
+          : {
+              flexShrink: 0,
+              background: theme.surface,
+              borderTop: `1px solid ${theme.border}`,
+              padding: '12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
+              boxShadow: '0 -4px 16px rgba(0,0,0,0.06)',
+            }
+      }
     >
       <div
         style={{
-          maxWidth: 600,
+          maxWidth: inline ? '100%' : 600,
           width: '100%',
           display: 'flex',
           alignItems: 'center',

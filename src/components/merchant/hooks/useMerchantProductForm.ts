@@ -104,7 +104,7 @@ export function useMerchantProductForm({
     setProdCostPrice(
       p.costPrice !== undefined && p.costPrice > 0 ? p.costPrice.toString() : ""
     );
-    setProdStock(p.stock ? p.stock.toString() : p.duration || "60 Menit");
+    setProdStock(p.stock ? p.stock.toString() : p.duration || "60 Mins");
     setProdWeight(p.weight !== undefined && p.weight !== null ? String(p.weight) : (p.type === "SERVICE" ? "" : "1000"));
     setProdWeightUnit(p.weightUnit === "ml" ? "ml" : "g");
     setProdBarcode(p.barcode || "");

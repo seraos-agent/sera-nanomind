@@ -56,7 +56,7 @@ function parseMarketplaceTabParam(): MarketplaceFilterTab | null {
 
 export function MarketplacePage({
   theme,
-  isMobileView: _isMobileView,
+  isMobileView,
   userEmail: _userEmail,
   onBack,
   onNavigateToMerchant,
@@ -515,6 +515,7 @@ export function MarketplacePage({
         selectedType={selectedType}
         onTypeChange={handleTypeChange}
         cartCount={totalCartCount}
+        isMobileView={isMobileView}
         onOpenCart={() => {
           setCartDrawerTab('CART');
           setIsCartOpen(true);
@@ -579,6 +580,7 @@ export function MarketplacePage({
             <MarketplaceTabBody
               type={tabKey}
               selectedType={selectedType}
+              isMobileView={isMobileView}
               activeCategory={activeCategoryByTab[tabKey]}
               onSelectCategory={categoryHandlersByTab[tabKey]}
               onShowToast={showToast}

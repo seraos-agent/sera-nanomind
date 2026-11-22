@@ -118,7 +118,7 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
                   fontWeight: newCategoryName.length >= 80 ? 600 : 400
                 }}
               >
-                {newCategoryName.length}/80 karakter
+                {newCategoryName.length}/80 characters
               </span>
             </div>
           </div>

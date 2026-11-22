@@ -83,6 +83,7 @@ export function InfiniteScrollSentinel({ onVisible, enabled = true }: { onVisibl
 interface MarketplaceTabBodyProps {
   type: MarketplaceFilterTab;
   selectedType: MarketplaceFilterTab;
+  isMobileView?: boolean;
   activeCategory: string | null;
   onSelectCategory: (cat: string | null) => void;
   onShowToast: (msg: string) => void;
@@ -108,6 +109,7 @@ interface MarketplaceTabBodyProps {
 export const MarketplaceTabBody = React.memo(function MarketplaceTabBody({
   type,
   selectedType,
+  isMobileView,
   activeCategory,
   onSelectCategory,
   onShowToast,
@@ -138,6 +140,7 @@ export const MarketplaceTabBody = React.memo(function MarketplaceTabBody({
         activeCategory={activeCategory}
         onSelectCategory={onSelectCategory}
         onShowToast={onShowToast}
+        isMobileView={isMobileView}
       />
 
       <main

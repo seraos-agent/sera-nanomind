@@ -142,7 +142,7 @@ export function MerchantHeader({
     );
   };
 
-  // Desktop single-row header: Back (left), centered nav tabs, Open/Closed status (right)
+  // Desktop single-row header: Back + left-aligned nav tabs, Open/Closed status (right)
   if (!isMobileView) {
     return (
       <div style={{
@@ -153,18 +153,19 @@ export function MerchantHeader({
         zIndex: 10,
         display: "flex",
         alignItems: "center",
-        gap: 12,
+        justifyContent: "space-between",
+        gap: 16,
         padding: "10px 18px",
         width: "100%",
         boxSizing: "border-box",
         flexShrink: 0
       }}>
         <div style={{
-          flex: "1 1 0",
-          minWidth: "fit-content",
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-start"
+          gap: 12,
+          minWidth: 0,
+          flex: 1
         }}>
           <button
             type="button"
@@ -190,86 +191,82 @@ export function MerchantHeader({
           >
             <CloseIcon size={20} />
           </button>
-        </div>
 
-        <nav
-          aria-label="Merchant navigation"
-          className="no-scrollbar"
-          style={{
-            flex: "0 1 auto",
-            minWidth: 0,
-            maxWidth: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            overflowX: "auto",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none"
-          }}
-        >
-          {navItems.map(({ id, label, Icon, onClick, badgeCount }) => {
-            const isActive = currentView === id;
-            const isHovered = hoveredNav === id;
-            const activeBg = theme.isDark ? theme.surface2 : theme.bg;
-            const hoverBg = theme.isDark ? theme.surface2 : theme.surface2;
+          <nav
+            aria-label="Merchant navigation"
+            className="no-scrollbar"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              minWidth: 0,
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none"
+            }}
+          >
+            {navItems.map(({ id, label, Icon, onClick, badgeCount }) => {
+              const isActive = currentView === id;
+              const isHovered = hoveredNav === id;
+              const activeBg = theme.isDark ? theme.surface2 : theme.bg;
+              const hoverBg = theme.surface2;
 
-            return (
-              <button
-                key={id}
-                type="button"
-                onClick={onClick}
-                aria-current={isActive ? "page" : undefined}
-                onMouseEnter={() => setHoveredNav(id)}
-                onMouseLeave={() => setHoveredNav(prev => (prev === id ? null : prev))}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 7,
-                  padding: "7px 14px",
-                  borderRadius: 10,
-                  background: isActive ? activeBg : isHovered ? hoverBg : "transparent",
-                  border: `1px solid ${isActive ? theme.border : "transparent"}`,
-                  color: isActive || isHovered ? theme.ink : theme.inkSoft,
-                  fontSize: 13,
-                  fontWeight: isActive ? 600 : 500,
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
-                  cursor: "pointer",
-                  transition: "all 0.15s ease"
-                }}
-              >
-                <Icon size={15} style={{ flexShrink: 0 }} />
-                <span>{label}</span>
-                {typeof badgeCount === "number" && badgeCount > 0 && (
-                  <span style={{
-                    minWidth: 18,
-                    height: 18,
-                    borderRadius: 9,
-                    background: "#EF4444",
-                    color: "#FFFFFF",
-                    fontSize: 10,
-                    fontWeight: 700,
-                    padding: "0 5px",
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={onClick}
+                  aria-current={isActive ? "page" : undefined}
+                  onMouseEnter={() => setHoveredNav(id)}
+                  onMouseLeave={() => setHoveredNav(prev => (prev === id ? null : prev))}
+                  style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    lineHeight: 1,
-                    boxSizing: "border-box"
-                  }}>
-                    {badgeCount}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
+                    gap: 7,
+                    padding: "7px 14px",
+                    borderRadius: 10,
+                    background: isActive ? activeBg : isHovered ? hoverBg : "transparent",
+                    border: `1px solid ${isActive ? theme.border : "transparent"}`,
+                    color: isActive || isHovered ? theme.ink : theme.inkSoft,
+                    fontSize: 13,
+                    fontWeight: isActive ? 600 : 500,
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                    cursor: "pointer",
+                    transition: "all 0.15s ease"
+                  }}
+                >
+                  <Icon size={15} style={{ flexShrink: 0 }} />
+                  <span>{label}</span>
+                  {typeof badgeCount === "number" && badgeCount > 0 && (
+                    <span style={{
+                      minWidth: 18,
+                      height: 18,
+                      borderRadius: 9,
+                      background: "#EF4444",
+                      color: "#FFFFFF",
+                      fontSize: 10,
+                      fontWeight: 700,
+                      padding: "0 5px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      lineHeight: 1,
+                      boxSizing: "border-box"
+                    }}>
+                      {badgeCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
 
         <div style={{
-          flex: "1 1 0",
-          minWidth: "fit-content",
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-end"
+          flexShrink: 0
         }}>
           {renderStatusPill()}
         </div>

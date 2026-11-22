@@ -12,6 +12,7 @@ interface HeroBannerProps {
   activeCategory: string | null;
   onSelectCategory: (cat: string | null) => void;
   onShowToast?: (msg: string) => void;
+  isMobileView?: boolean;
 }
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({
@@ -19,6 +20,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   activeCategory,
   onSelectCategory,
   onShowToast,
+  isMobileView,
 }) => {
   const [localToast, setLocalToast] = React.useState<string | null>(null);
 
@@ -70,13 +72,13 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
     <section style={{ padding: '12px 0 2px' }}>
       <div className="container">
         {isFoodMode ? (
-          <FoodHeroSection activeCategory={activeCategory} onSelectCategory={onSelectCategory} />
+          <FoodHeroSection activeCategory={activeCategory} onSelectCategory={onSelectCategory} isMobileView={isMobileView} />
         ) : isServiceMode ? (
           /* Service Dedicated 2-Row Swipeable Ribbon */
           <div style={{ padding: '4px 0 6px', marginBottom: '4px' }}>
             <div
               ref={serviceScrollRef}
-              onScroll={handleServiceScroll}
+              onScroll={isMobileView ? handleServiceScroll : undefined}
               className="service-category-swipe-grid"
             >
               {SERVICE_CATEGORIES.map((cat) => {
@@ -156,35 +158,37 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               })}
             </div>
 
-            {/* Smooth Red Scroll Indicator */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '6px' }}>
-              <div
-                style={{
-                  width: '38px',
-                  height: '3.5px',
-                  backgroundColor: 'var(--border-color, #E2E8F0)',
-                  borderRadius: '999px',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
+            {/* Smooth Red Scroll Indicator (Mobile Only) */}
+            {isMobileView && (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '6px' }}>
                 <div
-                  ref={serviceRedBarRef}
                   style={{
-                    width: '16px',
-                    height: '100%',
-                    backgroundColor: '#EF4444',
+                    width: '38px',
+                    height: '3.5px',
+                    backgroundColor: 'var(--border-color, #E2E8F0)',
                     borderRadius: '999px',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    transform: 'translate3d(0, 0, 0)',
-                    willChange: 'transform',
-                    transition: 'none'
+                    position: 'relative',
+                    overflow: 'hidden'
                   }}
-                />
+                >
+                  <div
+                    ref={serviceRedBarRef}
+                    style={{
+                      width: '16px',
+                      height: '100%',
+                      backgroundColor: '#EF4444',
+                      borderRadius: '999px',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      transform: 'translate3d(0, 0, 0)',
+                      willChange: 'transform',
+                      transition: 'none'
+                    }}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         ) : (
           /* Default Category Menu Grid */

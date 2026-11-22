@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { CheckCircle2 } from "lucide-react";
 import type { ThemeType } from "../../../theme";
 import {
+  DEFAULT_SHIPPING_CONFIG,
+  formatScheduleString,
+  getStoreEntityLabel,
   type StoreType,
   type StoreShippingConfig,
-  type MerchantStore,
-  getStoreEntityLabel
+  type MerchantStore
 } from "../types";
+import { formatStorePinLocation } from "../../marketplace/utils/formatters";
 import { MerchantPaymentsView } from "./MerchantPaymentsView";
 import { StoreLocationPickerModal } from "./modals/StoreLocationPickerModal";
 import { ShippingSettingsModal } from "./modals/ShippingSettingsModal";
@@ -14,8 +17,8 @@ import { registerBackHandler } from "../../../utils/backButton";
 
 // Modular Profile Components
 import { SubPageLayout } from "./profile/components/SubPageLayout";
-import { StoreSummaryCard } from "./profile/components/StoreSummaryCard";
-import { HubNavigationMenu } from "./profile/components/HubNavigationMenu";
+import { StoreSummaryCard, type StoreOverviewRow } from "./profile/components/StoreSummaryCard";
+import { HubNavigationMenu, type HubNavigationMode } from "./profile/components/HubNavigationMenu";
 import { ProfileSubpageForm } from "./profile/components/ProfileSubpageForm";
 import { LocationSubpageForm } from "./profile/components/LocationSubpageForm";
 import { ScheduleSubpageForm } from "./profile/components/ScheduleSubpageForm";
@@ -24,7 +27,7 @@ import { DevResetStoreBanner } from "./profile/components/DevResetStoreBanner";
 import { ResetStoreConfirmModal } from "./profile/components/ResetStoreConfirmModal";
 import { PosSettingsSubpageForm } from "./profile/components/PosSettingsSubpageForm";
 
-export type InfoTokoViewMode = "hub" | "profile" | "location" | "schedule" | "payments" | "pos";
+export type InfoTokoViewMode = HubNavigationMode;
 
 interface MerchantProfileViewProps {
   theme: ThemeType;
@@ -223,7 +226,9 @@ export function MerchantProfileView({
     e.preventDefault();
     onSaveProfile(e);
     triggerFeedback(msg);
-    setViewMode("hub");
+    if (isMobileView) {
+      setViewMode("hub");
+    }
   };
 
   const handleSavePaymentsSubForm = (e: React.FormEvent) => {
@@ -234,19 +239,431 @@ export function MerchantProfileView({
       onSaveProfile(e);
     }
     triggerFeedback("Payment methods saved!");
-    setViewMode("hub");
+    if (isMobileView) {
+      setViewMode("hub");
+    }
   };
 
+  const entity = getStoreEntityLabel(editType);
+  const sectionTitles: Record<Exclude<InfoTokoViewMode, "hub">, string> = {
+    profile: "Profile & Identity",
+    payments: "Payment Methods",
+    location: "Address & GPS Location",
+    schedule: "Operating Hours",
+    shipping: `${entity} Shipping`,
+    pos: "POS & Cashier Settings"
+  };
+
+  const buildDesktopOverviewRows = (): StoreOverviewRow[] => {
+    const locationSummary =
+      editAddress.trim() ||
+      formatStorePinLocation({
+        city: editCity,
+        district: editDistrict,
+        village: editVillage,
+        address: editAddress,
+        fallback: "Address not set"
+      });
+    const scheduleSummary = formatScheduleString(
+      editOpenDays,
+      editOpenTime,
+      editCloseTime,
+      editIs24Hours,
+      editDailyCustomHours
+    );
+
+    const paymentParts: string[] = [];
+    if (editDanaPhone.trim()) paymentParts.push(`${editBankName || "Bank"} Transfer`);
+    if (editQrisImageUrl.trim()) paymentParts.push("QRIS");
+    if (editAcceptCod) paymentParts.push("COD");
+
+    const effectiveShipping = shippingConfig ?? DEFAULT_SHIPPING_CONFIG;
+    const shippingParts: string[] = [];
+    if (effectiveShipping.storeDelivery ?? true) shippingParts.push("Store Delivery");
+    if (effectiveShipping.selfPickup ?? true) shippingParts.push("Self Pickup");
+    if (effectiveShipping.regularCourier) shippingParts.push("Regular Courier");
+
+    return [
+      {
+        id: "location",
+        label: "Address",
+        value: locationSummary,
+        badge:
+          editLatitude !== undefined && editLongitude !== undefined
+            ? "GPS Pinned"
+            : undefined,
+        onClick: () => setViewMode("location")
+      },
+      {
+        id: "schedule",
+        label: "Operating Hours",
+        value: scheduleSummary,
+        onClick: () => setViewMode("schedule")
+      },
+      {
+        id: "whatsapp",
+        label: "WhatsApp",
+        value: editWhatsapp.trim() || "Not set",
+        badge: isWhatsappVerified ? "Verified" : undefined,
+        onClick: () => setViewMode("profile")
+      },
+      {
+        id: "payments",
+        label: "Payments",
+        value: paymentParts.length > 0 ? paymentParts.join(", ") : "Not configured",
+        onClick: () => setViewMode("payments")
+      },
+      {
+        id: "shipping",
+        label: "Shipping",
+        value: shippingParts.length > 0 ? shippingParts.join(", ") : "Disabled",
+        onClick: () => setViewMode("shipping")
+      }
+    ];
+  };
+
+  const renderSectionContent = (mode: Exclude<InfoTokoViewMode, "hub">) => {
+    switch (mode) {
+      case "profile":
+        return (
+          <ProfileSubpageForm
+            theme={theme}
+            isMobileView={isMobileView}
+            editBannerUrl={editBannerUrl}
+            setEditBannerUrl={setEditBannerUrl}
+            editLogoUrl={editLogoUrl}
+            setEditLogoUrl={setEditLogoUrl}
+            editName={editName}
+            setEditName={setEditName}
+            editType={editType}
+            setEditType={setEditType}
+            editCategory={editCategory}
+            setEditCategory={setEditCategory}
+            editWhatsapp={editWhatsapp}
+            setEditWhatsapp={setEditWhatsapp}
+            isWhatsappVerified={isWhatsappVerified}
+            onOpenWaModal={() => onVerifyWhatsapp?.(editWhatsapp)}
+            editDescription={editDescription}
+            setEditDescription={setEditDescription}
+            onSubmit={(e) => handleSaveSubForm(e, `${entity} profile saved!`)}
+            onResetStore={
+              isLocalTestingEnv && isRegistered && onResetStore
+                ? () => setIsResetModalOpen(true)
+                : undefined
+            }
+          />
+        );
+      case "location":
+        return (
+          <LocationSubpageForm
+            theme={theme}
+            editWhatsapp={editWhatsapp}
+            setEditWhatsapp={setEditWhatsapp}
+            isWhatsappVerified={isWhatsappVerified}
+            onOpenWaModal={() => onVerifyWhatsapp?.(editWhatsapp)}
+            editLatitude={editLatitude}
+            editLongitude={editLongitude}
+            onOpenLocationModal={() => setIsLocationModalOpen(true)}
+            editAddress={editAddress}
+            setEditAddress={setEditAddress}
+            editCity={editCity}
+            setEditCity={setEditCity}
+            editDistrict={editDistrict}
+            setEditDistrict={setEditDistrict}
+            editVillage={editVillage}
+            setEditVillage={setEditVillage}
+            onSubmit={(e) => handleSaveSubForm(e, "Address & location saved!")}
+          />
+        );
+      case "schedule":
+        return (
+          <ScheduleSubpageForm
+            theme={theme}
+            isMobileView={isMobileView}
+            storeType={editType}
+            editOpenDays={editOpenDays}
+            setEditOpenDays={setEditOpenDays}
+            editIs24Hours={editIs24Hours}
+            setEditIs24Hours={setEditIs24Hours}
+            editOpenTime={editOpenTime}
+            setEditOpenTime={setEditOpenTime}
+            editCloseTime={editCloseTime}
+            setEditCloseTime={setEditCloseTime}
+            editDailyCustomHours={editDailyCustomHours}
+            setEditDailyCustomHours={setEditDailyCustomHours}
+            onSubmit={(e) => handleSaveSubForm(e, "Operating hours saved!")}
+          />
+        );
+      case "payments":
+        return (
+          <MerchantPaymentsView
+            theme={theme}
+            isMobileView={isMobileView}
+            storeType={editType}
+            editBankName={editBankName}
+            setEditBankName={setEditBankName}
+            editDanaPhone={editDanaPhone}
+            setEditDanaPhone={setEditDanaPhone}
+            editDanaName={editDanaName}
+            setEditDanaName={setEditDanaName}
+            editQrisImageUrl={editQrisImageUrl}
+            setEditQrisImageUrl={setEditQrisImageUrl}
+            editAcceptCod={editAcceptCod}
+            setEditAcceptCod={setEditAcceptCod}
+            handleQrisUpload={handleQrisUpload}
+            referralCopied={referralCopied}
+            handleCopyReferralCode={handleCopyReferralCode}
+            onSavePayments={handleSavePaymentsSubForm}
+            embedded={!isMobileView}
+          />
+        );
+      case "shipping":
+        return (
+          <ShippingSettingsModal
+            isOpen={true}
+            inline={!isMobileView}
+            onClose={() => setViewMode("hub")}
+            theme={theme}
+            isMobileView={isMobileView}
+            shippingConfig={shippingConfig}
+            store={store}
+            onRefreshStore={onRefreshStore}
+            onSave={async (newConfig) => {
+              onUpdateShippingConfig?.(newConfig);
+              triggerFeedback("Shipping settings saved!");
+              if (isMobileView) {
+                setViewMode("hub");
+              }
+              if (onRefreshStore) await onRefreshStore();
+            }}
+          />
+        );
+      case "pos":
+        return (
+          <PosSettingsSubpageForm
+            theme={theme}
+            store={store}
+            onFeedback={triggerFeedback}
+          />
+        );
+    }
+  };
+
+  const renderSharedModals = () => (
+    <>
+      {isLocationModalOpen && (
+        <StoreLocationPickerModal
+          isOpen={isLocationModalOpen}
+          onClose={() => setIsLocationModalOpen(false)}
+          theme={theme}
+          isMobileView={isMobileView}
+          initialLat={editLatitude}
+          initialLng={editLongitude}
+          initialAddress={editAddress}
+          storeName={editName}
+          onConfirmLocation={(result) => {
+            setEditLatitude?.(result.lat);
+            setEditLongitude?.(result.lng);
+            if (result.fullAddress) {
+              setEditAddress(result.fullAddress);
+            }
+            if (result.city) {
+              setEditCity(result.city);
+            }
+            if (result.district) {
+              setEditDistrict?.(result.district);
+            }
+            if (result.village) {
+              setEditVillage?.(result.village);
+            }
+            setIsLocationModalOpen(false);
+          }}
+        />
+      )}
+
+      {isMobileView && isShippingModalOpen && (
+        <ShippingSettingsModal
+          isOpen={isShippingModalOpen}
+          onClose={() => setIsShippingModalOpen(false)}
+          theme={theme}
+          isMobileView={isMobileView}
+          shippingConfig={shippingConfig}
+          store={store}
+          onRefreshStore={onRefreshStore}
+          onSave={async (newConfig) => {
+            onUpdateShippingConfig?.(newConfig);
+            setIsShippingModalOpen(false);
+            if (onRefreshStore) await onRefreshStore();
+          }}
+        />
+      )}
+
+      <ResetStoreConfirmModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        storeName={editName}
+        onResetStore={onResetStore}
+        theme={theme}
+      />
+    </>
+  );
+
+  // Desktop 2-column split workspace matching clean POS proportions
+  if (!isMobileView) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          flexDirection: "row",
+          gap: 16,
+          padding: "18px 22px",
+          width: "100%",
+          minHeight: 0,
+          overflow: "hidden",
+          alignItems: "stretch",
+          boxSizing: "border-box"
+        }}
+      >
+        {/* Left Column: Borderless Scrollable Content directly on theme.bg */}
+        <div
+          className="store-info-scroll"
+          style={{
+            flex: 1,
+            minWidth: 0,
+            minHeight: 0,
+            overflowY: "auto",
+            overflowX: "hidden",
+            paddingRight: 4
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 16,
+              paddingBottom: 24
+            }}
+          >
+            {statusFeedback && (
+              <div
+                style={{
+                  padding: "11px 15px",
+                  borderRadius: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 9,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  background: theme.statusSoft,
+                  color: theme.status,
+                  border: `1px solid ${theme.status}`
+                }}
+              >
+                <CheckCircle2 size={16} />
+                <span style={{ flex: 1 }}>{statusFeedback.text}</span>
+              </div>
+            )}
+
+            {viewMode === "hub" ? (
+              <>
+                <StoreSummaryCard
+                  theme={theme}
+                  isMobileView={false}
+                  isDesktopHero={true}
+                  storeType={editType}
+                  editBannerUrl={editBannerUrl}
+                  editLogoUrl={editLogoUrl}
+                  editName={editName}
+                  editCategory={editCategory}
+                  editDescription={editDescription}
+                  editCity={editCity}
+                  editDistrict={editDistrict}
+                  editVillage={editVillage}
+                  editAddress={editAddress}
+                  overviewRows={buildDesktopOverviewRows()}
+                />
+
+                {isLocalTestingEnv && isRegistered && onResetStore && (
+                  <DevResetStoreBanner
+                    theme={theme}
+                    onOpenResetModal={() => setIsResetModalOpen(true)}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                <div
+                  style={{
+                    fontSize: 17,
+                    fontWeight: 700,
+                    color: theme.ink,
+                    paddingBottom: 2
+                  }}
+                >
+                  {sectionTitles[viewMode]}
+                </div>
+                {renderSectionContent(viewMode)}
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column: Stationary Store Settings Menu */}
+        <div
+          style={{
+            width: "clamp(210px, 26vw, 320px)",
+            flexShrink: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: 14,
+            minHeight: 0,
+            overflowY: "auto"
+          }}
+        >
+          <HubNavigationMenu
+            theme={theme}
+            storeType={editType}
+            activeMode={viewMode}
+            isDesktopSplit={true}
+            onNavigate={setViewMode}
+            onOpenShippingModal={() => setViewMode("shipping")}
+            isRegistered={isRegistered}
+            completionStatus={{
+              profile: isProfileComplete,
+              location: isLocationComplete,
+              schedule: isScheduleComplete,
+              payments: isPaymentsComplete
+            }}
+          />
+
+          {!isRegistered && (
+            <StoreOnboardingRegistrationCard
+              theme={theme}
+              isMobileView={false}
+              completedCount={completedCount}
+              isAllDataComplete={isAllDataComplete}
+              onRegisterStore={onRegisterStore}
+              onFeedback={triggerFeedback}
+            />
+          )}
+        </div>
+
+        {renderSharedModals()}
+      </div>
+    );
+  }
+
+  // Mobile 1-column hub + full-screen subpages/modals
   return (
     <div
       style={{
-        padding: isMobileView ? "16px 14px 60px" : "24px 20px 60px",
+        padding: "16px 14px 60px",
         maxWidth: 600,
         margin: "0 auto",
         width: "100%"
       }}
     >
-      {/* 1. MENU HUB (MAIN STORE INFORMATION HUB) */}
       {viewMode === "hub" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {statusFeedback && (
@@ -297,7 +714,6 @@ export function MerchantProfileView({
             }}
           />
 
-          {/* Store onboarding registration card shown while store is not yet registered */}
           {!isRegistered && (
             <StoreOnboardingRegistrationCard
               theme={theme}
@@ -309,7 +725,6 @@ export function MerchantProfileView({
             />
           )}
 
-          {/* DEVELOPER TESTING MODE: RESET STORE (LOCAL DEV ONLY) */}
           {isLocalTestingEnv && isRegistered && onResetStore && (
             <DevResetStoreBanner
               theme={theme}
@@ -319,197 +734,20 @@ export function MerchantProfileView({
         </div>
       )}
 
-      {/* 2. SUBPAGE: PROFILE & IDENTITY */}
-      {viewMode === "profile" && (
+      {viewMode !== "hub" && viewMode !== "shipping" && (
         <SubPageLayout
-          title="Profile & Identity"
+          title={sectionTitles[viewMode]}
           theme={theme}
           isMobileView={isMobileView}
           onBack={() => setViewMode("hub")}
         >
-          <ProfileSubpageForm
-            theme={theme}
-            isMobileView={isMobileView}
-            editBannerUrl={editBannerUrl}
-            setEditBannerUrl={setEditBannerUrl}
-            editLogoUrl={editLogoUrl}
-            setEditLogoUrl={setEditLogoUrl}
-            editName={editName}
-            setEditName={setEditName}
-            editType={editType}
-            setEditType={setEditType}
-            editCategory={editCategory}
-            setEditCategory={setEditCategory}
-            editWhatsapp={editWhatsapp}
-            setEditWhatsapp={setEditWhatsapp}
-            isWhatsappVerified={isWhatsappVerified}
-            onOpenWaModal={() => onVerifyWhatsapp?.(editWhatsapp)}
-            editDescription={editDescription}
-            setEditDescription={setEditDescription}
-            onSubmit={(e) => handleSaveSubForm(e, `${getStoreEntityLabel(editType)} profile saved!`)}
-            onResetStore={isLocalTestingEnv && isRegistered && onResetStore ? () => setIsResetModalOpen(true) : undefined}
-          />
+          {renderSectionContent(viewMode)}
         </SubPageLayout>
       )}
 
-      {/* 3. SUBPAGE: CONTACT & LOCATION */}
-      {viewMode === "location" && (
-        <SubPageLayout
-          title="Contact & Location"
-          theme={theme}
-          isMobileView={isMobileView}
-          onBack={() => setViewMode("hub")}
-        >
-          <LocationSubpageForm
-            theme={theme}
-            editWhatsapp={editWhatsapp}
-            setEditWhatsapp={setEditWhatsapp}
-            isWhatsappVerified={isWhatsappVerified}
-            onOpenWaModal={() => onVerifyWhatsapp?.(editWhatsapp)}
-            editLatitude={editLatitude}
-            editLongitude={editLongitude}
-            onOpenLocationModal={() => setIsLocationModalOpen(true)}
-            editAddress={editAddress}
-            setEditAddress={setEditAddress}
-            editCity={editCity}
-            setEditCity={setEditCity}
-            editDistrict={editDistrict}
-            setEditDistrict={setEditDistrict}
-            editVillage={editVillage}
-            setEditVillage={setEditVillage}
-            onSubmit={(e) => handleSaveSubForm(e, "Contact & location saved!")}
-          />
-        </SubPageLayout>
-      )}
+      {viewMode === "shipping" && renderSectionContent("shipping")}
 
-      {/* 4. SUBPAGE: OPERATING SCHEDULE */}
-      {viewMode === "schedule" && (
-        <SubPageLayout
-          title="Operating Hours"
-          theme={theme}
-          isMobileView={isMobileView}
-          onBack={() => setViewMode("hub")}
-        >
-          <ScheduleSubpageForm
-            theme={theme}
-            isMobileView={isMobileView}
-            storeType={editType}
-            editOpenDays={editOpenDays}
-            setEditOpenDays={setEditOpenDays}
-            editIs24Hours={editIs24Hours}
-            setEditIs24Hours={setEditIs24Hours}
-            editOpenTime={editOpenTime}
-            setEditOpenTime={setEditOpenTime}
-            editCloseTime={editCloseTime}
-            setEditCloseTime={setEditCloseTime}
-            editDailyCustomHours={editDailyCustomHours}
-            setEditDailyCustomHours={setEditDailyCustomHours}
-            onSubmit={(e) => handleSaveSubForm(e, "Operating hours saved!")}
-          />
-        </SubPageLayout>
-      )}
-
-      {/* 5. SUBPAGE: PAYMENT METHODS */}
-      {viewMode === "payments" && (
-        <SubPageLayout
-          title="Payment Methods"
-          theme={theme}
-          isMobileView={isMobileView}
-          onBack={() => setViewMode("hub")}
-        >
-          <MerchantPaymentsView
-            theme={theme}
-            isMobileView={isMobileView}
-            storeType={editType}
-            editBankName={editBankName}
-            setEditBankName={setEditBankName}
-            editDanaPhone={editDanaPhone}
-            setEditDanaPhone={setEditDanaPhone}
-            editDanaName={editDanaName}
-            setEditDanaName={setEditDanaName}
-            editQrisImageUrl={editQrisImageUrl}
-            setEditQrisImageUrl={setEditQrisImageUrl}
-            editAcceptCod={editAcceptCod}
-            setEditAcceptCod={setEditAcceptCod}
-            handleQrisUpload={handleQrisUpload}
-            referralCopied={referralCopied}
-            handleCopyReferralCode={handleCopyReferralCode}
-            onSavePayments={handleSavePaymentsSubForm}
-          />
-        </SubPageLayout>
-      )}
-
-      {/* 6. SUBPAGE: POS & CASHIER STAFF SETTINGS */}
-      {viewMode === "pos" && (
-        <SubPageLayout
-          title="POS & Cashier Settings"
-          theme={theme}
-          isMobileView={isMobileView}
-          onBack={() => setViewMode("hub")}
-        >
-          <PosSettingsSubpageForm
-            theme={theme}
-            store={store}
-            onFeedback={triggerFeedback}
-          />
-        </SubPageLayout>
-      )}
-
-      {/* MODALS */}
-      {isLocationModalOpen && (
-        <StoreLocationPickerModal
-          isOpen={isLocationModalOpen}
-          onClose={() => setIsLocationModalOpen(false)}
-          theme={theme}
-          isMobileView={isMobileView}
-          initialLat={editLatitude}
-          initialLng={editLongitude}
-          initialAddress={editAddress}
-          storeName={editName}
-          onConfirmLocation={(result) => {
-            setEditLatitude?.(result.lat);
-            setEditLongitude?.(result.lng);
-            if (result.fullAddress) {
-              setEditAddress(result.fullAddress);
-            }
-            if (result.city) {
-              setEditCity(result.city);
-            }
-            if (result.district) {
-              setEditDistrict?.(result.district);
-            }
-            if (result.village) {
-              setEditVillage?.(result.village);
-            }
-            setIsLocationModalOpen(false);
-          }}
-        />
-      )}
-
-      {isShippingModalOpen && (
-        <ShippingSettingsModal
-          isOpen={isShippingModalOpen}
-          onClose={() => setIsShippingModalOpen(false)}
-          theme={theme}
-          isMobileView={isMobileView}
-          shippingConfig={shippingConfig}
-          store={store}
-          onRefreshStore={onRefreshStore}
-          onSave={async (newConfig) => {
-            onUpdateShippingConfig?.(newConfig);
-            setIsShippingModalOpen(false);
-            if (onRefreshStore) await onRefreshStore();
-          }}
-        />
-      )}
-
-      <ResetStoreConfirmModal
-        isOpen={isResetModalOpen}
-        onClose={() => setIsResetModalOpen(false)}
-        storeName={editName}
-        onResetStore={onResetStore}
-        theme={theme}
-      />
+      {renderSharedModals()}
     </div>
   );
 }

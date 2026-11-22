@@ -319,17 +319,61 @@ function MerchantPageInner({
     } catch {}
   }, [store?.id, storeProfile]);
 
+  const renderProductEditor = (inline: boolean) => (
+    <ProductModal
+      isOpen={productForm.productModalOpen}
+      onClose={() => productForm.setProductModalOpen(false)}
+      editingProduct={productForm.editingProduct}
+      storeType={storeType}
+      store={store}
+      theme={theme}
+      prodName={productForm.prodName}
+      setProdName={productForm.setProdName}
+      prodNormalPrice={productForm.prodNormalPrice}
+      setProdNormalPrice={productForm.setProdNormalPrice}
+      prodCostPrice={productForm.prodCostPrice}
+      setProdCostPrice={productForm.setProdCostPrice}
+      prodDiscountType={productForm.prodDiscountType}
+      setProdDiscountType={productForm.setProdDiscountType}
+      prodDiscountValue={productForm.prodDiscountValue}
+      setProdDiscountValue={productForm.setProdDiscountValue}
+      prodStock={productForm.prodStock}
+      setProdStock={productForm.setProdStock}
+      prodWeight={productForm.prodWeight}
+      setProdWeight={productForm.setProdWeight}
+      prodWeightUnit={productForm.prodWeightUnit}
+      setProdWeightUnit={productForm.setProdWeightUnit}
+      prodCategory={productForm.prodCategory}
+      setProdCategory={productForm.setProdCategory}
+      prodDescription={productForm.prodDescription}
+      setProdDescription={productForm.setProdDescription}
+      prodBarcode={productForm.prodBarcode}
+      setProdBarcode={productForm.setProdBarcode}
+      prodImages={productForm.prodImages}
+      setProdImages={productForm.setProdImages}
+      hasVariants={productForm.hasVariants}
+      setHasVariants={productForm.setHasVariants}
+      variants={productForm.variants}
+      setVariants={productForm.setVariants}
+      onSave={productForm.handleSaveProduct}
+      isSaving={productForm.isSaving}
+      isSuccess={productForm.isSuccess}
+      isMobileView={isMobileView}
+      inline={inline}
+    />
+  );
+
   const renderMerchantView = (view: MerchantViewType, isAdjacent = false) => {
-    const isDesktopPosSplit = !isMobileView && view === "pos";
+    const isDesktopSplit = !isMobileView && (view === "pos" || view === "profile" || view === "payments" || view === "products" || view === "orders");
     return (
       <div
         style={{
           width: "100%",
-          minHeight: isDesktopPosSplit ? 0 : "100%",
-          height: isDesktopPosSplit ? "100%" : undefined,
-          display: isDesktopPosSplit ? "flex" : undefined,
-          flexDirection: isDesktopPosSplit ? "column" : undefined,
-          overflow: isDesktopPosSplit ? "hidden" : undefined,
+          minHeight: isDesktopSplit ? 0 : "100%",
+          height: isDesktopSplit ? "100%" : undefined,
+          display: isDesktopSplit ? "flex" : undefined,
+          flexDirection: isDesktopSplit ? "column" : undefined,
+          overflow: isDesktopSplit ? "hidden" : undefined,
           boxSizing: "border-box"
         }}
       >
@@ -354,6 +398,13 @@ function MerchantPageInner({
             handleOpenEditProduct={isAdjacent ? () => {} : productForm.handleOpenEditProduct}
             handleDeleteProduct={isAdjacent ? () => {} : productForm.handleDeleteProduct}
             setProdCategory={isAdjacent ? () => {} : productForm.setProdCategory}
+            isProductEditorOpen={isAdjacent ? false : productForm.productModalOpen}
+            onCloseProductEditor={isAdjacent ? undefined : () => productForm.setProductModalOpen(false)}
+            inlineProductEditor={
+              !isMobileView && !isAdjacent && productForm.productModalOpen
+                ? renderProductEditor(true)
+                : null
+            }
           />
         )}
 
@@ -540,13 +591,12 @@ function MerchantPageInner({
               minWidth: "100%",
               maxWidth: "100%",
               height: "100%",
-              overflowY: !isMobileView && viewKey === "pos" ? "hidden" : "auto",
+              overflowY: !isMobileView && (viewKey === "pos" || viewKey === "profile" || viewKey === "products" || viewKey === "orders") ? "hidden" : "auto",
               overflowX: "hidden",
               position: "relative",
               WebkitOverflowScrolling: "touch",
               overscrollBehaviorY: "contain",
               contain:
-                viewKey === "products" ||
                 viewKey === "pos" ||
                 viewKey !== normalizedCurrentView
                   ? "content"
@@ -561,46 +611,7 @@ function MerchantPageInner({
         ))}
       </div>
 
-      <ProductModal
-        isOpen={productForm.productModalOpen}
-        onClose={() => productForm.setProductModalOpen(false)}
-        editingProduct={productForm.editingProduct}
-        storeType={storeType}
-        store={store}
-        theme={theme}
-        prodName={productForm.prodName}
-        setProdName={productForm.setProdName}
-        prodNormalPrice={productForm.prodNormalPrice}
-        setProdNormalPrice={productForm.setProdNormalPrice}
-        prodCostPrice={productForm.prodCostPrice}
-        setProdCostPrice={productForm.setProdCostPrice}
-        prodDiscountType={productForm.prodDiscountType}
-        setProdDiscountType={productForm.setProdDiscountType}
-        prodDiscountValue={productForm.prodDiscountValue}
-        setProdDiscountValue={productForm.setProdDiscountValue}
-        prodStock={productForm.prodStock}
-        setProdStock={productForm.setProdStock}
-        prodWeight={productForm.prodWeight}
-        setProdWeight={productForm.setProdWeight}
-        prodWeightUnit={productForm.prodWeightUnit}
-        setProdWeightUnit={productForm.setProdWeightUnit}
-        prodCategory={productForm.prodCategory}
-        setProdCategory={productForm.setProdCategory}
-        prodDescription={productForm.prodDescription}
-        setProdDescription={productForm.setProdDescription}
-        prodBarcode={productForm.prodBarcode}
-        setProdBarcode={productForm.setProdBarcode}
-        prodImages={productForm.prodImages}
-        setProdImages={productForm.setProdImages}
-        hasVariants={productForm.hasVariants}
-        setHasVariants={productForm.setHasVariants}
-        variants={productForm.variants}
-        setVariants={productForm.setVariants}
-        onSave={productForm.handleSaveProduct}
-        isSaving={productForm.isSaving}
-        isSuccess={productForm.isSuccess}
-        isMobileView={isMobileView}
-      />
+      {isMobileView && renderProductEditor(false)}
 
       {productForm.saveToast && (
         <div

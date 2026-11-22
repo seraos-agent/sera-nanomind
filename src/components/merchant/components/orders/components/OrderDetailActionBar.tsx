@@ -11,6 +11,7 @@ interface OrderDetailActionBarProps {
   onClose: () => void;
   onUpdateOrderStatus?: (orderId: string, nextStatus: MerchantOrder["status"]) => void | Promise<void>;
   onRequestCourier?: (order: MerchantOrder) => void | Promise<void>;
+  inline?: boolean;
 }
 
 export function OrderDetailActionBar({
@@ -22,6 +23,7 @@ export function OrderDetailActionBar({
   onClose,
   onUpdateOrderStatus,
   onRequestCourier,
+  inline = false,
 }: OrderDetailActionBarProps) {
   if (currentStatus === "COMPLETED" || currentStatus === "CANCELLED") {
     return null;
@@ -29,16 +31,30 @@ export function OrderDetailActionBar({
 
   return (
     <div
-      style={{
-        padding: "12px 18px",
-        background: theme.surface,
-        borderTop: `1px solid ${theme.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        gap: 10,
-        flexShrink: 0
-      }}
+      style={
+        inline
+          ? {
+              padding: "12px 16px",
+              background: theme.surface,
+              border: `1px solid ${theme.border}`,
+              borderRadius: 14,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: 10,
+              flexShrink: 0,
+            }
+          : {
+              padding: "12px 18px",
+              background: theme.surface,
+              borderTop: `1px solid ${theme.border}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: 10,
+              flexShrink: 0,
+            }
+      }
     >
 
       {onUpdateOrderStatus && (currentStatus === "PENDING" || currentStatus === "CONFIRMED") && (

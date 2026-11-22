@@ -25,6 +25,7 @@ interface ShippingSettingsModalProps {
   isMobileView?: boolean;
   store?: MerchantStore | null;
   onRefreshStore?: () => Promise<void>;
+  inline?: boolean;
 }
 
 export function ShippingSettingsModal({
@@ -36,6 +37,7 @@ export function ShippingSettingsModal({
   isMobileView,
   store,
   onRefreshStore,
+  inline = false,
 }: ShippingSettingsModalProps) {
   const couriers = useMerchantCouriers({ store: store ?? null, onRefreshStore });
 
@@ -62,12 +64,173 @@ export function ShippingSettingsModal({
     onClose,
     shippingConfig,
     onSave,
+    closeOnSave: !inline,
+    skipBackHandler: inline,
   });
 
   if (!isOpen) return null;
 
   const entity = getStoreEntityLabel(store?.type);
   const entityLower = getStoreEntityLabel(store?.type, true);
+
+  const settingsCards = (
+    <>
+      {/* Information Banner */}
+      <div
+        style={{
+          padding: '12px 14px',
+          borderRadius: 14,
+          background: theme.surface2,
+          border: `1px solid ${theme.border}`,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+        }}
+      >
+        <ShieldCheck size={16} color={theme.inkSoft} style={{ flexShrink: 0 }} />
+        <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.4 }}>
+          Active shipping methods will appear as checkout options for buyers on your store page.
+        </div>
+      </div>
+
+      {/* Option 1: Store Courier Delivery */}
+      <StoreDeliveryCard
+        theme={theme}
+        isMobileView={isMobileView}
+        storeType={store?.type}
+        storeDelivery={storeDelivery}
+        onToggleStoreDelivery={() => setStoreDelivery((prev) => !prev)}
+        storeDeliveryMaxRadius={storeDeliveryMaxRadius}
+        onChangeMaxRadius={setStoreDeliveryMaxRadius}
+        storeDeliveryPricingType={storeDeliveryPricingType}
+        onChangePricingType={setStoreDeliveryPricingType}
+        storeDeliveryFee={storeDeliveryFee}
+        onChangeFee={setStoreDeliveryFee}
+        storeDeliveryFeePerKm={storeDeliveryFeePerKm}
+        onChangeFeePerKm={setStoreDeliveryFeePerKm}
+      />
+
+      {/* Option 1.5: Dedicated Store Courier Fleet Card */}
+      {storeDelivery && (
+        <CourierFleetCard
+          theme={theme}
+          isMobileView={isMobileView}
+          couriers={couriers}
+        />
+      )}
+
+      {/* Option 2: Self Pickup at Store */}
+      <SelfPickupCard
+        theme={theme}
+        isMobileView={isMobileView}
+        storeType={store?.type}
+        selfPickup={selfPickup}
+        onToggleSelfPickup={() => setSelfPickup((prev) => !prev)}
+      />
+
+      {/* Option 3: Regular Third-Party Logistics */}
+      <RegularCourierCard
+        theme={theme}
+        isMobileView={isMobileView}
+        regularCourier={regularCourier}
+        onToggleRegularCourier={() => setRegularCourier((prev) => !prev)}
+      />
+
+      {/* Warning Alert if No Shipping Method is Selected */}
+      {!atLeastOneActive && (
+        <div
+          style={{
+            padding: '12px 14px',
+            borderRadius: 14,
+            background: 'rgba(239, 68, 68, 0.08)',
+            border: '1px solid rgba(239, 68, 68, 0.25)',
+            color: '#EF4444',
+            fontSize: 12.5,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+          }}
+        >
+          <AlertCircle size={16} style={{ flexShrink: 0 }} />
+          <span>At least one shipping method must be enabled so the {entityLower} can fulfill orders.</span>
+        </div>
+      )}
+    </>
+  );
+
+  const courierModals = (
+    <>
+      <AddCourierModal
+        show={couriers.showAddModal}
+        onClose={() => couriers.setShowAddModal(false)}
+        onSubmit={couriers.handleAddCourier}
+        theme={theme}
+        isMobileView={isMobileView}
+        name={couriers.newCourierName}
+        setName={couriers.setNewCourierName}
+        phone={couriers.newCourierPhone}
+        setPhone={couriers.setNewCourierPhone}
+        vehicle={couriers.newCourierVehicle}
+        setVehicle={couriers.setNewCourierVehicle}
+        plate={couriers.newCourierPlate}
+        setPlate={couriers.setNewCourierPlate}
+        newCourierPin={couriers.newCourierPin}
+        setNewCourierPin={couriers.setNewCourierPin}
+        isAdding={couriers.isAddingCourier}
+      />
+
+      <UnlinkCourierModal
+        courier={couriers.courierToDelete}
+        onClose={() => couriers.setCourierToDelete(null)}
+        onConfirm={couriers.executeUnlinkCourier}
+        isDeleting={couriers.isDeletingCourier}
+        theme={theme}
+      />
+
+      <ResetCourierCodeModal
+        courier={couriers.courierToReset}
+        onClose={() => couriers.setCourierToReset(null)}
+        onConfirm={couriers.executeResetCourierCode}
+        isResetting={couriers.isResettingCode}
+        theme={theme}
+      />
+
+      <SetCourierPinModal
+        isOpen={Boolean(couriers.courierToSetPin)}
+        courier={couriers.courierToSetPin}
+        isUpdating={couriers.isUpdatingPin}
+        theme={theme}
+        onConfirm={couriers.executeUpdateCourierPin}
+        onCancel={() => couriers.setCourierToSetPin(null)}
+      />
+
+      <CourierToast toast={couriers.actionToast} />
+    </>
+  );
+
+  if (inline) {
+    return (
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
+        }}
+      >
+        {settingsCards}
+        <ShippingFooterBar
+          theme={theme}
+          atLeastOneActive={atLeastOneActive}
+          isSaved={isSaved}
+          onClose={onClose}
+          onSave={handleSave}
+          inline={true}
+        />
+        {courierModals}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -159,86 +322,7 @@ export function ShippingSettingsModal({
             gap: 16,
           }}
         >
-          {/* Information Banner */}
-          <div
-            style={{
-              padding: '12px 14px',
-              borderRadius: 14,
-              background: theme.surface2,
-              border: `1px solid ${theme.border}`,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-            }}
-          >
-            <ShieldCheck size={16} color={theme.inkSoft} style={{ flexShrink: 0 }} />
-            <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.4 }}>
-              Active shipping methods will appear as checkout options for buyers on your store page.
-            </div>
-          </div>
-
-          {/* Option 1: Store Courier Delivery */}
-          <StoreDeliveryCard
-            theme={theme}
-            isMobileView={isMobileView}
-            storeType={store?.type}
-            storeDelivery={storeDelivery}
-            onToggleStoreDelivery={() => setStoreDelivery((prev) => !prev)}
-            storeDeliveryMaxRadius={storeDeliveryMaxRadius}
-            onChangeMaxRadius={setStoreDeliveryMaxRadius}
-            storeDeliveryPricingType={storeDeliveryPricingType}
-            onChangePricingType={setStoreDeliveryPricingType}
-            storeDeliveryFee={storeDeliveryFee}
-            onChangeFee={setStoreDeliveryFee}
-            storeDeliveryFeePerKm={storeDeliveryFeePerKm}
-            onChangeFeePerKm={setStoreDeliveryFeePerKm}
-          />
-
-          {/* Option 1.5: Dedicated Store Courier Fleet Card */}
-          {storeDelivery && (
-            <CourierFleetCard
-              theme={theme}
-              isMobileView={isMobileView}
-              couriers={couriers}
-            />
-          )}
-
-          {/* Option 2: Self Pickup at Store */}
-          <SelfPickupCard
-            theme={theme}
-            isMobileView={isMobileView}
-            storeType={store?.type}
-            selfPickup={selfPickup}
-            onToggleSelfPickup={() => setSelfPickup((prev) => !prev)}
-          />
-
-          {/* Option 3: Regular Third-Party Logistics */}
-          <RegularCourierCard
-            theme={theme}
-            isMobileView={isMobileView}
-            regularCourier={regularCourier}
-            onToggleRegularCourier={() => setRegularCourier((prev) => !prev)}
-          />
-
-          {/* Warning Alert if No Shipping Method is Selected */}
-          {!atLeastOneActive && (
-            <div
-              style={{
-                padding: '12px 14px',
-                borderRadius: 14,
-                background: 'rgba(239, 68, 68, 0.08)',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                color: '#EF4444',
-                fontSize: 12.5,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
-            >
-              <AlertCircle size={16} style={{ flexShrink: 0 }} />
-              <span>At least one shipping method must be enabled so the {entityLower} can fulfill orders.</span>
-            </div>
-          )}
+          {settingsCards}
         </div>
       </div>
 
@@ -251,52 +335,7 @@ export function ShippingSettingsModal({
         onSave={handleSave}
       />
 
-      {/* Modals for Courier Fleet Management */}
-      <AddCourierModal
-        show={couriers.showAddModal}
-        onClose={() => couriers.setShowAddModal(false)}
-        onSubmit={couriers.handleAddCourier}
-        theme={theme}
-        isMobileView={isMobileView}
-        name={couriers.newCourierName}
-        setName={couriers.setNewCourierName}
-        phone={couriers.newCourierPhone}
-        setPhone={couriers.setNewCourierPhone}
-        vehicle={couriers.newCourierVehicle}
-        setVehicle={couriers.setNewCourierVehicle}
-        plate={couriers.newCourierPlate}
-        setPlate={couriers.setNewCourierPlate}
-        newCourierPin={couriers.newCourierPin}
-        setNewCourierPin={couriers.setNewCourierPin}
-        isAdding={couriers.isAddingCourier}
-      />
-
-      <UnlinkCourierModal
-        courier={couriers.courierToDelete}
-        onClose={() => couriers.setCourierToDelete(null)}
-        onConfirm={couriers.executeUnlinkCourier}
-        isDeleting={couriers.isDeletingCourier}
-        theme={theme}
-      />
-
-      <ResetCourierCodeModal
-        courier={couriers.courierToReset}
-        onClose={() => couriers.setCourierToReset(null)}
-        onConfirm={couriers.executeResetCourierCode}
-        isResetting={couriers.isResettingCode}
-        theme={theme}
-      />
-
-      <SetCourierPinModal
-        isOpen={Boolean(couriers.courierToSetPin)}
-        courier={couriers.courierToSetPin}
-        isUpdating={couriers.isUpdatingPin}
-        theme={theme}
-        onConfirm={couriers.executeUpdateCourierPin}
-        onCancel={() => couriers.setCourierToSetPin(null)}
-      />
-
-      <CourierToast toast={couriers.actionToast} />
+      {courierModals}
       </div>
     </div>
   );

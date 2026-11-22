@@ -188,7 +188,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
       {/* Info & Action Controls */}
       <div
         style={{
-          padding: isMobileView ? 10 : 8,
+          padding: 10,
           flex: 1,
           display: "flex",
           flexDirection: "column",
@@ -198,11 +198,11 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
         <div>
           <div
             style={{
-              fontSize: isMobileView ? 13 : 12,
+              fontSize: 13,
               fontWeight: 600,
               color: theme.ink,
               lineHeight: 1.25,
-              height: isMobileView ? 34 : 30,
+              height: 34,
               overflow: "hidden"
             }}
           >
@@ -211,7 +211,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
 
           <div
             style={{
-              fontSize: isMobileView ? 14 : 13,
+              fontSize: 14,
               fontWeight: 700,
               color: theme.accent,
               marginTop: 4,
@@ -268,12 +268,12 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
               alignItems: "center",
               justifyContent: "center",
               gap: 4,
-              padding: isMobileView ? "5px 0" : "4px 0",
-              borderRadius: 6,
+              padding: isMobileView ? "5px 0" : "6px 0",
+              borderRadius: isMobileView ? 6 : 7,
               background: theme.surface2,
               border: `1px solid ${theme.border}`,
               color: theme.ink,
-              fontSize: 11,
+              fontSize: isMobileView ? 11 : 11.5,
               fontWeight: 600,
               cursor: "pointer"
             }}
@@ -289,12 +289,12 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
               alignItems: "center",
               justifyContent: "center",
               gap: 4,
-              padding: isMobileView ? "5px 0" : "4px 0",
-              borderRadius: 6,
+              padding: isMobileView ? "5px 0" : "6px 0",
+              borderRadius: isMobileView ? 6 : 7,
               background: "#EF444415",
               border: "1px solid #EF444430",
               color: "#EF4444",
-              fontSize: 11,
+              fontSize: isMobileView ? 11 : 11.5,
               fontWeight: 600,
               cursor: "pointer"
             }}
