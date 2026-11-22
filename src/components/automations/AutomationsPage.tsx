@@ -1,0 +1,448 @@
+import { useEffect, useState } from "react";
+import { Activity, ChevronLeft, Trash2, Terminal, Check, RefreshCw, X } from "lucide-react";
+import type { ThemeType } from "../../theme";
+import type { Socket } from "../../services/localSocket";
+import { registerBackHandler, dispatchBackButton } from "../../utils/backButton";
+
+interface AutomationsPageProps {
+  theme: ThemeType;
+  socket: Socket | null;
+  onBack: () => void;
+  isMobileView?: boolean;
+}
+
+export function AutomationsPage({ theme, socket, onBack, isMobileView }: AutomationsPageProps) {
+  const [triggers, setTriggers] = useState<any[]>([]);
+  const [agreements, setAgreements] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<'ACTIVE' | 'COMPLETED'>('ACTIVE');
+  const [pendingDelete, setPendingDelete] = useState<{
+    type: 'TRIGGER' | 'AGREEMENT';
+    id: string;
+    title: string;
+    subtitle?: string;
+  } | null>(null);
+
+  // Sequential Native Back Button Navigation for Automations Page
+  useEffect(() => {
+    if (pendingDelete) {
+      return registerBackHandler('automations_delete_modal', 70, () => {
+        setPendingDelete(null);
+        return true;
+      });
+    }
+  }, [pendingDelete]);
+
+  const handleAutomationsBack = () => {
+    if (dispatchBackButton()) return;
+    if (pendingDelete) {
+      setPendingDelete(null);
+      return;
+    }
+    if (onBack) {
+      onBack();
+    }
+  };
+
+  const sidePad = isMobileView ? 16 : 32;
+  const titleSize = isMobileView ? 20 : 24;
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleUpdate = (data: any[]) => {
+      setTriggers(data);
+    };
+    const handleAgreementUpdate = (data: any[]) => setAgreements(data);
+
+    socket.on('automations:update', handleUpdate);
+    socket.on('autonomy-agreements:update', handleAgreementUpdate);
+    socket.emit('automations:fetch');
+    socket.emit('autonomy-agreements:fetch');
+
+    return () => {
+      socket.off('automations:update', handleUpdate);
+      socket.off('autonomy-agreements:update', handleAgreementUpdate);
+    };
+  }, [socket]);
+
+  const activeAgreements = agreements.filter(agreement => agreement.status === 'ACTIVE');
+  const inactiveAgreements = agreements.filter(agreement => agreement.status !== 'ACTIVE');
+  const visibleTriggers = activeTab === 'ACTIVE' ? triggers.filter(t => t.state === 'ACTIVE') : triggers.filter(t => t.state !== 'ACTIVE');
+  const visibleAgreements = activeTab === 'ACTIVE' ? activeAgreements : inactiveAgreements;
+
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: theme.bg, position: "relative", minWidth: 0, minHeight: 0 }}>
+      {/* Clean Top Header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: isMobileView ? "12px 16px" : "12px 24px", borderBottom: "none", background: theme.bg, flexShrink: 0 }}>
+        <button
+          onClick={handleAutomationsBack}
+          style={{ background: "transparent", border: "none", cursor: "pointer", color: theme.inkSoft, padding: 4, display: "flex", borderRadius: 6, transition: "background 0.2s" }}
+          onMouseEnter={(e) => e.currentTarget.style.background = theme.surface2}
+          onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+        >
+          <ChevronLeft size={18} />
+        </button>
+        <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 600, fontSize: 15, color: theme.ink }}>Automations</span>
+      </div>
+
+      <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column" }}>
+        <div style={{ padding: `${isMobileView ? 24 : 32}px ${sidePad}px 8px`, flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div>
+              <h1 style={{ margin: 0, fontSize: titleSize, fontWeight: 600, color: theme.ink, fontFamily: "Inter, sans-serif", letterSpacing: "-0.5px" }}>Active Intent Stream</h1>
+              <p style={{ margin: "4px 0 0", fontSize: 14, color: theme.inkSoft, fontFamily: "Inter, sans-serif" }}>
+                Ongoing automations and decisions Sera is currently managing for you.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          display: 'flex', gap: 12,
+          position: 'sticky', top: -1, zIndex: 10,
+          background: theme.bg, padding: `16px ${sidePad}px 16px`,
+        }}>
+          <button
+            onClick={() => setActiveTab('ACTIVE')}
+            style={{
+              padding: '8px 16px', borderRadius: 20, border: 'none', cursor: 'pointer',
+              fontWeight: 600, fontSize: 13,
+              background: activeTab === 'ACTIVE' ? theme.border : theme.surface2,
+              color: activeTab === 'ACTIVE' ? theme.ink : theme.inkSoft,
+              transition: 'all 0.2s'
+            }}>
+            Active ({triggers.filter(t => t.state === 'ACTIVE').length + activeAgreements.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('COMPLETED')}
+            style={{
+              padding: '8px 16px', borderRadius: 20, border: 'none', cursor: 'pointer',
+              fontWeight: 600, fontSize: 13,
+              background: activeTab === 'COMPLETED' ? theme.border : theme.surface2,
+              color: activeTab === 'COMPLETED' ? theme.ink : theme.inkSoft,
+              transition: 'all 0.2s'
+            }}>
+            Completed ({triggers.filter(t => t.state !== 'ACTIVE').length + inactiveAgreements.length})
+          </button>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: `0 ${sidePad}px ${sidePad}px` }}>
+          {visibleTriggers.length + visibleAgreements.length === 0 ? (
+            <div style={{
+              padding: "48px 40px", textAlign: "center", border: `1px dashed ${theme.border}`,
+              borderRadius: 16, color: theme.inkFaint, fontFamily: "Inter, sans-serif",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 16
+            }}>
+              <div style={{
+                width: 56, height: 56, borderRadius: 28, background: theme.surface2,
+                display: "flex", alignItems: "center", justifyContent: "center"
+              }}>
+                <Activity size={28} opacity={0.6} />
+              </div>
+              <div style={{ maxWidth: 280 }}>
+                <div style={{ fontSize: 15, fontWeight: 500, color: theme.ink, marginBottom: 4 }}>
+                  {activeTab === 'ACTIVE' ? "Nothing is running yet" : "No completed tasks"}
+                </div>
+                <div style={{ fontSize: 13, lineHeight: 1.5 }}>
+                  {activeTab === 'ACTIVE'
+                    ? "Sera is not managing any ongoing tasks right now. Start a conversation to give Sera an instruction."
+                    : "You don't have any completed automations yet."}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, opacity: activeTab === 'COMPLETED' ? 0.7 : 1 }}>
+              {visibleAgreements
+                .sort((a, b) => b.updatedAt - a.updatedAt)
+                .map(agreement => renderAgreementCard(agreement, theme, (item) => setPendingDelete(item)))}
+              {visibleTriggers
+                .sort((a, b) => (b.lastFiredAt || b.createdAt || 0) - (a.lastFiredAt || a.createdAt || 0))
+                .map(t => renderTriggerCard(t, theme, (item) => setPendingDelete(item)))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Professional Deletion Modal */}
+      {pendingDelete && (
+        <div
+          role="presentation"
+          onMouseDown={() => setPendingDelete(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 100,
+            background: "rgba(10, 13, 18, 0.65)",
+            backdropFilter: "blur(6px)",
+            display: "grid",
+            placeItems: "center",
+            padding: 20
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-modal-title"
+            onMouseDown={(e) => e.stopPropagation()}
+            style={{
+              width: "min(100%, 420px)",
+              border: `1px solid ${theme.border}`,
+              borderRadius: 20,
+              background: theme.surface2,
+              boxShadow: theme.shellShadow || "0 24px 48px rgba(0,0,0,0.35)",
+              padding: isMobileView ? 20 : 24,
+              color: theme.ink,
+              display: "flex",
+              flexDirection: "column",
+              gap: 16
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 14,
+                  display: "grid",
+                  placeItems: "center",
+                  color: "#EF4444",
+                  background: theme.isDark ? "rgba(239, 68, 68, 0.15)" : "#FEF2F2",
+                  border: `1px solid ${theme.isDark ? "rgba(239, 68, 68, 0.25)" : "#FCA5A5"}`
+                }}
+              >
+                <Trash2 size={22} />
+              </div>
+              <div>
+                <h3
+                  id="delete-modal-title"
+                  style={{ margin: 0, fontSize: 18, fontWeight: 650, letterSpacing: "-0.3px", color: theme.ink }}
+                >
+                  Are you sure you want to delete this automation?
+                </h3>
+                <p style={{ margin: "4px 0 0", fontSize: 13, color: theme.inkSoft }}>
+                  This will stop ongoing management immediately.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                padding: "12px 14px",
+                borderRadius: 12,
+                border: `1px solid ${theme.border}`,
+                background: theme.surface,
+                display: "flex",
+                flexDirection: "column",
+                gap: 4
+              }}
+            >
+              <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", color: theme.inkSoft, letterSpacing: "0.5px" }}>
+                Target Automation
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: theme.ink }}>
+                {pendingDelete.title}
+              </div>
+              {pendingDelete.subtitle && (
+                <div style={{ fontSize: 12, color: theme.inkSoft }}>
+                  {pendingDelete.subtitle}
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 4 }}>
+              <button
+                onClick={() => setPendingDelete(null)}
+                style={{
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: 10,
+                  padding: "9px 16px",
+                  background: theme.surface,
+                  color: theme.ink,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (pendingDelete.type === 'TRIGGER') {
+                    socket?.emit('automations:delete', pendingDelete.id);
+                  } else {
+                    socket?.emit('autonomy-agreements:revoke', pendingDelete.id);
+                  }
+                  setPendingDelete(null);
+                }}
+                style={{
+                  border: "none",
+                  borderRadius: 10,
+                  padding: "9px 16px",
+                  background: "#DC2626",
+                  color: "#FFFFFF",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.12)",
+                  transition: "all 0.2s"
+                }}
+              >
+                Delete Automation
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function renderAgreementCard(agreement: any, theme: any, onRequestDelete: (item: any) => void) {
+  const active = agreement.status === 'ACTIVE';
+  return (
+    <div key={agreement.id} style={{
+      background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 12, padding: 20,
+      display: 'flex', flexDirection: 'column', gap: 14, fontFamily: 'Inter, sans-serif'
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16 }}>
+        <div>
+          <div style={{ fontSize: 15, fontWeight: 600, color: theme.ink }}>{agreement.title}</div>
+          <div style={{ marginTop: 4, fontSize: 13, color: theme.inkSoft }}>{agreement.intent}</div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{
+            background: active ? theme.statusSoft : theme.surface2, color: active ? theme.status : theme.inkSoft,
+            padding: '6px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600
+          }}>{active ? agreement.mode === 'FULL_ACCESS' ? 'Full Access' : 'Assistant' : agreement.status}</span>
+          {active && <button onClick={() => {
+            onRequestDelete({ type: 'AGREEMENT', id: agreement.id, title: agreement.title, subtitle: agreement.intent });
+          }} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: theme.inkFaint, padding: 6 }} title="Cancel active intent"><Trash2 size={16} /></button>}
+        </div>
+      </div>
+      <div style={{ display: 'grid', gap: 8, fontSize: 13, color: theme.inkSoft }}>
+        {agreement.lastActionSummary && <div><strong style={{ color: theme.ink }}>Last action: </strong>{agreement.lastActionSummary}</div>}
+        {agreement.nextActionSummary && <div><strong style={{ color: theme.ink }}>Monitoring: </strong>{agreement.nextActionSummary}</div>}
+        <div><strong style={{ color: theme.ink }}>Agreement: </strong>{new Date(agreement.createdAt).toLocaleString()}</div>
+      </div>
+    </div>
+  );
+}
+
+// ── Helper to render a trigger card ──────────────────────────────────────────
+function renderTriggerCard(t: any, theme: any, onRequestDelete: (item: any) => void) {
+  const rawIntent = t.action?.type || "UNKNOWN_ACTION";
+  const title = rawIntent.replace(/_/g, ' ');
+
+  const scheduleStr = t.condition?.humanIntent || t.condition?.internalCompiled || "Event-based";
+
+  const timeStr = t.lastFiredAt
+    ? `Last run: ${new Date(t.lastFiredAt).toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`
+    : `Created: ${new Date(t.createdAt || Date.now()).toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`;
+
+  return (
+    <div key={t.id} style={{
+      background: theme.surface,
+      border: `1px solid ${theme.border}`,
+      borderRadius: 12,
+      padding: 20,
+      display: "flex",
+      flexDirection: "column",
+      gap: 16,
+      boxShadow: theme.isDark ? "0 4px 12px rgba(0,0,0,0.2)" : "0 2px 8px rgba(0,0,0,0.02)",
+      fontFamily: "Inter, sans-serif"
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 600, color: theme.ink, marginBottom: 2 }}>{title}</div>
+            <div style={{ fontSize: 13, color: theme.inkSoft, display: "flex", alignItems: "center", gap: 6 }}>
+              <span>{timeStr}</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{
+            background: t.state === 'ACTIVE' ? theme.statusSoft : theme.surface2,
+            color: t.state === 'ACTIVE' ? theme.status : theme.inkSoft,
+            padding: "6px 10px",
+            borderRadius: 20,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            justifyContent: "center"
+          }} title={t.state === 'ACTIVE' ? 'Active' : 'Finished'}>
+            {t.firePolicy === 'REPEAT' ? (
+              <RefreshCw size={14} />
+            ) : (
+              <div style={{
+                padding: "0 3px",
+                height: 14,
+                borderRadius: 4,
+                border: "1.5px solid currentColor",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 9,
+                fontWeight: 700
+              }}>1x</div>
+            )}
+            {rawIntent.toLowerCase().includes('github') ? <Terminal size={14} /> :
+                <Activity size={14} />}
+            {t.state !== 'ACTIVE' && (
+              t.lastExecutionResult?.success === false ? (
+                <X size={14} color="#ef4444" />
+              ) : (
+                <Check size={14} />
+              )
+            )}
+          </div>
+          <button
+            onClick={() => {
+              onRequestDelete({ type: 'TRIGGER', id: t.id, title, subtitle: `Schedule: ${scheduleStr}` });
+            }}
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 6,
+              borderRadius: 6,
+              color: theme.inkFaint,
+              transition: "all 0.2s"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = theme.surface2;
+              e.currentTarget.style.color = "#ff4444";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = theme.inkFaint;
+            }}
+            title="Delete this trigger"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 4 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Schedule</span>
+          <span style={{ fontSize: 14, color: theme.ink }}>
+            {scheduleStr}
+          </span>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Action</span>
+          <span style={{ fontSize: 14, color: theme.ink }}>
+            {title}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}

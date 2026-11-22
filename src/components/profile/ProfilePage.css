@@ -1,0 +1,111 @@
+.profile-page-container {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  animation: profilePageIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes profilePageIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-header-title {
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.profile-tab-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.profile-tab-btn:hover:not(.active) {
+  opacity: 0.8;
+}
+
+.profile-tab-btn.active {
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.profile-card {
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+.profile-card-hover:hover {
+  border-color: var(--ink-soft) !important;
+}
+
+.profile-button-secondary {
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.profile-button-secondary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.profile-danger-button {
+  transition: all 0.15s ease;
+}
+
+.profile-danger-button:hover:not(:disabled) {
+  opacity: 0.9;
+  filter: brightness(1.05);
+}
+
+.profile-dialog-overlay {
+  animation: dialogOverlayIn 0.25s ease forwards;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+@keyframes dialogOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.profile-dialog-content {
+  animation: dialogContentIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dialogContentIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.spin {
+  animation: profileSpin 1s linear infinite;
+}
+
+@keyframes profileSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

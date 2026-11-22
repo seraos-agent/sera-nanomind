@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    (function() {
+      var filterPattern = /(?:\[PHANTOM\]|disconnected port object|Failed to send message to service worker|evmAsk|Cannot redefine property: ethereum)/i;
+      
+      window.addEventListener('error', function(e) {
+        var msg = (e && e.message) ? e.message : '';
+        var file = (e && e.filename) ? e.filename : '';
+        if (filterPattern.test(msg) || filterPattern.test(file)) {
+          if (e.preventDefault) e.preventDefault();
+          if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+
+      var origError = console.error;
+      console.error = function() {
+        var str = Array.prototype.slice.call(arguments).map(function(a) {
+          return typeof a === 'string' ? a : (a && a.message ? a.message : (a && typeof a.toString === 'function' ? a.toString() : ''));
+        }).join(' ');
+        if (filterPattern.test(str)) return;
+        return origError.apply(console, arguments);
+      };
+      var origWarn = console.warn;
+      console.warn = function() {
+        var str = Array.prototype.slice.call(arguments).map(function(a) {
+          return typeof a === 'string' ? a : (a && a.message ? a.message : (a && typeof a.toString === 'function' ? a.toString() : ''));
+        }).join(' ');
+        if (filterPattern.test(str)) return;
+        return origWarn.apply(console, arguments);
+      };
+    })();
+  </script>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('sera_theme');
+        var isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var initialBg = isDark ? '#000000' : '#F3F4F6';
+        var initialColor = isDark ? '#EDEDED' : '#191C1F';
+        document.documentElement.style.backgroundColor = initialBg;
+        document.documentElement.style.color = initialColor;
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        if (isDark) {
+          document.documentElement.classList.add('dark', 'dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark', 'dark-mode');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/png" href="/sera-logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="google-site-verification" content="_MANjuL2Dl35a_APTfZN84xjOzaN21Hhi8AaoCAiiCQ" />
+  <meta name="talentapp:project_verification"
+    content="5f65c89b02aa8cef09cbbecb6d0d374510e5bfa39882aab846a660dfd6f17c57aaa1caf6d80ce9be895cff1b18cb9c52f7d598565a8501eaa83424996e56e57a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <title>SERA NanoMind — Hybrid AI Commerce OS</title>
+  <meta name="base:app_id" content="6a4aa651678328ec000fa024" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
