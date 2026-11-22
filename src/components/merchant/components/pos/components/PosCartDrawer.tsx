@@ -86,7 +86,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
 
           <div
             style={{
-              width: isMobileView ? "100%" : 360,
+              width: isMobileView ? "100%" : "clamp(290px, 31vw, 360px)",
               flexShrink: 0,
               background: theme.surface,
               border: isMobileView ? "none" : `1px solid ${theme.border}`,
@@ -95,12 +95,13 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              maxHeight: isMobileView ? "85vh" : "calc(100vh - 140px)",
-              position: isMobileView ? "fixed" : "sticky",
+              height: isMobileView ? undefined : "100%",
+              maxHeight: isMobileView ? "85vh" : "100%",
+              position: isMobileView ? "fixed" : "relative",
               bottom: isMobileView ? 0 : undefined,
               left: isMobileView ? 0 : undefined,
               right: isMobileView ? 0 : undefined,
-              top: isMobileView ? undefined : 20,
+              top: undefined,
               zIndex: isMobileView ? 999 : 5,
               boxShadow: isMobileView ? "0 -10px 40px rgba(0,0,0,0.35)" : "none",
               animation: isMobileView ? "slideUpDrawer 0.22s cubic-bezier(0.16, 1, 0.3, 1)" : undefined
@@ -142,7 +143,8 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                 justifyContent: "space-between",
                 padding: isMobileView ? "6px 18px 12px" : "14px 16px",
                 borderBottom: `1px solid ${theme.border}`,
-                background: isMobileView ? theme.surface : theme.surface2
+                background: isMobileView ? theme.surface : theme.surface2,
+                flexShrink: 0
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -186,7 +188,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
               style={{
                 flex: 1,
                 minHeight: 0,
-                maxHeight: isMobileView ? "calc(85vh - 230px)" : "calc(100vh - 380px)",
+                maxHeight: isMobileView ? "calc(85vh - 230px)" : undefined,
                 overflowY: "auto",
                 overscrollBehavior: "contain",
                 WebkitOverflowScrolling: "touch",

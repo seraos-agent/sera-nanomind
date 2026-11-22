@@ -320,8 +320,19 @@ function MerchantPageInner({
   }, [store?.id, storeProfile]);
 
   const renderMerchantView = (view: MerchantViewType, isAdjacent = false) => {
+    const isDesktopPosSplit = !isMobileView && view === "pos";
     return (
-      <div style={{ width: "100%", minHeight: "100%", boxSizing: "border-box" }}>
+      <div
+        style={{
+          width: "100%",
+          minHeight: isDesktopPosSplit ? 0 : "100%",
+          height: isDesktopPosSplit ? "100%" : undefined,
+          display: isDesktopPosSplit ? "flex" : undefined,
+          flexDirection: isDesktopPosSplit ? "column" : undefined,
+          overflow: isDesktopPosSplit ? "hidden" : undefined,
+          boxSizing: "border-box"
+        }}
+      >
         {view === "products" && (
           <MerchantProductsView
             theme={theme}
@@ -529,7 +540,7 @@ function MerchantPageInner({
               minWidth: "100%",
               maxWidth: "100%",
               height: "100%",
-              overflowY: "auto",
+              overflowY: !isMobileView && viewKey === "pos" ? "hidden" : "auto",
               overflowX: "hidden",
               position: "relative",
               WebkitOverflowScrolling: "touch",

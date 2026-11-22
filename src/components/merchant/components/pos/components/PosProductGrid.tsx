@@ -74,7 +74,8 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
         display: "flex",
         flexDirection: "column",
         gap: 14,
-        minWidth: 0
+        minWidth: 0,
+        ...(isMobileView ? {} : { minHeight: 0, height: "100%", overflowX: "clip", overflowY: "hidden" })
       }}
     >
       <style>{`
@@ -82,14 +83,33 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
         .pos-product-grid-root * {
           transition: none !important;
         }
+        .pos-product-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+        }
+        .pos-product-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .pos-product-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .pos-product-scroll::-webkit-scrollbar-thumb {
+          background: rgba(148, 163, 184, 0.35);
+          border-radius: 999px;
+        }
+        .pos-product-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(148, 163, 184, 0.55);
+        }
       `}</style>
       {/* Top Actions Bar */}
       <div
         style={{
           display: "flex",
           flexDirection: isMobileView ? "column" : "row",
+          flexWrap: isMobileView ? undefined : "wrap",
           alignItems: isMobileView ? "stretch" : "center",
-          gap: isMobileView ? 8 : 10
+          gap: isMobileView ? 8 : 10,
+          flexShrink: 0
         }}
       >
         {/* Search Input */}
@@ -98,7 +118,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
             position: "relative",
             flex: isMobileView ? undefined : 1,
             width: isMobileView ? "100%" : undefined,
-            minWidth: isMobileView ? 0 : 200
+            minWidth: isMobileView ? 0 : 150
           }}
         >
           <Search
@@ -166,7 +186,8 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
             alignItems: "center",
             gap: 8,
             flexShrink: 0,
-            overflowX: isMobileView ? "auto" : undefined,
+            maxWidth: "100%",
+            overflowX: "auto",
             scrollbarWidth: "none"
           }}
         >
@@ -351,7 +372,8 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
           paddingBottom: 4,
           scrollbarWidth: "none",
           msOverflowStyle: "none",
-          WebkitOverflowScrolling: "touch"
+          WebkitOverflowScrolling: "touch",
+          flexShrink: 0
         }}
       >
         {categoryList.map((cat) => {
@@ -381,9 +403,26 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
       </div>
 
       {/* Optional Extra Header Strip (e.g. Held Bills / Open Tables) */}
-      {extraHeaderContent}
+      {extraHeaderContent && <div style={{ flexShrink: 0 }}>{extraHeaderContent}</div>}
 
       {/* Product Cards Grid or Compact Data/Barcode List */}
+      <div
+        className={!isMobileView ? "pos-product-scroll" : undefined}
+        style={
+          !isMobileView
+            ? {
+                flex: 1,
+                minHeight: 0,
+                overflowY: "auto",
+                overflowX: "hidden",
+                overscrollBehaviorY: "contain",
+                WebkitOverflowScrolling: "touch",
+                paddingRight: 4,
+                paddingBottom: 16
+              }
+            : undefined
+        }
+      >
       {filteredProducts.length === 0 ? (
         <div
           style={{
@@ -519,7 +558,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
             display: "grid",
             gridTemplateColumns: isMobileView
               ? "repeat(2, minmax(0, 1fr))"
-              : "repeat(auto-fill, minmax(138px, 1fr))",
+              : "repeat(auto-fill, minmax(min(138px, 100%), 1fr))",
             gap: isMobileView ? 10 : 8,
             transition: "none",
             contain: "layout paint"
@@ -723,6 +762,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
           })}
         </div>
       )}
+      </div>
     </div>
   );
 });

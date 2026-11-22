@@ -1084,7 +1084,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
         height: "100%",
         minHeight: 0,
         width: "100%",
-        overflowY: "auto",
+        overflowY: !isMobileView && activeShift ? "hidden" : "auto",
         overflowX: "hidden",
         WebkitOverflowScrolling: "touch",
         overscrollBehaviorY: "contain",
@@ -1128,7 +1128,8 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
           flexDirection: isMobileView ? "column" : "row",
           alignItems: isMobileView ? "stretch" : "center",
           justifyContent: "space-between",
-          gap: isMobileView ? 8 : 10
+          gap: isMobileView ? 8 : 10,
+          flexShrink: 0
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, minWidth: 0 }}>
@@ -1384,6 +1385,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
             gap: isMobileView ? 12 : 16,
             padding: isMobileView ? "10px 12px 96px" : "18px 22px",
             width: "100%",
+            ...(isMobileView ? {} : { minHeight: 0, overflow: "hidden", alignItems: "stretch" }),
             boxSizing: "border-box"
           }}
         >

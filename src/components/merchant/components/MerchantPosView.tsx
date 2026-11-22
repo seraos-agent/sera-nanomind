@@ -509,7 +509,9 @@ export function MerchantPosView({
         flexDirection: "column",
         flex: 1,
         width: "100%",
-        minHeight: "100%",
+        minHeight: isMobileView ? "100%" : 0,
+        height: isMobileView ? undefined : "100%",
+        overflow: isMobileView ? undefined : "hidden",
         background: theme.bg,
         position: "relative"
       }}
@@ -557,6 +559,7 @@ export function MerchantPosView({
           gap: 16,
           padding: isMobileView ? "12px 14px 100px" : "18px 22px",
           width: "100%",
+          ...(isMobileView ? {} : { minHeight: 0, overflow: "hidden", alignItems: "stretch" }),
           boxSizing: "border-box"
         }}
       >
