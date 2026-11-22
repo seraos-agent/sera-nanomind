@@ -498,7 +498,8 @@ function buildCompactSystemInstruction(snapshot: ReturnType<typeof buildCommerce
 
   return [
     'You are SERA NanoMind, an offline-first hybrid AI commerce assistant.',
-    'Reply naturally in the same language as the user (Indonesian or English), concisely and grounded strictly in the live local store data below.',
+    'CRITICAL LANGUAGE RULE: Default strictly to clear, professional English. Always reply ONLY in the language of the Latest User Request. If the Latest User Request is in English, you MUST respond 100% in English even when earlier chat history, store names, city names, product names, or IDR currency values contain Indonesian words. Only reply in Indonesian if the Latest User Request itself is clearly written in Indonesian.',
+    'Keep responses concise, structured, and grounded strictly in the live local store data below. Never use em-dashes or en-dashes.',
     `Store: ${snapshot.store.name} (${snapshot.store.city}, open=${snapshot.store.isOpen})`,
     'Catalog:',
     productLines,
@@ -509,7 +510,7 @@ function buildCompactSystemInstruction(snapshot: ReturnType<typeof buildCommerce
     'If the user explicitly asks to add a product, update stock/price, record a POS order, or create an automation, append ONE JSON tag at the very end wrapped in <<<PROPOSAL and PROPOSAL>>>:',
     'CREATE_PRODUCT: <<<PROPOSAL {"intent":"CREATE_PRODUCT","parameters":{"productName":"string","price":25000,"stock":20,"category":"Signature Coffee"}} PROPOSAL>>>',
     'UPDATE_STOCK: <<<PROPOSAL {"intent":"UPDATE_STOCK","parameters":{"productId":"id","productName":"name","newStock":25}} PROPOSAL>>>',
-    'CREATE_POS_ORDER: <<<PROPOSAL {"intent":"CREATE_POS_ORDER","parameters":{"tableOrQueueNumber":"Meja 4","paymentMethod":"QRIS","itemsSummary":"2x Es Kopi Susu","items":[{"name":"Es Kopi Susu Gula Aren","quantity":2,"price":22000}],"totalAmount":44000}} PROPOSAL>>>',
+    'CREATE_POS_ORDER: <<<PROPOSAL {"intent":"CREATE_POS_ORDER","parameters":{"tableOrQueueNumber":"Table 4","paymentMethod":"QRIS","itemsSummary":"2x Cold Brew Citrus Tonic","items":[{"name":"Cold Brew Citrus Tonic","quantity":2,"price":30000}],"totalAmount":60000}} PROPOSAL>>>',
     'SCHEDULE_GOAL: <<<PROPOSAL {"intent":"SCHEDULE_GOAL","parameters":{"goalName":"string","cronExpression":"0 21 * * *","description":"string"}} PROPOSAL>>>',
   ].join('\n');
 }
@@ -656,7 +657,7 @@ export async function runHybridCommerceTurn(input: HybridTurnInput): Promise<Hyb
           .join('\n')
       : '';
 
-  const fullUserPrompt = `${historyContext ? `Recent chat:\n${historyContext}\n\n` : ''}${input.text}${docContext}`.trim();
+  const fullUserPrompt = `${historyContext ? `Recent chat (background context only; always match the language of Latest User Request below):\n${historyContext}\n\n` : ''}Latest User Request:\n${input.text}${docContext}`.trim();
 
   // For on-device ChromeAdapterImpl (which does not forward request.systemInstruction to session.prompt),
   // embed compact store context directly inside the prompt sent to generateContent.

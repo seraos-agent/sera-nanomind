@@ -40,7 +40,7 @@ export function Sidebar({ theme, open, onClose, onToggle, isMobileView, currentV
   const getProfileData = () => {
     if (typeof window === 'undefined') {
       return {
-        name: userEmail || 'Pengguna SERA',
+        name: userEmail || 'SERA User',
         avatar: null as string | null,
         initial: 'S'
       };
@@ -50,7 +50,7 @@ export function Sidebar({ theme, open, onClose, onToggle, isMobileView, currentV
       localStorage.getItem('sera_user_name') ||
       localStorage.getItem('sera_user_nickname') ||
       userEmail ||
-      'Pengguna SERA';
+      'SERA User';
     const avatar = localStorage.getItem('sera_user_avatar');
     const initial = (name.trim().charAt(0) || (userEmail ? userEmail.trim().charAt(0) : '') || 'S').toUpperCase();
     return { name, avatar, initial };
