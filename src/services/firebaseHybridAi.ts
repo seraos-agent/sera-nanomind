@@ -1,3 +1,4 @@
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
 import {
   initializeAppCheck,
@@ -17,6 +18,26 @@ import {
   DEMO_STORE,
   DEMO_STORE_ID,
 } from './demoCommerceSeed';
+
+interface NanoAICoreStatusResult {
+  aicoreInstalled: boolean;
+  sdkInt: number;
+  deviceModel: string;
+  detail: string;
+}
+
+interface NanoAICoreGenerateResult {
+  available: boolean;
+  text?: string;
+  error?: string;
+}
+
+interface NanoAICorePluginInterface {
+  checkStatus(): Promise<NanoAICoreStatusResult>;
+  generatePrompt(options: { prompt: string }): Promise<NanoAICoreGenerateResult>;
+}
+
+const NanoAICore = registerPlugin<NanoAICorePluginInterface>('NanoAICore');
 
 export interface FirebaseRuntimeConfig {
   apiKey: string;
@@ -305,6 +326,15 @@ export async function probeNanoDiagnosticState(): Promise<NanoDiagnosticState> {
     } catch (err: any) {
       availability = 'unavailable';
       detailMessage = `window.ai.languageModel check failed: ${err?.message || String(err)}`;
+    }
+  } else if (Capacitor.isNativePlatform()) {
+    try {
+      const st = await NanoAICore.checkStatus();
+      availability = st.aicoreInstalled ? 'available' : 'unavailable';
+      detailMessage = st.detail || `Android ${st.deviceModel} (API ${st.sdkInt})`;
+    } catch (err: any) {
+      availability = 'unavailable';
+      detailMessage = `Android AICore check failed: ${err?.message || String(err)}`;
     }
   }
 
@@ -649,6 +679,61 @@ export async function runHybridCommerceTurn(input: HybridTurnInput): Promise<Hyb
   });
 
   let lastSdkError = '';
+
+  // 0. Android Native AICore On-Device Bridge (Capacitor Android)
+  if (
+    Capacitor.isNativePlatform() &&
+    modelTier !== 'high' &&
+    !hasImages &&
+    diag.availability === 'available'
+  ) {
+    input.onActivity?.({
+      phase: 'WORKING',
+      subText: 'Executing On-Device Gemini Nano via Android AICore...',
+      startTime,
+      cognitiveSteps: [
+        {
+          title: 'Hybrid Router: Android AICore Native Bridge',
+          detail: `Device: ${diag.detailMessage}`,
+          status: 'active',
+        },
+      ],
+    });
+
+    try {
+      const aicoreRes = await NanoAICore.generatePrompt({ prompt: promptWithEmbeddedContext });
+      if (aicoreRes?.available && aicoreRes.text?.trim()) {
+        const { cleanText, proposal } = extractProposalFromText(aicoreRes.text);
+        const durationSeconds = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+        return {
+          content: cleanText,
+          proposal,
+          durationSeconds,
+          hadTools: true,
+          executionEngine: 'FIREBASE_ON_DEVICE',
+          cognitiveSteps: [
+            {
+              title: 'Executed On-Device via Android AICore (Gemini Nano)',
+              detail: `Native AICore · $0 cloud cost · 100% offline-capable (${durationSeconds}s)`,
+              status: 'completed',
+            },
+            {
+              title: 'Live Commerce State Grounded',
+              detail: `${snapshot.store.name}: ${snapshot.products.length} products · ${snapshot.posShift?.transactionCount || 0} POS txs`,
+              status: 'completed',
+            },
+          ],
+        };
+      }
+      if (aicoreRes?.error) {
+        lastSdkError = aicoreRes.error;
+        console.warn('[AndroidAICore] Falling back to Firebase Cloud:', aicoreRes.error);
+      }
+    } catch (err: any) {
+      lastSdkError = err?.message || String(err);
+      console.warn('[AndroidAICore] Bridge error, falling back to Firebase Cloud:', err);
+    }
+  }
 
   // 1. Official Firebase AI Logic SDK Path (`firebase/ai`)
   // Uses user's Firebase app (PREFER_ON_DEVICE / PREFER_IN_CLOUD) when configured,
