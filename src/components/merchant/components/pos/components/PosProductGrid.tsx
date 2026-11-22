@@ -115,8 +115,8 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
             type="text"
             placeholder={
               storeType === "FOOD"
-                ? "Cari menu makanan atau minuman..."
-                : "Cari nama produk atau scan / ketik barcode..."
+                ? "Search food or drink menu items..."
+                : "Search products or scan / type barcode..."
             }
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -223,7 +223,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
             <button
               type="button"
               onClick={() => onToggleViewMode("grid")}
-              title="Tampilan Grid Foto"
+              title="Photo Grid View"
               style={{
                 padding: isMobileView ? "7px 9px" : "8px 10px",
                 border: "none",
@@ -245,7 +245,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
             <button
               type="button"
               onClick={() => onToggleViewMode("list")}
-              title="Tampilan Tabel Data & Barcode"
+              title="Data & Barcode Table View"
               style={{
                 padding: isMobileView ? "7px 9px" : "8px 10px",
                 border: "none",
@@ -266,7 +266,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
           </div>
         )}
 
-        {/* Rekap Kasir Button */}
+        {/* POS Report Button */}
         <button
           type="button"
           onClick={onOpenReport}
@@ -298,14 +298,14 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
           }}
         >
           <FileText size={15} color="currentColor" />
-          <span>{isMobileView ? "Rekap" : "Rekap Kasir"}</span>
+          <span>{isMobileView ? "Report" : "POS Report"}</span>
         </button>
 
         {onOpenPrinterSettings && (
           <button
             type="button"
             onClick={onOpenPrinterSettings}
-            title="Pengaturan Printer Thermal"
+            title="Thermal Printer Settings"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -374,7 +374,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
                 transition: "all 0.15s ease"
               }}
             >
-              {cat === "ALL" ? (storeType === "FOOD" ? "Semua Menu" : "Semua Produk") : cat}
+              {cat === "ALL" ? (storeType === "FOOD" ? "All Menu" : "All Products") : cat}
             </button>
           );
         })}
@@ -397,12 +397,12 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
         >
           <ShoppingBag size={36} style={{ opacity: 0.4, marginBottom: 8 }} />
           <p style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>
-            Tidak ada produk yang cocok
+            No matching products found
           </p>
           <p style={{ margin: 0, fontSize: 12, marginTop: 4 }}>
             {storeType === "FOOD"
-              ? "Coba ubah kata kunci pencarian atau pilih kategori lain"
-              : "Coba ubah kata kunci pencarian atau scan barcode produk"}
+              ? "Try changing your search keywords or selecting another category"
+              : "Try changing your search keywords or scanning a product barcode"}
           </p>
         </div>
       ) : viewMode === "list" ? (
@@ -460,11 +460,11 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
                       </span>
                     )}
                     <span>{p.category}</span>
-                    {hasVar && <span>• {p.variants!.length} varian</span>}
+                    {hasVar && <span>• {p.variants!.length} variants</span>}
                     <span style={{ fontWeight: 600, color: isOutOfStock ? "#EF4444" : "#10B981" }}>
                       {p.type === "GOODS"
-                        ? (isOutOfStock ? "Habis" : `Stok: ${p.stock ?? 0}`)
-                        : (p.duration || "Layanan")}
+                        ? (isOutOfStock ? "Out of Stock" : `Stock: ${p.stock ?? 0}`)
+                        : (p.duration || "Service")}
                     </span>
                   </div>
                 </div>
@@ -472,7 +472,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
                 <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
                   <div style={{ textAlign: "right" }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: theme.accent }}>
-                      {hasVar ? "Mulai " : ""}Rp {displayPrice.toLocaleString("id-ID")}
+                      {hasVar ? "From " : ""}Rp {displayPrice.toLocaleString("id-ID")}
                     </div>
                     {!hasVar && p.originalPrice && p.originalPrice > p.price && (
                       <div style={{ fontSize: 10, color: theme.inkSoft, textDecoration: "line-through" }}>
@@ -619,8 +619,8 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
                     }}
                   >
                     {p.type === "GOODS"
-                      ? ((p.stock ?? 0) <= 0 ? "Habis" : `Stok: ${p.stock ?? 0}`)
-                      : (p.duration || "Siap Booking")}
+                      ? ((p.stock ?? 0) <= 0 ? "Out of Stock" : `Stock: ${p.stock ?? 0}`)
+                      : (p.duration || "Ready to Book")}
                   </div>
                 </div>
 
@@ -670,7 +670,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
                           color: theme.accent
                         }}
                       >
-                        {hasVar ? "Mulai " : ""}Rp {displayPrice.toLocaleString("id-ID")}
+                        {hasVar ? "From " : ""}Rp {displayPrice.toLocaleString("id-ID")}
                       </span>
                       {!hasVar && p.originalPrice && p.originalPrice > p.price && (
                         <span
@@ -697,7 +697,7 @@ export const PosProductGrid: React.FC<PosProductGridProps> = React.memo(({
                           onSelectProduct(p);
                         }
                       }}
-                      title={isOutOfStock ? "Stok habis" : (hasVar ? "Pilih varian" : "Tambah ke keranjang")}
+                      title={isOutOfStock ? "Out of stock" : (hasVar ? "Select variant" : "Add to cart")}
                       style={{
                         width: isMobileView ? 32 : 26,
                         height: isMobileView ? 32 : 26,

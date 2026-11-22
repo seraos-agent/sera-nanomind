@@ -41,7 +41,7 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
       {item.variants && item.variants.length > 0 && (
         <div>
           <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-sub)', marginBottom: '6px' }}>
-            Pilihan Varian / Paket
+            Variant / Package Options
           </div>
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
             {item.variants.map((v) => (
@@ -81,13 +81,13 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
           }}
         >
           <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-service)' }}>
-            📅 Jadwal Layanan / Kunjungan:
+            📅 Service / Visit Schedule:
           </label>
           <input
             type="text"
             value={bookingDate}
             onChange={(e) => onChangeBookingDate(e.target.value)}
-            placeholder="Contoh: Besok pukul 10:00 WIB"
+            placeholder="Example: Tomorrow at 10:00 AM"
             style={{
               padding: '8px 12px',
               borderRadius: 'var(--radius-sm)',
@@ -121,7 +121,7 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
           {/* Stepper Buttons */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-sub)' }}>
-              Jumlah
+              Quantity
             </span>
             <div
               style={{
@@ -199,7 +199,7 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
           {/* Subtotal Display */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
             <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.2 }}>
-              Total Harga
+              Total Price
             </span>
             <div
               style={{
@@ -226,7 +226,7 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
           onChange={(e) => onChangeCustomerNotes(e.target.value.slice(0, 120))}
           maxLength={120}
           rows={2}
-          placeholder="Catatan untuk penjual..."
+          placeholder="Notes for seller..."
           style={{
             width: '100%',
             padding: '8px 12px 20px',
@@ -274,7 +274,7 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
         >
           <span>ℹ️</span>
           <span>
-            <strong>Toko Tutup Sementara.</strong> Pesanan tetap dapat dibuat dan akan diproses saat toko buka kembali.
+            <strong>Store Temporarily Closed.</strong> You can still place orders, which will be processed once the store reopens.
           </span>
         </div>
       )}
@@ -284,8 +284,8 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
         <button
           type="button"
           onClick={onWhatsAppChat}
-          aria-label="Chat WhatsApp Penjual"
-          title="Chat WhatsApp Penjual"
+          aria-label="Chat Seller on WhatsApp"
+          title="Chat Seller on WhatsApp"
           style={{
             width: '44px',
             height: '44px',
@@ -323,7 +323,7 @@ export const ItemOrderControls: React.FC<ItemOrderControlsProps> = ({
             borderRadius: 'var(--radius-md)',
           }}
         >
-          {isService ? 'Booking Sekarang' : 'Tambah ke Keranjang'}
+          {isService ? 'Book Now' : 'Add to Cart'}
         </button>
       </div>
     </>

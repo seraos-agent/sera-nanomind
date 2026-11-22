@@ -50,8 +50,9 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({
         receiptOrBillNumber: completedTransaction.receiptNumber,
         actorName:
           completedTransaction.cashierName ||
-          (completedTransaction.customerName?.startsWith("Kasir:")
-            ? completedTransaction.customerName.replace(/^Kasir:\s*/i, "")
+          (completedTransaction.customerName?.startsWith("Kasir:") ||
+          completedTransaction.customerName?.startsWith("Cashier:")
+            ? completedTransaction.customerName.replace(/^(?:Kasir|Cashier):\s*/i, "")
             : undefined),
         items: completedTransaction.items,
         printedAt: completedTransaction.createdAt
@@ -67,7 +68,7 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({
       setPrintNote(res.message);
       if (onNotify) onNotify(res.message);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Gagal mencetak tiket dapur.";
+      const msg = err instanceof Error ? err.message : "Failed to print kitchen ticket.";
       setPrintNote(msg);
       if (onNotify) onNotify(msg);
     } finally {
@@ -83,7 +84,7 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({
       setPrintNote(res.message);
       if (onNotify) onNotify(res.message);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Gagal mencetak struk thermal.";
+      const msg = err instanceof Error ? err.message : "Failed to print thermal receipt.";
       setPrintNote(msg);
       if (onNotify) onNotify(msg);
     } finally {
@@ -118,7 +119,7 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({
           }, 0);
     const savingsLine =
       totalDiscountSaved > 0
-        ? `Hemat: Rp ${totalDiscountSaved.toLocaleString("id-ID")}\n`
+        ? `Savings: Rp ${totalDiscountSaved.toLocaleString("id-ID")}\n`
         : "";
 
     const paymentText = isSplitPayment
@@ -129,20 +130,20 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({
 
     const cashChangeLine =
       completedTransaction.paymentMethod === "CASH"
-        ? `Bayar: Rp ${completedTransaction.amountPaid.toLocaleString(
+        ? `Paid: Rp ${completedTransaction.amountPaid.toLocaleString(
             "id-ID"
-          )}\nKembalian: Rp ${completedTransaction.changeAmount.toLocaleString("id-ID")}\n`
+          )}\nChange: Rp ${completedTransaction.changeAmount.toLocaleString("id-ID")}\n`
         : isSplitPayment && completedTransaction.changeAmount > 0
-          ? `Kembalian: Rp ${completedTransaction.changeAmount.toLocaleString("id-ID")}\n`
+          ? `Change: Rp ${completedTransaction.changeAmount.toLocaleString("id-ID")}\n`
           : "";
 
     const tableLine = completedTransaction.tableOrQueueNumber
-      ? `Meja/Order: ${completedTransaction.tableOrQueueNumber}\n`
+      ? `Table/Order: ${completedTransaction.tableOrQueueNumber}\n`
       : "";
 
     const taxServiceLines = `${
       completedTransaction.taxAmount && completedTransaction.taxAmount > 0
-        ? `Pajak: Rp ${completedTransaction.taxAmount.toLocaleString("id-ID")}\n`
+        ? `Tax: Rp ${completedTransaction.taxAmount.toLocaleString("id-ID")}\n`
         : ""
     }${
       completedTransaction.serviceChargeAmount && completedTransaction.serviceChargeAmount > 0
@@ -150,15 +151,15 @@ export const PosReceiptModal: React.FC<PosReceiptModalProps> = ({
         : ""
     }`;
 
-    const message = `*STRUK PEMBELIAN ${store?.name || "MITRA SERA"}*
-No. Struk: ${completedTransaction.receiptNumber}
-Tanggal: ${new Date(completedTransaction.createdAt).toLocaleString("id-ID")}
+    const message = `*PURCHASE RECEIPT ${store?.name || "SERA MERCHANT"}*
+Receipt No: ${completedTransaction.receiptNumber}
+Date: ${new Date(completedTransaction.createdAt).toLocaleString("en-US")}
 ${tableLine}--------------------------------
 ${itemsText}
 --------------------------------
-${taxServiceLines}*Total Belanja: Rp ${completedTransaction.totalAmount.toLocaleString("id-ID")}*
-${savingsLine}Metode: ${paymentText}
-${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
+${taxServiceLines}*Total: Rp ${completedTransaction.totalAmount.toLocaleString("id-ID")}*
+${savingsLine}Method: ${paymentText}
+${cashChangeLine}Thank you for shopping at ${store?.name}!`;
 
     const url = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
@@ -214,10 +215,10 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
               <CheckCircle2 size={26} />
             </div>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: theme.ink }}>
-              Transaksi Berhasil!
+              Transaction Completed!
             </h3>
             <p style={{ margin: "2px 0 0", fontSize: 12, color: theme.inkSoft }}>
-              Stok produk online telah terpotong otomatis
+              Online catalog stock deducted automatically
             </p>
           </div>
 
@@ -238,10 +239,10 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
             }}
           >
             <div style={{ textAlign: "center", fontWeight: "bold", fontSize: 14 }}>
-              {store?.name || "MITRA TOKO SERA"}
+              {store?.name || "SERA MERCHANT"}
             </div>
             <div style={{ textAlign: "center", fontSize: 10, color: "#6B7280" }}>
-              {store?.address || "Solo"}
+              {store?.address || "Downtown"}
             </div>
             <div style={{ textAlign: "center", fontSize: 10, color: "#6B7280" }}>
               WA: {store?.whatsapp || "081234567890"}
@@ -250,7 +251,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
 
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10 }}>
               <span>No: {completedTransaction.receiptNumber}</span>
-              <span>{new Date(completedTransaction.createdAt).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}</span>
+              <span>{new Date(completedTransaction.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</span>
             </div>
             {completedTransaction.tableOrQueueNumber && (
               <div style={{ fontSize: 10, fontWeight: "bold" }}>
@@ -277,7 +278,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
 
             {completedTransaction.taxAmount !== undefined && completedTransaction.taxAmount > 0 && (
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#4B5563" }}>
-                <span>Pajak:</span>
+                <span>Tax:</span>
                 <span>Rp {completedTransaction.taxAmount.toLocaleString("id-ID")}</span>
               </div>
             )}
@@ -307,17 +308,17 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
               if (totalSavings <= 0) return null;
               return (
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#059669", fontWeight: "bold" }}>
-                  <span>HEMAT:</span>
+                  <span>SAVED:</span>
                   <span>- Rp {totalSavings.toLocaleString("id-ID")}</span>
                 </div>
               );
             })()}
 
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-              <span>Metode:</span>
+              <span>Method:</span>
               <span>
                 {isSplitPayment
-                  ? "Split (2 Metode)"
+                  ? "Split (2 Methods)"
                   : getPaymentMethodDisplayLabel(completedTransaction.paymentMethod)}
               </span>
             </div>
@@ -336,11 +337,11 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
             {completedTransaction.paymentMethod === "CASH" && (
               <>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11 }}>
-                  <span>Bayar:</span>
+                  <span>Paid:</span>
                   <span>Rp {completedTransaction.amountPaid.toLocaleString("id-ID")}</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: "bold" }}>
-                  <span>Kembali:</span>
+                  <span>Change:</span>
                   <span>Rp {completedTransaction.changeAmount.toLocaleString("id-ID")}</span>
                 </div>
               </>
@@ -348,14 +349,14 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
 
             {isSplitPayment && completedTransaction.changeAmount > 0 && (
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: "bold" }}>
-                <span>Kembali:</span>
+                <span>Change:</span>
                 <span>Rp {completedTransaction.changeAmount.toLocaleString("id-ID")}</span>
               </div>
             )}
 
             <div style={{ borderTop: "1px dashed #9CA3AF", margin: "4px 0" }} />
             <div style={{ textAlign: "center", fontSize: 10, color: "#4B5563" }}>
-              Terima kasih atas kunjungan Anda!
+              Thank you for your visit!
             </div>
           </div>
 
@@ -400,7 +401,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
               }}
             >
               <Printer size={16} />
-              <span>{isPrinting ? "Mencetak..." : "Cetak Struk"}</span>
+              <span>{isPrinting ? "Printing..." : "Print Receipt"}</span>
             </button>
 
             {isFoodStore && (
@@ -408,7 +409,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
                 type="button"
                 disabled={isPrinting}
                 onClick={handlePrintKitchenTicket}
-                title="Cetak tiket pesanan ke dapur/barista (tanpa harga)"
+                title="Print preparation ticket to kitchen/barista (no prices)"
                 style={{
                   flex: 1,
                   minWidth: 115,
@@ -428,7 +429,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
                 }}
               >
                 <ChefHat size={16} />
-                <span>Tiket Dapur</span>
+                <span>Kitchen Ticket</span>
               </button>
             )}
 
@@ -436,7 +437,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
               <button
                 type="button"
                 onClick={onOpenPrinterSettings}
-                title="Atur Printer"
+                title="Printer Settings"
                 style={{
                   padding: "10px",
                   borderRadius: 10,
@@ -474,7 +475,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
               }}
             >
               <Share2 size={16} />
-              <span>Kirim WhatsApp</span>
+              <span>Send WhatsApp</span>
             </button>
           </div>
 
@@ -502,12 +503,12 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
             }}
           >
             <RotateCcw size={16} />
-            <span>Transaksi Baru</span>
+            <span>New Transaction</span>
           </button>
         </div>
       </div>
 
-      {/* PROMPT: Input Nomor WhatsApp Pembeli */}
+      {/* PROMPT: Customer WhatsApp Input */}
       {showWhatsAppPrompt && (
         <div
           style={{
@@ -535,7 +536,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
               <h4 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: theme.ink }}>
-                Kirim Struk ke WhatsApp
+                Send Receipt via WhatsApp
               </h4>
               <button
                 type="button"
@@ -546,7 +547,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
               </button>
             </div>
             <p style={{ margin: "0 0 12px", fontSize: 12, color: theme.inkSoft }}>
-              Masukkan nomor WhatsApp pembeli untuk menerima struk digital:
+              Enter the buyer's WhatsApp number to send their digital receipt:
             </p>
             <input
               type="tel"
@@ -584,7 +585,7 @@ ${cashChangeLine}Terima kasih telah berbelanja di ${store?.name}!`;
                 cursor: customerWhatsApp.trim() ? "pointer" : "not-allowed"
               }}
             >
-              Kirim Struk Sekarang
+              Send Receipt Now
             </button>
           </div>
         </div>

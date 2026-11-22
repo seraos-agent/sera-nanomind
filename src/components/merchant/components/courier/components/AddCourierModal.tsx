@@ -81,7 +81,7 @@ export function AddCourierModal({
           <button
             type="button"
             onClick={onClose}
-            title="Kembali"
+            title="Back"
             style={{
               background: theme.surface2,
               border: `1px solid ${theme.border}`,
@@ -103,10 +103,10 @@ export function AddCourierModal({
           </button>
           <div>
             <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>
-              Tambah Kurir Toko
+              Add Store Courier
             </div>
             <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 1 }}>
-              Daftarkan armada kurir toko baru
+              Register a new store delivery fleet member
             </div>
           </div>
         </div>
@@ -144,12 +144,12 @@ export function AddCourierModal({
             <form onSubmit={onSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
                 <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 7 }}>
-                  Nama Lengkap Kurir *
+                  Courier Full Name *
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Contoh: Joko Susanto"
+                  placeholder="Example: Alex Johnson"
                   value={name}
                   onChange={e => {
                     const val = e.target.value.replace(/[^a-zA-Z\s'.`-]/g, "");
@@ -173,14 +173,14 @@ export function AddCourierModal({
 
               <div>
                 <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 7 }}>
-                  Nomor WhatsApp Kurir *
+                  Courier WhatsApp Number *
                 </label>
                 <input
                   type="tel"
                   required
                   inputMode="numeric"
                   maxLength={15}
-                  placeholder="Contoh: 08123456789"
+                  placeholder="Example: 08123456789"
                   value={phone}
                   onChange={e => {
                     const val = e.target.value.replace(/\D/g, "");
@@ -205,7 +205,7 @@ export function AddCourierModal({
               {/* Fleet Selection */}
               <div>
                 <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-                  Tipe Armada Ditugaskan
+                  Assigned Vehicle Type
                 </label>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                   <button
@@ -230,7 +230,7 @@ export function AddCourierModal({
                     }}
                   >
                     <Bike size={19} />
-                    <span>Motor</span>
+                    <span>Motorcycle</span>
                   </button>
 
                   <button
@@ -255,7 +255,7 @@ export function AddCourierModal({
                     }}
                   >
                     <Car size={19} />
-                    <span>Mobil</span>
+                    <span>Car</span>
                   </button>
 
                   <button
@@ -280,19 +280,19 @@ export function AddCourierModal({
                     }}
                   >
                     <Truck size={19} />
-                    <span>Pickup</span>
+                    <span>Pickup Truck</span>
                   </button>
                 </div>
               </div>
 
               <div>
                 <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 7 }}>
-                  Nomor Plat Kendaraan (Opsional)
+                  Vehicle License Plate (Optional)
                 </label>
                 <input
                   type="text"
                   maxLength={12}
-                  placeholder="Contoh: AD 4589 SER"
+                  placeholder="Example: AB 4589 SER"
                   value={plate}
                   onChange={e => {
                     const val = e.target.value.toUpperCase().replace(/[^A-Z0-9\s-]/g, "");
@@ -316,14 +316,14 @@ export function AddCourierModal({
 
               <div>
                 <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 7 }}>
-                  PIN Kurir (4–6 Digit Angka, Wajib) <span style={{ color: "#EF4444" }}>*</span>
+                  Courier PIN (4-6 Numeric Digits, Required) <span style={{ color: "#EF4444" }}>*</span>
                 </label>
                 <input
                   type="password"
                   inputMode="numeric"
                   maxLength={6}
                   required
-                  placeholder="Masukkan 4–6 digit angka PIN"
+                  placeholder="Enter 4-6 digit PIN"
                   value={newCourierPin}
                   onChange={e => {
                     const val = e.target.value.replace(/\D/g, "").slice(0, 6);
@@ -345,7 +345,7 @@ export function AddCourierModal({
                   }}
                 />
                 <div style={{ fontSize: 11.5, color: theme.inkSoft, marginTop: 5 }}>
-                  PIN ini wajib dimasukkan setiap kurir login atau ganti shift/perangkat.
+                  This PIN is required each time the courier logs in or switches shifts/devices.
                 </div>
               </div>
 
@@ -361,7 +361,7 @@ export function AddCourierModal({
                   lineHeight: 1.45
                 }}
               >
-                Sistem akan membuatkan <b>Kode Aktivasi Unik</b>. Bagikan Kode Aktivasi dan PIN kurir secara terpisah agar keamanan akun kurir tetap terjaga.
+                The system will generate a <b>Unique Activation Code</b>. Share the Activation Code and the courier's PIN separately to keep account security intact.
               </div>
 
               {/* Action Buttons */}
@@ -381,7 +381,7 @@ export function AddCourierModal({
                     cursor: "pointer"
                   }}
                 >
-                  Batal
+                  Cancel
                 </button>
 
                 <button
@@ -405,7 +405,7 @@ export function AddCourierModal({
                     boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
                   }}
                 >
-                  {isAdding ? "Menyimpan..." : "Simpan Kurir"}
+                  {isAdding ? "Saving..." : "Save Courier"}
                 </button>
               </div>
             </form>

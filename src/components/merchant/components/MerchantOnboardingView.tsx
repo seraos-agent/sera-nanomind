@@ -65,19 +65,19 @@ export function MerchantOnboardingView({
     const cleanAddress = address.trim();
 
     if (!cleanName || cleanName.length < 3) {
-      setErrorMessage(`Nama ${entityLower} wajib diisi (minimal 3 karakter)!`);
+      setErrorMessage(`${entity} name is required (minimum 3 characters)!`);
       return;
     }
     if (!cleanWhatsapp || cleanWhatsapp.length < 9) {
-      setErrorMessage("Nomor WhatsApp wajib diisi dengan nomor aktif yang valid!");
+      setErrorMessage("A valid active WhatsApp number is required!");
       return;
     }
     if (!cleanCity) {
-      setErrorMessage(`Kota/wilayah ${entityLower} wajib diisi untuk penentuan area pengiriman!`);
+      setErrorMessage(`${entity} city/area is required for delivery zones!`);
       return;
     }
     if (!cleanAddress) {
-      setErrorMessage(`Alamat lengkap ${entityLower} wajib diisi sebagai titik penjemputan pesanan!`);
+      setErrorMessage(`Full ${entityLower} address is required for order pickup!`);
       return;
     }
 
@@ -95,8 +95,8 @@ export function MerchantOnboardingView({
         id: storeId,
         ownerId: userEmail || undefined,
         name: cleanName,
-        tagline: "Mitra Resmi SERA",
-        description: description.trim() || `Pusat produk dan layanan terpercaya dari ${cleanName}.`,
+        tagline: "Official SERA Merchant",
+        description: description.trim() || `Trusted products and services from ${cleanName}.`,
         logoUrl: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=160",
         bannerUrl: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200",
         type: storeType,
@@ -107,7 +107,7 @@ export function MerchantOnboardingView({
         city: cleanCity,
         isOpen: true,
         isOpenManualOverride: null,
-        operatingHours: "Setiap Hari, 08:00 - 21:00 WIB",
+        operatingHours: "Every Day, 08:00 - 21:00",
         openTime: "08:00",
         closeTime: "21:00",
         openDays: ["SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU", "MINGGU"],
@@ -144,7 +144,7 @@ export function MerchantOnboardingView({
 
       onStoreCreated(newStore);
     } catch (err: any) {
-      setErrorMessage(err.message || "Gagal membuka toko. Silakan coba lagi.");
+      setErrorMessage(err.message || "Failed to open store. Please try again.");
       setIsSubmitting(false);
     }
   };
@@ -189,14 +189,14 @@ export function MerchantOnboardingView({
             padding: 6,
             borderRadius: 8
           }}
-          title="Kembali"
+          title="Back"
         >
           <ChevronLeft size={20} />
         </button>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <Store size={18} color={theme.accent} />
           <span style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-            Pendaftaran Mitra Store
+            Merchant Partner Registration
           </span>
         </div>
       </div>
@@ -243,10 +243,10 @@ export function MerchantOnboardingView({
           </div>
           <div style={{ minWidth: 0 }}>
             <h1 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: theme.ink, lineHeight: 1.3 }}>
-              Buka {entity} Mitra SERA
+              Open Your SERA {entity}
             </h1>
             <p style={{ margin: "4px 0 0", fontSize: 12, color: theme.inkSoft, lineHeight: 1.45 }}>
-              Lengkapi data {entityLower}mu untuk mulai mengunggah {storeType === "FOOD" ? "menu" : "produk"} dan melayani pesanan pembeli di SERA Marketplace.
+              Complete your {entityLower} profile to start uploading {storeType === "FOOD" ? "menu items" : "products"} and serving buyers on SERA Marketplace.
             </p>
           </div>
         </div>
@@ -286,16 +286,16 @@ export function MerchantOnboardingView({
             boxShadow: "0 2px 8px rgba(0,0,0,0.03)"
           }}
         >
-          {/* 1. Nama Toko / Resto */}
+          {/* 1. Store / Restaurant Name */}
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-              Nama {entity} / Brand <span style={{ color: "#EF4444" }}>*</span>
+              {entity} / Brand Name <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <input
               type="text"
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
-              placeholder={storeType === "FOOD" ? "Contoh: Warung Nasi Nusantara" : "Contoh: Toko Berkah Makmur"}
+              placeholder={storeType === "FOOD" ? "Example: Artisan Kitchen & Cafe" : "Example: Daily Harvest Market"}
               required
               style={{
                 width: "100%",
@@ -311,10 +311,10 @@ export function MerchantOnboardingView({
             />
           </div>
 
-          {/* 2. Jenis Usaha */}
+          {/* 2. Business Type */}
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <label style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-              Jenis Usaha <span style={{ color: "#EF4444" }}>*</span>
+              Business Type <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <div
               style={{
@@ -324,9 +324,9 @@ export function MerchantOnboardingView({
               }}
             >
               {[
-                { type: "BARANG" as const, label: "Barang / Sembako", icon: Package },
-                { type: "FOOD" as const, label: "Kuliner / Makanan", icon: Utensils },
-                { type: "JASA" as const, label: "Jasa & Layanan", icon: Wrench }
+                { type: "BARANG" as const, label: "Goods / Retail", icon: Package },
+                { type: "FOOD" as const, label: "Food & Beverage", icon: Utensils },
+                { type: "JASA" as const, label: "Services", icon: Wrench }
               ].map(({ type, label, icon: Icon }) => {
                 const isSelected = storeType === type;
                 return (
@@ -361,10 +361,10 @@ export function MerchantOnboardingView({
             </div>
           </div>
 
-          {/* 3. Kategori Utama */}
+          {/* 3. Main Category */}
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-              Kategori Utama <span style={{ color: "#EF4444" }}>*</span>
+              Main Category <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <select
               value={category}
@@ -390,18 +390,18 @@ export function MerchantOnboardingView({
             </select>
           </div>
 
-          {/* 4. Nomor WhatsApp Toko */}
+          {/* 4. Store WhatsApp Number */}
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={{ fontSize: 12, fontWeight: 700, color: theme.ink, display: "flex", alignItems: "center", gap: 6 }}>
               <Phone size={13} color="#16A34A" />
-              <span>Nomor WhatsApp Toko</span>
+              <span>Store WhatsApp Number</span>
               <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <input
               type="tel"
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="Contoh: 081234567890"
+              placeholder="Example: 081234567890"
               required
               style={{
                 width: "100%",
@@ -416,23 +416,23 @@ export function MerchantOnboardingView({
               }}
             />
             <span style={{ fontSize: 10.5, color: theme.inkSoft }}>
-              Digunakan pelanggan untuk konfirmasi pesanan dan koordinasi pengiriman.
+              Used by buyers for order confirmation and delivery coordination.
             </span>
           </div>
 
-          {/* 5. Kota & Alamat Toko */}
+          {/* 5. City & Store Address */}
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <label style={{ fontSize: 12, fontWeight: 700, color: theme.ink, display: "flex", alignItems: "center", gap: 6 }}>
                 <MapPin size={13} color="#EF4444" />
-                <span>Kota / Kabupaten</span>
+                <span>City / Regency</span>
                 <span style={{ color: "#EF4444" }}>*</span>
               </label>
               <input
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="Contoh: Malang / Solo / Jakarta"
+                placeholder="Example: Malang / Jakarta / Austin"
                 required
                 style={{
                   width: "100%",
@@ -450,12 +450,12 @@ export function MerchantOnboardingView({
 
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <label style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-                Alamat Lengkap {entity} <span style={{ color: "#EF4444" }}>*</span>
+                Full {entity} Address <span style={{ color: "#EF4444" }}>*</span>
               </label>
               <textarea
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="Jl. Merdeka No. 10, RT 01/02, Kelurahan..."
+                placeholder="Street name, unit number, district, landmarks..."
                 required
                 rows={2}
                 style={{
@@ -474,11 +474,11 @@ export function MerchantOnboardingView({
             </div>
           </div>
 
-          {/* 6. Deskripsi Singkat (Opsional) */}
+          {/* 6. Short Description (Optional) */}
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={{ fontSize: 12, fontWeight: 700, color: theme.ink, display: "flex", alignItems: "center", gap: 6 }}>
               <FileText size={13} color={theme.inkSoft} />
-              <span>Deskripsi / Slogan {entity} (Opsional)</span>
+              <span>{entity} Description / Tagline (Optional)</span>
             </label>
             <input
               type="text"
@@ -486,8 +486,8 @@ export function MerchantOnboardingView({
               onChange={(e) => setDescription(e.target.value)}
               placeholder={
                 storeType === "FOOD"
-                  ? "Contoh: Sedia masakan rumahan hangat & minuman segar"
-                  : "Contoh: Sedia aneka kebutuhan pokok murah dan segar"
+                  ? "Example: Serving fresh home-style meals & craft drinks"
+                  : "Example: Fresh groceries and daily essentials"
               }
               style={{
                 width: "100%",
@@ -527,11 +527,11 @@ export function MerchantOnboardingView({
             }}
           >
             {isSubmitting ? (
-              <span>Mendaftarkan {entity}...</span>
+              <span>Registering {entity}...</span>
             ) : (
               <>
                 <CheckCircle2 size={18} />
-                <span>Buka {entity} Sekarang</span>
+                <span>Open {entity} Now</span>
               </>
             )}
           </button>

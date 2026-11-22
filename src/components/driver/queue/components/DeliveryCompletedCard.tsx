@@ -39,9 +39,9 @@ export function DeliveryCompletedCard({
       >
         <div>
           <div style={{ fontSize: 11.5, color: theme.inkSoft, fontFamily: "monospace" }}>
-            {stop.orderId} • {stop.completedAt || "Telah Diserahkan"}
+            {stop.orderId} • {stop.completedAt || "Delivered"}
           </div>
-          {/* Nama Penerima Langsung di Bawah Keterangan ID Order */}
+          {/* Recipient Name Below Order ID */}
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink, marginTop: 2 }}>
             {stop.customerName}
           </div>
@@ -59,11 +59,11 @@ export function DeliveryCompletedCard({
             flexShrink: 0
           }}
         >
-          {stop.isCod ? "COD Tunai" : "Non-COD (Lunas)"}
+          {stop.isCod ? "COD Cash" : "Non-COD (Paid)"}
         </span>
       </div>
 
-      {/* Rincian Produk & Catatan */}
+      {/* Product Details & Note */}
       <div>
         <DeliveryOrderItemsList
           itemsSummary={stop.itemsSummary}
@@ -84,13 +84,13 @@ export function DeliveryCompletedCard({
               lineHeight: 1.4
             }}
           >
-            <span style={{ color: theme.inkSoft, fontWeight: 600 }}>Catatan: </span>
+            <span style={{ color: theme.inkSoft, fontWeight: 600 }}>Note: </span>
             <span>"{stop.note}"</span>
           </div>
         )}
       </div>
 
-      {/* Footer Kartu */}
+      {/* Card Footer */}
       <div
         style={{
           display: "flex",
@@ -102,7 +102,7 @@ export function DeliveryCompletedCard({
         }}
       >
         <div style={{ fontSize: 12, color: theme.inkSoft, fontWeight: 500 }}>
-          {stop.isCod ? "Kas COD Diterima" : "Total Nilai Pesanan"}
+          {stop.isCod ? "COD Cash Collected" : "Order Total"}
         </div>
         <div style={{ fontSize: 16, fontWeight: 800, color: theme.ink }}>
           Rp {(stop.codAmount || stop.totalAmount || 0).toLocaleString("id-ID")}

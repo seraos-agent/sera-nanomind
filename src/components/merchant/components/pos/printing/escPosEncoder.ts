@@ -163,14 +163,14 @@ export function buildPosReceiptEscPos(
   options: { paperWidth: PaperWidth; autoCut: boolean }
 ): Uint8Array {
   const b = new EscPosBuilder(options.paperWidth);
-  const storeName = store?.name || "MITRA TOKO SERA";
-  const storeAddr = store?.address || "Solo";
+  const storeName = store?.name || "SERA MERCHANT";
+  const storeAddr = store?.address || "Downtown";
   const storeWa = store?.whatsapp || "-";
-  const timeStr = new Date(tx.createdAt).toLocaleTimeString("id-ID", {
+  const timeStr = new Date(tx.createdAt).toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit"
   });
-  const dateStr = new Date(tx.createdAt).toLocaleDateString("id-ID");
+  const dateStr = new Date(tx.createdAt).toLocaleDateString("en-US");
 
   b.align("center")
     .bold(true)
@@ -185,7 +185,7 @@ export function buildPosReceiptEscPos(
 
   b.keyValue(`No: ${tx.receiptNumber}`, `${dateStr} ${timeStr}`);
   if (tx.tableOrQueueNumber) {
-    b.keyValue("Meja/Order", tx.tableOrQueueNumber);
+    b.keyValue("Table/Order", tx.tableOrQueueNumber);
   }
   b.divider();
 
@@ -197,7 +197,7 @@ export function buildPosReceiptEscPos(
 
   b.divider();
   if (tx.taxAmount && tx.taxAmount > 0) {
-    b.keyValue("Pajak", `Rp ${tx.taxAmount.toLocaleString("id-ID")}`);
+    b.keyValue("Tax", `Rp ${tx.taxAmount.toLocaleString("id-ID")}`);
   }
   if (tx.serviceChargeAmount && tx.serviceChargeAmount > 0) {
     b.keyValue("Service", `Rp ${tx.serviceChargeAmount.toLocaleString("id-ID")}`);
@@ -215,33 +215,33 @@ export function buildPosReceiptEscPos(
         }, 0);
 
   if (totalSavings > 0) {
-    b.keyValue("HEMAT", `- Rp ${totalSavings.toLocaleString("id-ID")}`);
+    b.keyValue("SAVINGS", `- Rp ${totalSavings.toLocaleString("id-ID")}`);
   }
 
   if (tx.paymentMethod === "SPLIT" && Array.isArray(tx.payments) && tx.payments.length > 0) {
-    b.keyValue("Metode", "SPLIT (2 Metode)");
+    b.keyValue("Method", "SPLIT (2 Methods)");
     for (const part of tx.payments) {
       b.keyValue(`  ${getPaymentMethodDisplayLabel(part.method)}`, `Rp ${part.amount.toLocaleString("id-ID")}`);
     }
     if (tx.changeAmount > 0) {
       b.bold(true)
-        .keyValue("Kembali", `Rp ${tx.changeAmount.toLocaleString("id-ID")}`)
+        .keyValue("Change", `Rp ${tx.changeAmount.toLocaleString("id-ID")}`)
         .bold(false);
     }
   } else {
-    b.keyValue("Metode", getPaymentMethodDisplayLabel(tx.paymentMethod));
+    b.keyValue("Method", getPaymentMethodDisplayLabel(tx.paymentMethod));
     if (tx.paymentMethod === "CASH") {
-      b.keyValue("Bayar", `Rp ${tx.amountPaid.toLocaleString("id-ID")}`);
+      b.keyValue("Paid", `Rp ${tx.amountPaid.toLocaleString("id-ID")}`);
       b.bold(true)
-        .keyValue("Kembali", `Rp ${tx.changeAmount.toLocaleString("id-ID")}`)
+        .keyValue("Change", `Rp ${tx.changeAmount.toLocaleString("id-ID")}`)
         .bold(false);
     }
   }
 
   b.divider()
     .align("center")
-    .wrappedLines("Terima kasih atas kunjungan Anda!")
-    .wrappedLines("Dicetak dari SERA POS")
+    .wrappedLines("Thank you for your visit!")
+    .wrappedLines("Printed from SERA POS")
     .feed(options.autoCut ? 4 : 3);
 
   if (options.autoCut) {
@@ -257,38 +257,38 @@ export function buildDailyReportEscPos(
   options: { paperWidth: PaperWidth; autoCut: boolean }
 ): Uint8Array {
   const b = new EscPosBuilder(options.paperWidth);
-  const nowDate = new Date().toLocaleDateString("id-ID");
-  const nowTime = new Date().toLocaleTimeString("id-ID");
+  const nowDate = new Date().toLocaleDateString("en-US");
+  const nowTime = new Date().toLocaleTimeString("en-US");
 
   b.align("center")
     .bold(true)
     .size("title")
-    .wrappedLines(store?.name || "MITRA SERA")
+    .wrappedLines(store?.name || "SERA MERCHANT")
     .size("normal")
-    .wrappedLines("LAPORAN REKAP KASIR")
+    .wrappedLines("POS SALES & SHIFT SUMMARY")
     .bold(false)
     .wrappedLines(report.periodLabel ? `${report.periodLabel}` : `${nowDate} ${nowTime}`)
     .align("left")
     .divider();
 
-  b.keyValue("Uang Tunai", `Rp ${report.totalCashInDrawer.toLocaleString("id-ID")}`)
-    .keyValue("Non-Tunai", `Rp ${report.totalNonCash.toLocaleString("id-ID")}`)
+  b.keyValue("Cash", `Rp ${report.totalCashInDrawer.toLocaleString("id-ID")}`)
+    .keyValue("Non-Cash", `Rp ${report.totalNonCash.toLocaleString("id-ID")}`)
     .divider()
     .bold(true)
-    .keyValue("TOTAL OMSET", `Rp ${report.totalRevenue.toLocaleString("id-ID")}`)
+    .keyValue("TOTAL REVENUE", `Rp ${report.totalRevenue.toLocaleString("id-ID")}`)
     .bold(false);
 
   if (report.totalCogs && report.totalCogs > 0 && report.grossProfit !== undefined) {
-    b.keyValue("Total Modal", `Rp ${report.totalCogs.toLocaleString("id-ID")}`)
+    b.keyValue("Total COGS", `Rp ${report.totalCogs.toLocaleString("id-ID")}`)
       .bold(true)
-      .keyValue("Laba Kotor", `Rp ${report.grossProfit.toLocaleString("id-ID")}`)
+      .keyValue("Gross Profit", `Rp ${report.grossProfit.toLocaleString("id-ID")}`)
       .bold(false);
   }
 
-  b.keyValue("Total Transaksi", `${report.activeTransactionsCount}`)
+  b.keyValue("Transactions", `${report.activeTransactionsCount}`)
     .divider()
     .align("center")
-    .wrappedLines("Dicetak dari SERA POS")
+    .wrappedLines("Printed from SERA POS")
     .feed(options.autoCut ? 4 : 3);
 
   if (options.autoCut) {
@@ -303,7 +303,7 @@ export function buildTestPrintEscPos(
   options: { paperWidth: PaperWidth; autoCut: boolean }
 ): Uint8Array {
   const b = new EscPosBuilder(options.paperWidth);
-  const now = new Date().toLocaleString("id-ID");
+  const now = new Date().toLocaleString("en-US");
 
   b.align("center")
     .bold(true)
@@ -311,15 +311,15 @@ export function buildTestPrintEscPos(
     .wrappedLines(store?.name || "SERA POS TEST")
     .size("normal")
     .bold(false)
-    .wrappedLines(`Tes Printer Thermal (${options.paperWidth})`)
+    .wrappedLines(`Thermal Printer Test (${options.paperWidth})`)
     .align("left")
     .divider()
-    .keyValue("Status", "TERHUBUNG")
-    .keyValue("Kertas", options.paperWidth)
-    .keyValue("Waktu", now)
+    .keyValue("Status", "CONNECTED")
+    .keyValue("Paper", options.paperWidth)
+    .keyValue("Time", now)
     .divider()
     .align("center")
-    .wrappedLines("Siap mencetak struk pelanggan!")
+    .wrappedLines("Ready to print customer receipts!")
     .feed(options.autoCut ? 4 : 3);
 
   if (options.autoCut) {
@@ -349,29 +349,29 @@ export function buildKitchenTicketEscPos(
       : `DINE-IN: ${payload.tableLabel || "Table"}`;
 
   const ticketTitle = payload.isAdditionalOrder
-    ? "TAMBAHAN DAPUR / BAR"
+    ? "KITCHEN / BAR ADD-ON"
     : payload.isReprint
-      ? "CETAK ULANG DAPUR"
-      : "TIKET DAPUR / BARISTA";
+      ? "KITCHEN REPRINT"
+      : "KITCHEN / BARISTA TICKET";
 
   b.align("center")
     .bold(true)
     .size("title")
     .wrappedLines(ticketTitle)
     .size("normal")
-    .wrappedLines(payload.store?.name || "RESTO SERA")
+    .wrappedLines(payload.store?.name || "SERA RESTAURANT")
     .divider("=")
     .size("title")
     .wrappedLines(modeTitle)
     .size("normal");
   if (payload.isAdditionalOrder) {
-    b.wrappedLines(">>> PESANAN TAMBAHAN <<<");
+    b.wrappedLines(">>> ADDITIONAL ITEMS <<<");
   }
   b.bold(false)
     .align("left")
     .divider();
 
-  b.keyValue("Jam", timeStr);
+  b.keyValue("Time", timeStr);
   if (payload.actorName) {
     b.keyValue("Staff", payload.actorName);
   }
@@ -388,17 +388,17 @@ export function buildKitchenTicketEscPos(
     }`;
     b.bold(true).wrappedLines(itemLine).bold(false);
     if (item.notes && item.notes.trim()) {
-      b.wrappedLines(`    Catatan: ${item.notes.trim()}`);
+      b.wrappedLines(`    Note: ${item.notes.trim()}`);
     }
   }
 
   b.divider()
     .bold(true)
-    .keyValue("Total Porsi", `${totalPortions} item`)
+    .keyValue("Total Portions", `${totalPortions} items`)
     .bold(false)
     .divider()
     .align("center")
-    .wrappedLines("Segera diproses oleh dapur")
+    .wrappedLines("Prepare in kitchen promptly")
     .feed(options.autoCut ? 4 : 3);
 
   if (options.autoCut) {

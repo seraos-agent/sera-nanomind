@@ -3,27 +3,27 @@ import type { ThemeType } from "../../../../theme";
 import type { MerchantStore, MerchantReview } from "../../types";
 
 const QUICK_TEMPLATES = [
-  "Terima kasih atas pesanannya kak, semoga bermanfaat! 😊",
-  "Terima kasih ulasan bintang 5-nya! Ditunggu orderan berikutnya 🙏",
-  "Terima kasih masukannya kak, akan kami evaluasi dan tingkatkan 🙌"
+  "Thank you for your order! We hope you love it!",
+  "Thank you so much for the 5-star review! We appreciate your support.",
+  "Thank you for your feedback! We will review and continue improving."
 ];
 
 function formatRelativeTime(timestamp: number): string {
   try {
     const diffMs = Date.now() - timestamp;
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    if (diffHours < 1) return "Baru saja";
-    if (diffHours < 24) return `${diffHours} jam lalu`;
+    if (diffHours < 1) return "Just now";
+    if (diffHours < 24) return `${diffHours}h ago`;
     const diffDays = Math.floor(diffHours / 24);
-    if (diffDays === 1) return "Kemarin";
-    if (diffDays < 7) return `${diffDays} hari lalu`;
-    return new Date(timestamp).toLocaleDateString("id-ID", {
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays}d ago`;
+    return new Date(timestamp).toLocaleDateString("en-US", {
       day: "numeric",
       month: "short",
       year: "numeric"
     });
   } catch {
-    return "Baru saja";
+    return "Just now";
   }
 }
 
@@ -202,7 +202,7 @@ export function ReviewItemCard({
               }}
             >
               <CornerDownRight size={12} />
-              <span>Respon Toko ({store?.name || "Penjual"}):</span>
+              <span>Store Reply ({store?.name || "Merchant"}):</span>
             </div>
 
             <button
@@ -223,7 +223,7 @@ export function ReviewItemCard({
               }}
             >
               <Edit3 size={11} />
-              <span>Ubah</span>
+              <span>Edit</span>
             </button>
           </div>
 
@@ -277,7 +277,7 @@ export function ReviewItemCard({
           <textarea
             value={replyText}
             onChange={(e) => onChangeReplyText(e.target.value)}
-            placeholder="Tulis balasan untuk pembeli..."
+            placeholder="Write a reply to the buyer..."
             rows={2}
             maxLength={500}
             style={{
@@ -311,7 +311,7 @@ export function ReviewItemCard({
                 boxShadow: "0 1px 2px rgba(0,0,0,0.02)"
               }}
             >
-              Batal
+              Cancel
             </button>
             <button
               type="button"
@@ -333,7 +333,7 @@ export function ReviewItemCard({
               }}
             >
               <Send size={11} />
-              <span>{submittingReply ? "Mengirim..." : "Kirim"}</span>
+              <span>{submittingReply ? "Sending..." : "Send"}</span>
             </button>
           </div>
         </div>
@@ -360,7 +360,7 @@ export function ReviewItemCard({
             }}
           >
             <CornerDownRight size={13} />
-            <span>Balas ulasan</span>
+            <span>Reply</span>
           </button>
         </div>
       )}

@@ -42,7 +42,7 @@ export function parseBarChart(rawText: string) {
 
 export function normalizeMarkdownContent(content: string): string {
   if (typeof content !== 'string') return content;
-  return content.replace(/(?<!-)\s*—\s*(?!-)/g, ', ');
+  return content.replace(/(?<!-)\s*\u2014\s*(?!-)/g, ', ');
 }
 
 export function isImageUrl(url: string | undefined): boolean {

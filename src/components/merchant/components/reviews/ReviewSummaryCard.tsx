@@ -85,7 +85,7 @@ export function ReviewSummaryCard({
               }}
             />
           )}
-          <span>Belum Dibalas ({unrepliedCount})</span>
+          <span>Unreplied ({unrepliedCount})</span>
         </button>
       </div>
 
@@ -104,9 +104,9 @@ export function ReviewSummaryCard({
         {[
           {
             id: "ALL",
-            label: `Semua (${totalReviews})`
+            label: `All (${totalReviews})`
           },
-          ...(withPhotosCount > 0 ? [{ id: "WITH_PHOTOS", label: `Dengan Foto (${withPhotosCount})` }] : []),
+          ...(withPhotosCount > 0 ? [{ id: "WITH_PHOTOS", label: `With Photos (${withPhotosCount})` }] : []),
           { id: "STAR_5", star: 5, count: starCounts[5] || 0 },
           { id: "STAR_4", star: 4, count: starCounts[4] || 0 },
           { id: "STAR_3", star: 3, count: starCounts[3] || 0 },

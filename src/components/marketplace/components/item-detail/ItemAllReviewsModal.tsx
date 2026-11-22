@@ -17,7 +17,7 @@ interface ItemAllReviewsModalProps {
 }
 
 const RATING_FILTER_CHIPS = [
-  { id: 'Semua', label: 'Semua' },
+  { id: 'All', label: 'All' },
   { id: '★ 5', label: '★ 5' },
   { id: '★ 4', label: '★ 4' },
   { id: '★ 3', label: '★ 3' },
@@ -62,7 +62,7 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Kembali"
+            aria-label="Back"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -96,7 +96,7 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
 
           <div style={{ minWidth: 0, flex: 1 }}>
             <h3 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 600, color: 'var(--text-main)', lineHeight: 1.25 }}>
-              Semua Ulasan
+              All Reviews
             </h3>
             <p
               style={{
@@ -143,14 +143,14 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
                 <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 500 }}>/ 5.0</span>
               </div>
               <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                • {allReviewsCount} ulasan
+                • {allReviewsCount} reviews
               </span>
             </div>
 
             {/* Photo Filter Chip */}
             <button
               type="button"
-              onClick={() => onSelectRatingFilter(selectedRatingFilter === 'Dengan Foto' ? 'Semua' : 'Dengan Foto')}
+              onClick={() => onSelectRatingFilter(selectedRatingFilter === 'With Photos' ? 'All' : 'With Photos')}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -160,14 +160,14 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
                 fontSize: '0.72rem',
                 fontWeight: 600,
                 background: 'var(--bg-surface, #FFFFFF)',
-                color: selectedRatingFilter === 'Dengan Foto' ? 'var(--text-main)' : 'var(--text-muted)',
+                color: selectedRatingFilter === 'With Photos' ? 'var(--text-main)' : 'var(--text-muted)',
                 border: '1px solid var(--border-color)',
                 cursor: 'pointer',
                 transition: 'color 0.15s ease',
               }}
             >
-              <CameraIcon size={12} color={selectedRatingFilter === 'Dengan Foto' ? 'var(--text-main)' : 'var(--text-muted)'} />
-              <span>Foto ({reviewsWithPhotosCount})</span>
+              <CameraIcon size={12} color={selectedRatingFilter === 'With Photos' ? 'var(--text-main)' : 'var(--text-muted)'} />
+              <span>Photos ({reviewsWithPhotosCount})</span>
             </button>
           </div>
 
@@ -220,7 +220,7 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
         >
           {filteredReviews.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '30px 10px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-              Tidak ada ulasan untuk filter rating ini.
+              No reviews found for this rating filter.
             </div>
           ) : (
             filteredReviews.map((rev) => (
@@ -260,7 +260,7 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
                         {rev.author}
                       </div>
                       <div style={{ fontSize: '0.66rem', color: 'var(--text-muted)' }}>
-                        Pembeli Terverifikasi • {rev.date}
+                        Verified Buyer • {rev.date}
                       </div>
                     </div>
                   </div>
@@ -277,7 +277,7 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
                   ))}
                   {rev.variant && (
                     <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginLeft: '6px' }}>
-                      (Varian: {rev.variant})
+                      (Variant: {rev.variant})
                     </span>
                   )}
                 </div>
@@ -301,7 +301,7 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
                     }}
                   >
                     <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--color-brand)' }}>
-                      Respon Toko ({storeName}):
+                      Store Reply ({storeName}):
                     </span>
                     <p style={{ margin: 0, fontSize: '0.74rem', color: 'var(--text-main)', lineHeight: 1.35 }}>
                       {rev.reply.text}
@@ -316,7 +316,7 @@ export const ItemAllReviewsModal: React.FC<ItemAllReviewsModalProps> = ({
                       <img
                         key={pIdx}
                         src={photo}
-                        alt={`Foto ulasan ${rev.author}`}
+                        alt={`Review photo by ${rev.author}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           onPreviewPhoto(photo);

@@ -57,14 +57,14 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
         }}
       >
         <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-          Alamat & Kontak Toko
+          Store Address & Contact
         </div>
         <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.45 }}>
-          Digunakan untuk titik penjemputan pesanan oleh kurir dan pembeli
+          Used for order pickup coordinates by couriers and buyers
         </div>
       </div>
 
-      {/* 1. Card WhatsApp Toko */}
+      {/* 1. Store WhatsApp Card */}
       <div
         style={{
           background: theme.surface,
@@ -78,12 +78,12 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-            WhatsApp Toko
+            Store WhatsApp
           </div>
 
           {isWhatsappVerified ? (
             <div
-              title="Nomor Terverifikasi"
+              title="Verified Number"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -119,7 +119,7 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = theme.border)}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = theme.surface2)}
             >
-              Verifikasi
+              Verify
             </button>
           ) : null}
         </div>
@@ -160,7 +160,7 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-            Titik Lokasi di Peta
+            Map Pin Location
           </div>
           {editLatitude !== undefined && editLongitude !== undefined ? (
             <span
@@ -173,7 +173,7 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
                 borderRadius: 6
               }}
             >
-              GPS Terpasang
+              GPS Pinned
             </span>
           ) : (
             <span
@@ -186,7 +186,7 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
                 borderRadius: 6
               }}
             >
-              Belum Ditandai
+              Not Pinned Yet
             </span>
           )}
         </div>
@@ -194,10 +194,10 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
         <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.45 }}>
           {editLatitude !== undefined && editLongitude !== undefined ? (
             <span>
-              Koordinat tersimpan: {editLatitude.toFixed(6)}, {editLongitude.toFixed(6)}
+              Saved coordinates: {editLatitude.toFixed(6)}, {editLongitude.toFixed(6)}
             </span>
           ) : (
-            <span>Tandai titik lokasi toko Anda agar kurir dan pembeli dapat menemukan rute presisi</span>
+            <span>Pin your store location on the map so couriers and buyers can navigate accurately</span>
           )}
         </div>
 
@@ -233,13 +233,13 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
           <MapPin size={16} color={theme.accent} />
           <span>
             {editLatitude !== undefined && editLongitude !== undefined
-              ? "Ubah Titik Lokasi di Peta"
-              : "Buka Peta & Tandai Lokasi Toko"}
+              ? "Update Map Pin Location"
+              : "Open Map & Pin Store Location"}
           </span>
         </button>
       </div>
 
-      {/* 3. Card Alamat Lengkap */}
+      {/* 3. Full Address Card */}
       <div
         style={{
           background: theme.surface,
@@ -252,14 +252,14 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
         }}
       >
         <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-          Alamat Lengkap Toko
+          Full Store Address
         </div>
         <textarea
           rows={3}
           required
           value={editAddress}
           onChange={(e) => setEditAddress(e.target.value)}
-          placeholder="Nama jalan, nomor ruko/bangunan, RT/RW, kelurahan, kecamatan, patokan lokasi..."
+          placeholder="Street name, unit/building number, district, landmarks..."
           style={{
             width: "100%",
             minHeight: 120,
@@ -279,7 +279,7 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
         />
       </div>
 
-      {/* 4. Card Wilayah Lokasi (Kota, Kecamatan, Desa/Kelurahan) */}
+      {/* 4. Store Area Card (City, District, Neighborhood) */}
       <div
         style={{
           background: theme.surface,
@@ -293,23 +293,23 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
       >
         <div>
           <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-            Wilayah Lokasi Toko
+            Store Area Details
           </div>
           <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 2 }}>
-            Terisi otomatis saat memilih titik di peta, dan bisa disunting manual
+            Auto-filled when picking a map pin, or can be edited manually
           </div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           <label style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft }}>
-            Kota / Kabupaten
+            City / Regency
           </label>
           <input
             type="text"
             required
             value={editCity}
             onChange={(e) => setEditCity(e.target.value)}
-            placeholder="Contoh: Batu / Malang"
+            placeholder="Example: San Francisco / Malang"
             style={{
               width: "100%",
               padding: "13px 16px",
@@ -328,13 +328,13 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft }}>
-              Kecamatan
+              District
             </label>
             <input
               type="text"
               value={editDistrict}
               onChange={(e) => setEditDistrict?.(e.target.value)}
-              placeholder="Contoh: Junrejo / Dau"
+              placeholder="Example: Central / Lowokwaru"
               style={{
                 width: "100%",
                 padding: "12px 14px",
@@ -351,13 +351,13 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <label style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft }}>
-              Desa / Kelurahan
+              Neighborhood / Subdistrict
             </label>
             <input
               type="text"
               value={editVillage}
               onChange={(e) => setEditVillage?.(e.target.value)}
-              placeholder="Opsional (Pendem)"
+              placeholder="Optional (e.g., Downtown)"
               style={{
                 width: "100%",
                 padding: "12px 14px",
@@ -389,7 +389,7 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
             }}
           >
             <MapPin size={13} color="#EF4444" />
-            <span>Label pin Marketplace:</span>
+            <span>Marketplace pin label:</span>
             <strong style={{ color: theme.ink }}>
               {formatStorePinLocation({
                 city: editCity,
@@ -428,7 +428,7 @@ export const LocationSubpageForm: React.FC<LocationSubpageFormProps> = ({
           (e.currentTarget as HTMLElement).style.opacity = "1";
         }}
       >
-        <span>Simpan Lokasi</span>
+        <span>Save Location</span>
       </button>
     </form>
   );

@@ -210,15 +210,15 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
     const mapVerifyErrorToNotice = (reasonCode?: string): string => {
       switch (reasonCode) {
         case "STORE_NOT_FOUND":
-          return "Toko tidak ditemukan di server. Silakan masukkan kode aktivasi kurir baru.";
+          return "Store not found on server. Please enter a new courier activation code.";
         case "REMOVED":
-          return "Akses kurir Anda telah dikeluarkan oleh pihak toko.";
+          return "Your courier access was removed by the store owner.";
         case "RESET":
-          return "Aktivasi kurir telah di-reset oleh toko. Silakan aktifkan ulang dengan PIN dan kode Anda.";
+          return "Courier activation was reset by the store. Please reactivate using your code and PIN.";
         case "SESSION_TAKEN_OVER":
-          return "Akun kurir ini sedang diaktifkan di perangkat lain. Sesi di perangkat ini ditutup otomatis.";
+          return "This courier account was activated on another device. This session has been closed.";
         default:
-          return "Sesi kurir Anda tidak valid. Silakan aktivasi ulang.";
+          return "Your courier session is no longer valid. Please reactivate.";
       }
     };
 
@@ -292,7 +292,7 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
       if (unlinkedCourierId && unlinkedCourierId !== activeDriverId) {
         return;
       }
-      unpairDriver("Akses kurir Anda telah dikeluarkan oleh pihak toko.", activeDriverId);
+      unpairDriver("Your courier access was removed by the store owner.", activeDriverId);
     };
     window.addEventListener("sera:courier-unlinked", handleLocalUnlink);
     window.addEventListener("focus", checkStoreLink);
@@ -316,7 +316,7 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
   const handleToggleOnline = async () => {
     if (isOnline && pendingStopsCount > 0) {
       setOfflineWarningNotice(
-        `Masih ada ${pendingStopsCount} pesanan yang sedang diantar. Selesaikan semua antaran terlebih dahulu.`
+        `There are still ${pendingStopsCount} active deliveries in transit. Please complete all stops first.`
       );
       setTimeout(() => setOfflineWarningNotice(null), 4500);
       return;
@@ -385,9 +385,9 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
 
   const handleUnlinkStore = () => {
     if (!driver) return;
-    const storeName = driver.linkedStoreName || "toko ini";
+    const storeName = driver.linkedStoreName || "this store";
     const confirmUnlink = window.confirm(
-      `Apakah Anda yakin ingin keluar dari kemitraan toko "${storeName}"? Setelah keluar, Anda dapat memasukkan kode aktivasi kurir baru.`
+      `Are you sure you want to leave "${storeName}" courier dispatch? Afterward, you can enter a new courier activation code.`
     );
     if (!confirmUnlink) return;
 
@@ -465,7 +465,7 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
             fontSize: 13
           }}
         >
-          Memulihkan sesi kurir...
+          Restoring courier session...
         </div>
       );
     }
@@ -530,8 +530,8 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
             <button
               type="button"
               onClick={handleDriverBack}
-              title="Kembali ke Dashboard Utama"
-              aria-label="Kembali"
+              title="Back to Main Dashboard"
+              aria-label="Back"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -569,7 +569,7 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
                   lineHeight: 1.2
                 }}
               >
-                {driver.linkedStoreName ? driver.linkedStoreName : driver?.name || "Mitra Kurir"}
+                {driver.linkedStoreName ? driver.linkedStoreName : driver?.name || "Courier Dispatch"}
               </div>
               <div
                 style={{
@@ -583,7 +583,7 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
                   marginTop: 1
                 }}
               >
-                {driver.linkedStoreName ? "Mitra Kurir Toko" : driver?.phone ? `Kurir • ${driver.phone}` : "Kurir SERA"}
+                {driver.linkedStoreName ? "Store Courier Dispatch" : driver?.phone ? `Courier • ${driver.phone}` : "SERA Courier"}
               </div>
             </div>
           </div>
@@ -592,7 +592,7 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
           <button
             type="button"
             onClick={handleToggleOnline}
-            title={isOnline ? "Status: Online (Klik untuk istirahat)" : "Status: Offline (Klik untuk online)"}
+            title={isOnline ? "Status: Online (Click to go on break)" : "Status: Offline (Click to go online)"}
             style={{
               display: "inline-flex",
               alignItems: "center",

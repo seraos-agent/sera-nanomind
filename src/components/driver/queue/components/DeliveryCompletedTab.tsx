@@ -51,10 +51,10 @@ export function DeliveryCompletedTab({
           <CheckCircle2 size={24} />
         </div>
         <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink, marginBottom: 4 }}>
-          Belum Ada Antaran Selesai
+          No Completed Deliveries Yet
         </div>
         <div style={{ fontSize: 12, color: theme.inkSoft, maxWidth: 320, margin: "0 auto", lineHeight: 1.5 }}>
-          Paket yang telah sukses Anda serahkan ke pemesan akan tercatat rapi di sini beserta rekap kas COD.
+          Packages you have successfully handed over to customers will appear here along with COD cash totals.
         </div>
       </div>
     );
@@ -62,7 +62,7 @@ export function DeliveryCompletedTab({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-      {/* Kartu Ringkasan Selesai */}
+      {/* Completed Summary Card */}
       <div
         style={{
           background: theme.surface,
@@ -77,21 +77,21 @@ export function DeliveryCompletedTab({
       >
         <div>
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-            Rekap Antaran Selesai
+            Completed Delivery Summary
           </div>
           <div style={{ fontSize: 11.5, color: theme.inkSoft, marginTop: 2 }}>
-            {completedStops.length} paket berhasil diantar hari ini
+            {completedStops.length} packages delivered today
           </div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 11, color: theme.inkSoft, fontWeight: 600 }}>Kas COD Terkumpul</div>
+          <div style={{ fontSize: 11, color: theme.inkSoft, fontWeight: 600 }}>COD Cash Collected</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: theme.accent, marginTop: 2 }}>
             Rp {totalCodCollected.toLocaleString("id-ID")}
           </div>
         </div>
       </div>
 
-      {/* Banner Rekap Kas COD Perlu Disetor ke Kasir Toko */}
+      {/* COD Settlement Reminder Banner */}
       {totalCodCollected > 0 && (
         <div
           style={{
@@ -109,10 +109,10 @@ export function DeliveryCompletedTab({
         >
           <div style={{ flex: 1, minWidth: 200 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-              Setoran Kas COD ke Kasir Toko
+              COD Cash Handover to Store Cashier
             </div>
             <div style={{ fontSize: 11.5, color: theme.inkSoft, marginTop: 2 }}>
-              Uang tunai terkumpul dari {completedStops.filter(s => s.isCod).length} pesanan COD. Silakan serahkan ke kasir toko.
+              Cash collected from {completedStops.filter(s => s.isCod).length} COD orders. Please hand over to the store cashier.
             </div>
           </div>
 
@@ -149,14 +149,14 @@ export function DeliveryCompletedTab({
                   transition: "transform 0.1s ease, filter 0.15s ease"
                 }}
               >
-                Setor Kas
+                Settle Cash
               </button>
             )}
           </div>
         </div>
       )}
 
-      {/* Notifikasi Setoran Selesai Jika Sudah Disetor */}
+      {/* Settlement Complete Notice */}
       {isCodSettled && (
         <div
           style={{
@@ -173,7 +173,7 @@ export function DeliveryCompletedTab({
           }}
         >
           <CheckCircle2 size={15} color="#10B981" />
-          <span>Seluruh uang setoran kas COD hari ini telah diserahkan ke kasir toko.</span>
+          <span>All COD cash collected today has been handed over to the store cashier.</span>
         </div>
       )}
 

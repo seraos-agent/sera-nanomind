@@ -7,7 +7,7 @@ export interface UseVoiceRealtimeOptions {
 }
 
 /**
- * useVoiceRealtime — Manages direct browser-to-OpenAI WebRTC Realtime audio session.
+ * useVoiceRealtime - Manages direct browser-to-OpenAI WebRTC Realtime audio session.
  * 
  * Fetches an ephemeral client secret from SERA Core backend (/api/voice/session),
  * then connects full-duplex microphone and audio output via RTCPeerConnection.
@@ -130,13 +130,13 @@ export function useVoiceRealtime({ apiUrl, onActiveChange, onError }: UseVoiceRe
 
       dc.onopen = () => {
         console.log('[useVoiceRealtime] Data channel established with OpenAI Realtime');
-        // Trigger Sera to greet the user warmly in Indonesian immediately upon connect
+        // Trigger Sera to greet the user warmly in English immediately upon connect
         setTimeout(() => {
           if (dc.readyState === 'open') {
             dc.send(JSON.stringify({
               type: 'response.create',
               response: {
-                instructions: 'Sapa user dengan ramah dan ceria dalam bahasa Indonesia dalam 1 kalimat singkat: "Halo! Aku Sera. Ada yang ingin kita bicarakan atau bantu hari ini?"'
+                instructions: 'Greet the user warmly and cheerfully in English in one brief sentence: "Hi! I am SERA. How can I help you with your store today?"'
               }
             }));
           }

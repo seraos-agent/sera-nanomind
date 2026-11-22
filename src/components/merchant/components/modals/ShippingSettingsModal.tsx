@@ -105,7 +105,7 @@ export function ShippingSettingsModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={`Atur Pengiriman ${entity}`}
+        aria-label={`Configure ${entity} Shipping`}
         style={
           isMobileView
             ? {
@@ -173,7 +173,7 @@ export function ShippingSettingsModal({
           >
             <ShieldCheck size={16} color={theme.inkSoft} style={{ flexShrink: 0 }} />
             <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.4 }}>
-              Metode pengiriman yang aktif akan tampil sebagai pilihan checkout bagi pembeli di etalase toko Anda.
+              Active shipping methods will appear as checkout options for buyers on your store page.
             </div>
           </div>
 
@@ -236,7 +236,7 @@ export function ShippingSettingsModal({
               }}
             >
               <AlertCircle size={16} style={{ flexShrink: 0 }} />
-              <span>Minimal satu metode pengiriman harus diaktifkan agar {entityLower} dapat melayani pesanan.</span>
+              <span>At least one shipping method must be enabled so the {entityLower} can fulfill orders.</span>
             </div>
           )}
         </div>

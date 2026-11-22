@@ -56,7 +56,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("Ukuran banner terlalu besar. Maksimal ukuran file adalah 5 MB.");
+        alert("Banner file is too large. Maximum file size is 5 MB.");
         e.target.value = "";
         return;
       }
@@ -75,7 +75,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("Ukuran logo terlalu besar. Maksimal ukuran file adalah 5 MB.");
+        alert("Logo file is too large. Maximum file size is 5 MB.");
         e.target.value = "";
         return;
       }
@@ -135,7 +135,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
               }}
             >
               <Camera size={16} />
-              <span>Tambah Banner {entity}</span>
+              <span>Add {entity} Banner</span>
               <input
                 type="file"
                 accept="image/*"
@@ -174,7 +174,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
                 }}
               >
                 <Camera size={12} />
-                <span>Ganti</span>
+                <span>Replace</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -186,7 +186,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
               <button
                 type="button"
                 onClick={() => setEditBannerUrl("")}
-                title="Hapus Banner"
+                title="Remove Banner"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -264,7 +264,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
               )}
 
               <label
-                title="Upload Foto Logo"
+                title="Upload Logo Photo"
                 style={{
                   position: "absolute",
                   inset: 0,
@@ -306,10 +306,10 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
                   textOverflow: "ellipsis"
                 }}
               >
-                {editName.trim() || `Nama ${entity}`}
+                {editName.trim() || `${entity} Name`}
               </div>
               <div style={{ fontSize: 12.5, color: theme.inkSoft, marginTop: 2 }}>
-                {editCategory || "Kategori Usaha"}
+                {editCategory || "Business Category"}
               </div>
             </div>
           </div>
@@ -341,7 +341,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
               }}
             >
               <Camera size={13} color={theme.inkSoft} />
-              <span>{editLogoUrl ? "Ganti Logo" : "Upload Logo"}</span>
+              <span>{editLogoUrl ? "Change Logo" : "Upload Logo"}</span>
               <input
                 type="file"
                 accept="image/*"
@@ -354,7 +354,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
               <button
                 type="button"
                 onClick={() => setEditLogoUrl("")}
-                title="Hapus Logo"
+                title="Remove Logo"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -383,7 +383,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
         </div>
       </div>
 
-      {/* Form Card: Identitas & Deskripsi */}
+      {/* Form Card: Identity & Description */}
       <div
         style={{
           background: theme.surface,
@@ -397,14 +397,14 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
       >
         <div>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-            Nama {entity}
+            {entity} Name
           </label>
           <input
             type="text"
             required
             value={editName}
             onChange={(e) => setEditName(e.target.value)}
-            placeholder={`Nama ${entity} Anda`}
+            placeholder={`Your ${entityLower} name`}
             style={{
               width: "100%",
               height: 48,
@@ -423,23 +423,23 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
 
         <div style={{ display: "grid", gridTemplateColumns: isMobileView ? "1fr" : "1fr 1fr", gap: 16 }}>
           <CustomSelectField
-            label="Jenis Toko"
+            label="Business Type"
             value={editType}
             options={[
               {
                 value: "BARANG",
-                label: "Barang",
-                subtitle: "Retail, produk fisik & kebutuhan harian"
+                label: "Goods",
+                subtitle: "Retail, physical products & daily essentials"
               },
               {
                 value: "FOOD",
-                label: "Food",
-                subtitle: "Kuliner, makanan siap saji & aneka minuman"
+                label: "Food & Beverage",
+                subtitle: "Dining, ready-to-eat meals & drinks"
               },
               {
                 value: "JASA",
-                label: "Jasa",
-                subtitle: "Layanan profesional, montir & perbaikan"
+                label: "Services",
+                subtitle: "Professional services, repairs & maintenance"
               }
             ]}
             onChange={(newVal) => {
@@ -452,7 +452,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
           />
 
           <CustomSelectField
-            label="Kategori Usaha"
+            label="Business Category"
             value={editCategory}
             options={(STORE_CATEGORIES[editType] || []).map((cat) => ({
               value: cat,
@@ -464,16 +464,16 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
           />
         </div>
 
-        {/* WhatsApp Toko */}
+        {/* Store WhatsApp */}
         <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
             <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: theme.ink }}>
-              <span>Nomor WhatsApp {entity}</span>
+              <span>{entity} WhatsApp Number</span>
               <span style={{ color: "#EF4444" }}>*</span>
             </label>
             {isWhatsappVerified ? (
               <span
-                title="Nomor WhatsApp Terverifikasi"
+                title="Verified WhatsApp Number"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -498,7 +498,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
                   cursor: "pointer"
                 }}
               >
-                Verifikasi
+                Verify
               </button>
             ) : null}
           </div>
@@ -507,7 +507,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
             required
             value={editWhatsapp}
             onChange={(e) => setEditWhatsapp?.(e.target.value)}
-            placeholder="Contoh: 081234567890"
+            placeholder="Example: 081234567890"
             style={{
               width: "100%",
               height: 48,
@@ -523,19 +523,19 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
             }}
           />
           <span style={{ display: "block", fontSize: 11, color: theme.inkSoft, marginTop: 6 }}>
-            Nomor ini terhubung dengan pelanggan untuk konfirmasi pesanan dan koordinasi pengiriman.
+            This number connects customers for order confirmations and delivery coordination.
           </span>
         </div>
 
         <div>
           <label style={{ display: "block", fontSize: 14, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-            Deskripsi {entity}
+            {entity} Description
           </label>
           <textarea
             rows={4}
             value={editDescription}
             onChange={(e) => setEditDescription(e.target.value)}
-            placeholder={`Ceritakan tentang ${entityLower} Anda, keunggulan ${editType === "FOOD" ? "menu" : "produk"}, dan layanan...`}
+            placeholder={`Tell customers about your ${entityLower}, featured ${editType === "FOOD" ? "menu items" : "products"}, and services...`}
             style={{
               width: "100%",
               minHeight: 110,
@@ -581,7 +581,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
           (e.currentTarget as HTMLElement).style.opacity = "1";
         }}
       >
-        <span>Simpan Profil</span>
+        <span>Save Profile</span>
       </button>
 
       {onResetStore && (
@@ -596,7 +596,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
           }}
         >
           <span style={{ fontSize: 11, fontWeight: 700, color: "#ef4444", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-            Mode Pengujian (Testing)
+            Testing Mode
           </span>
           <button
             type="button"
@@ -625,7 +625,7 @@ export const ProfileSubpageForm: React.FC<ProfileSubpageFormProps> = ({
             }}
           >
             <RotateCcw size={15} />
-            <span>Reset Toko Uji Coba (Mulai dari Awal)</span>
+            <span>Reset Demo Store (Start Fresh)</span>
           </button>
         </div>
       )}

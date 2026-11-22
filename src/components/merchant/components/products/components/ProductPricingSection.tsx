@@ -68,7 +68,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
         }}
       >
         <label style={{ fontSize: 12, fontWeight: 600, color: theme.ink }}>
-          {isMl ? "Volume Produk" : "Berat Produk"}
+          {isMl ? "Product Volume" : "Product Weight"}
         </label>
         {Number(prodWeight) > 0 && (
           <span style={{ fontSize: 11, color: theme.inkSoft }}>
@@ -89,7 +89,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
         <input
           type="text"
           inputMode="numeric"
-          placeholder={isMl ? "Contoh: 500" : "Contoh: 1.000"}
+          placeholder={isMl ? "Example: 500" : "Example: 1.000"}
           value={formatNumberWithDots(prodWeight)}
           onChange={(e) => setProdWeight(e.target.value.replace(/\D/g, ""))}
           onKeyDown={(e) => {
@@ -172,7 +172,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
     if (storeType === "JASA") return null;
     return (
       <div style={{ marginTop: 4 }}>
-        {weightFieldNode("Estimasi berat untuk perhitungan ongkos kirim kurir toko & kurir instan.")}
+        {weightFieldNode("Estimated weight for store courier and instant courier shipping calculation.")}
       </div>
     );
   }
@@ -186,7 +186,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
           gap: 10
         }}
       >
-        {/* Kolom 1: Harga Normal */}
+        {/* Column 1: Regular Price */}
         <div>
           <label
             style={{
@@ -197,7 +197,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
               marginBottom: 5
             }}
           >
-            Harga Normal <span style={{ color: "#EF4444" }}>*</span>
+            Regular Price <span style={{ color: "#EF4444" }}>*</span>
           </label>
           <div
             style={{
@@ -225,7 +225,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
             <input
               type="text"
               inputMode="numeric"
-              placeholder="Contoh: 25.000"
+              placeholder="Example: 25.000"
               value={formatNumberWithDots(prodNormalPrice)}
               onChange={(e) => setProdNormalPrice(e.target.value.replace(/\D/g, ""))}
               onKeyDown={(e) => {
@@ -249,7 +249,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
           </div>
         </div>
 
-        {/* Kolom 2: Diskon Promo */}
+        {/* Column 2: Promo Discount */}
         <div>
           <label
             style={{
@@ -260,7 +260,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
               marginBottom: 5
             }}
           >
-            Diskon Promo
+            Promo Discount
           </label>
           <div
             style={{
@@ -275,7 +275,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
             <input
               type="text"
               inputMode="numeric"
-              placeholder={prodDiscountType === "%" ? "Contoh: 20" : "Contoh: 5.000"}
+              placeholder={prodDiscountType === "%" ? "Example: 20" : "Example: 5.000"}
               value={
                 prodDiscountType === "%"
                   ? prodDiscountValue
@@ -378,7 +378,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
         >
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <span style={{ color: theme.inkSoft, fontSize: 11 }}>
-              Harga Bayar (Kasir & Toko):
+              Final Price (POS &amp; Store):
             </span>
             <strong style={{ color: theme.ink, fontSize: 13 }}>
               Rp {calculatedFinalPrice.toLocaleString("id-ID")}
@@ -395,13 +395,13 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
                 borderRadius: 4
               }}
             >
-              Hemat Rp {savingsAmount.toLocaleString("id-ID")} (-{computedPercent}%)
+              Save Rp {savingsAmount.toLocaleString("id-ID")} (-{computedPercent}%)
             </span>
           )}
         </div>
       )}
 
-      {/* HARGA MODAL (OPSIONAL) + LIVE MARGIN */}
+      {/* COST PRICE (OPTIONAL) + LIVE MARGIN */}
       <div>
         <div
           style={{
@@ -414,8 +414,8 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
           }}
         >
           <label style={{ fontSize: 12, fontWeight: 600, color: theme.ink }}>
-            Harga Modal{" "}
-            <span style={{ fontSize: 11, fontWeight: 400, color: theme.inkSoft }}>(Opsional)</span>
+            Cost Price{" "}
+            <span style={{ fontSize: 11, fontWeight: 400, color: theme.inkSoft }}>(Optional)</span>
           </label>
           {(() => {
             const costNum = parseInt(prodCostPrice.replace(/\D/g, ""), 10) || 0;
@@ -435,8 +435,8 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
                 }}
               >
                 {isLoss
-                  ? `Rugi Rp ${Math.abs(unitProfit).toLocaleString("id-ID")}`
-                  : `Untung Rp ${unitProfit.toLocaleString("id-ID")} (${marginPct}%)`}
+                  ? `Loss Rp ${Math.abs(unitProfit).toLocaleString("id-ID")}`
+                  : `Profit Rp ${unitProfit.toLocaleString("id-ID")} (${marginPct}%)`}
               </span>
             );
           })()}
@@ -467,7 +467,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
           <input
             type="text"
             inputMode="numeric"
-            placeholder="Contoh: 15.000 (tidak tampil ke pembeli)"
+            placeholder="Example: 15.000 (hidden from buyers)"
             value={formatNumberWithDots(prodCostPrice)}
             onChange={(e) => setProdCostPrice(e.target.value.replace(/\D/g, ""))}
             onKeyDown={(e) => {
@@ -491,7 +491,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
         </div>
       </div>
 
-      {/* STOK & BERAT (GOODS/FOOD) ATAU DURASI (JASA) */}
+      {/* STOCK & WEIGHT (GOODS/FOOD) OR DURATION (SERVICE) */}
       {storeType === "JASA" ? (
         <div>
           <label
@@ -503,11 +503,11 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
               marginBottom: 5
             }}
           >
-            Durasi Pengerjaan
+            Service Duration
           </label>
           <input
             type="text"
-            placeholder="60 Menit"
+            placeholder="60 Mins"
             value={prodStock}
             onChange={(e) => setProdStock(e.target.value)}
             style={{
@@ -532,7 +532,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
             gap: 10
           }}
         >
-          {/* Kolom 1: Jumlah Stok */}
+          {/* Column 1: Stock Quantity */}
           <div>
             <label
               style={{
@@ -543,7 +543,7 @@ export const ProductPricingSection: React.FC<ProductPricingSectionProps> = ({
                 marginBottom: 5
               }}
             >
-              Jumlah Stok
+              Stock Quantity
             </label>
             <input
               type="text"

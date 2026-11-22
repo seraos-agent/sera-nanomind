@@ -45,12 +45,12 @@ export function PosVoidConfirmModal({
         <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#EF4444", marginBottom: 8 }}>
           <AlertTriangle size={20} />
           <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Batalkan Transaksi?
+            Void Transaction?
           </h4>
         </div>
         <p style={{ margin: "0 0 14px", fontSize: 12, color: theme.inkSoft, lineHeight: 1.5 }}>
-          Transaksi <strong>{transactionToVoid.receiptNumber}</strong> sebesar{" "}
-          <strong>Rp {transactionToVoid.totalAmount.toLocaleString("id-ID")}</strong> akan dibatalkan, dan stok barang akan otomatis dikembalikan ke katalog.
+          Transaction <strong>{transactionToVoid.receiptNumber}</strong> for{" "}
+          <strong>Rp {transactionToVoid.totalAmount.toLocaleString("id-ID")}</strong> will be voided, and item stock will be restored to your catalog.
         </p>
         <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
           <button
@@ -67,7 +67,7 @@ export function PosVoidConfirmModal({
               cursor: "pointer"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -83,7 +83,7 @@ export function PosVoidConfirmModal({
               cursor: "pointer"
             }}
           >
-            Ya, Batalkan Transaksi
+            Yes, Void Transaction
           </button>
         </div>
       </div>

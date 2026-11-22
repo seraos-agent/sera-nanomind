@@ -84,7 +84,7 @@ export const StoreCard: React.FC<StoreCardProps> = React.memo(({ store, onSelect
                 letterSpacing: '0.02em',
               }}
             >
-              Tutup
+              Closed
             </span>
           </div>
         )}
@@ -148,7 +148,7 @@ export const StoreCard: React.FC<StoreCardProps> = React.memo(({ store, onSelect
             minHeight: '1.9rem',
           }}
         >
-          {store.tagline || store.description || 'Penyedia produk dan jasa terpercaya.'}
+          {store.tagline || store.description || 'Trusted product and service provider.'}
         </p>
 
         <div

@@ -150,10 +150,10 @@ export function ProfileMainView({
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span style={{ fontSize: 13.5, fontWeight: 600, color: theme.ink }}>
               {currentTier === 'ENTERPRISE'
-                ? 'Token Unlimited Enterprise'
+                ? 'Unlimited Enterprise Tokens'
                 : currentTier === 'STARTER'
-                ? '1.500.000 Token Starter'
-                : '10.000 Token harian'}
+                ? '1,500,000 Starter Tokens'
+                : '10,000 Daily Tokens'}
             </span>
           </div>
 
@@ -174,7 +174,7 @@ export function ProfileMainView({
             onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            Tingkatkan
+            Upgrade
           </button>
         </div>
       </div>
@@ -205,7 +205,7 @@ export function ProfileMainView({
             <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
               <User size={22} />
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Profil</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Profile</div>
           </div>
           <ChevronRight size={18} color={theme.inkSoft} />
         </div>
@@ -229,7 +229,7 @@ export function ProfileMainView({
             <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
               <MapPin size={22} />
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Alamat</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Address</div>
           </div>
           <ChevronRight size={18} color={theme.inkSoft} />
         </div>
@@ -253,7 +253,7 @@ export function ProfileMainView({
             <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
               <CreditCard size={22} />
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Penagihan</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Billing</div>
           </div>
           <ChevronRight size={18} color={theme.inkSoft} />
         </div>
@@ -285,7 +285,7 @@ export function ProfileMainView({
             <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
               <Sliders size={22} />
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Kemampuan</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Capabilities</div>
           </div>
           <ChevronRight size={18} color={theme.inkSoft} />
         </div>
@@ -309,7 +309,7 @@ export function ProfileMainView({
             <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
               <Bell size={22} />
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Notifikasi</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Notifications</div>
           </div>
           <ChevronRight size={18} color={theme.inkSoft} />
         </div>
@@ -333,7 +333,7 @@ export function ProfileMainView({
             <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
               <ShieldCheck size={22} />
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Privasi</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Privacy</div>
           </div>
           <ChevronRight size={18} color={theme.inkSoft} />
         </div>
@@ -357,7 +357,7 @@ export function ProfileMainView({
             <div style={{ color: '#ef4444', display: 'flex', alignItems: 'center' }}>
               <LogOut size={22} />
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: '#ef4444' }}>Keluar Akun</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: '#ef4444' }}>Sign Out</div>
           </div>
           <ChevronRight size={18} color="#ef4444" />
         </div>

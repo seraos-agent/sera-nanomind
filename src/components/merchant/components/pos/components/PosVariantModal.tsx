@@ -45,7 +45,7 @@ export const PosVariantModal: React.FC<PosVariantModalProps> = ({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Pilih Varian Produk
+            Select Product Variant
           </h3>
           <button
             type="button"

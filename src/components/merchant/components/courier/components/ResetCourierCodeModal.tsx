@@ -119,7 +119,7 @@ export function ResetCourierCodeModal({
             color: theme.inkSoft
           }}
         >
-          Kode aktivasi lama akan dibatalkan dan sistem akan menghasilkan PIN baru untuk kurir ini.
+          The previous activation code will be invalidated and a new code will be generated for this courier.
         </p>
 
         <div
@@ -147,7 +147,7 @@ export function ResetCourierCodeModal({
               cursor: isResetting ? "not-allowed" : "pointer"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -170,7 +170,7 @@ export function ResetCourierCodeModal({
               boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
             }}
           >
-            {isResetting ? "Mereset..." : "Buat Kode Baru"}
+            {isResetting ? "Resetting..." : "Generate New Code"}
           </button>
         </div>
       </div>

@@ -64,7 +64,7 @@ export function OrderProofLightboxModal({
         </button>
         <img
           src={proofUrl}
-          alt={`Bukti Transfer ${orderId}`}
+          alt={`Payment Proof ${orderId}`}
           style={{
             maxWidth: "100%",
             maxHeight: "80vh",

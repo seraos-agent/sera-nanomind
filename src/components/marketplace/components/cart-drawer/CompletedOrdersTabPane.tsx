@@ -79,10 +79,10 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
               <CheckCircleIcon size={46} color="currentColor" />
             </div>
             <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px', fontSize: '0.95rem' }}>
-              Belum Ada Pesanan Selesai
+              No Completed Orders Yet
             </div>
             <p style={{ fontSize: '0.78rem', lineHeight: 1.5, margin: 0 }}>
-              Ulasan dan penilaian bintang hanya dapat diberikan setelah transaksi belanja Anda selesai diterima.
+              Reviews and star ratings can only be submitted after your shopping order is marked complete.
             </p>
           </div>
         ) : (
@@ -137,7 +137,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                     fontWeight: 600,
                   }}
                 >
-                  Selesai
+                  Completed
                 </span>
               </div>
 
@@ -215,7 +215,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                                 fontWeight: 800,
                               }}
                             >
-                              <span>✓ Sudah Diulas</span>
+                              <span>✓ Reviewed</span>
                               <span style={{ color: '#EAB308', display: 'inline-flex', alignItems: 'center', gap: '1px' }}>
                                 ★ {existingReview.rating}
                               </span>
@@ -244,7 +244,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                                 e.currentTarget.style.background = 'var(--bg-surface, #FFFFFF)';
                               }}
                             >
-                              Beri Ulasan
+                              Leave a Review
                             </button>
                           )}
                         </div>
@@ -355,7 +355,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                               value={reviewComment}
                               onChange={(e) => onChangeComment(e.target.value.slice(0, 220))}
                               maxLength={220}
-                              placeholder="Ceritakan kepuasan Anda (kualitas barang, rasa, pengemasan)..."
+                              placeholder="Share your feedback (product quality, taste, packaging)..."
                               rows={2}
                               style={{
                                 width: '100%',
@@ -386,7 +386,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                               <div style={{ display: 'flex', alignItems: 'center' }}>
                                 {reviewPhotos.length === 0 ? (
                                   <label
-                                    title="Lampirkan foto"
+                                    title="Attach photo"
                                     style={{
                                       width: '28px',
                                       height: '28px',
@@ -439,7 +439,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                                     <button
                                       type="button"
                                       onClick={onRemovePhoto}
-                                      title="Hapus foto"
+                                      title="Remove photo"
                                       style={{
                                         position: 'absolute',
                                         top: '1px',
@@ -465,7 +465,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                                 )}
                               </div>
 
-                              {/* Batal & Kirim Buttons */}
+                              {/* Cancel & Submit Buttons */}
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <button
                                   type="button"
@@ -481,7 +481,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                                     cursor: 'pointer',
                                   }}
                                 >
-                                  Batal
+                                  Cancel
                                 </button>
                                 <button
                                   type="button"
@@ -500,7 +500,7 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                                     transition: 'opacity 0.15s ease',
                                   }}
                                 >
-                                  {isSubmittingReview ? 'Mengirim...' : 'Kirim'}
+                                  {isSubmittingReview ? 'Submitting...' : 'Submit'}
                                 </button>
                               </div>
                             </div>

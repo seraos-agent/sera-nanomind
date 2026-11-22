@@ -72,7 +72,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const handleWhatsAppContact = (order: MarketplaceOrder) => {
     const waText = encodeURIComponent(
-      `Halo *${order.storeName}*, saya ingin menanyakan status pesanan saya dengan nomor: *${order.id}*. Total pesanan Rp ${order.totalAmount.toLocaleString('id-ID')}. Terima kasih!`
+      `Hello *${order.storeName}*, I would like to check on the status of my order: *${order.id}*. Order total Rp ${order.totalAmount.toLocaleString('id-ID')}. Thank you!`
     );
     window.open(`https://wa.me/6281234567890?text=${waText}`, '_blank');
   };
@@ -153,8 +153,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <button
               type="button"
               onClick={onClose}
-              aria-label="Kembali"
-              title="Kembali"
+              aria-label="Back"
+              title="Back"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -187,7 +187,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 textOverflow: 'ellipsis',
               }}
             >
-              Keranjang Belanja
+              Shopping Cart
             </h2>
           </div>
 
@@ -208,12 +208,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 gap: '4px',
               }}
             >
-              <span>{items.length} Barang</span>
+              <span>{items.length} Items</span>
             </span>
           )}
         </div>
 
-        {/* 3-Tab Segmented Capsule Switcher: [ Keranjang ] [ Proses ] [ Selesai ] */}
+        {/* 3-Tab Segmented Capsule Switcher: [ Cart ] [ In Progress ] [ Completed ] */}
         <div
           style={{
             padding: '8px 14px',
@@ -258,7 +258,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 transition: 'all 0.18s ease',
               }}
             >
-              <span>Keranjang</span>
+              <span>Cart</span>
               {items.length > 0 && (
                 <span
                   style={{
@@ -305,7 +305,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 transition: 'all 0.18s ease',
               }}
             >
-              <span>Proses</span>
+              <span>In Progress</span>
               {processingOrders.length > 0 && (
                 <span
                   style={{
@@ -352,7 +352,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 transition: 'all 0.18s ease',
               }}
             >
-              <span>Selesai</span>
+              <span>Completed</span>
             </button>
           </div>
         </div>

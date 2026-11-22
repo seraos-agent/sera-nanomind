@@ -128,7 +128,7 @@ export const StoreProfileBanner: React.FC<StoreProfileBannerProps> = ({
                   boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
                 }}
               >
-                Tutup
+                Closed
               </span>
             )}
           </div>

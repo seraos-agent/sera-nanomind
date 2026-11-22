@@ -1,17 +1,17 @@
 import type { PosBasePaymentMethod, PosCartItem, PosPaymentPart, PosTransaction } from "../types";
 
 export const POS_PAYMENT_METHOD_LABELS: Record<PosBasePaymentMethod | "SPLIT", string> = {
-  CASH: "Tunai",
+  CASH: "Cash",
   QRIS: "QRIS",
   TRANSFER: "Transfer",
-  SPLIT: "Split Bayar"
+  SPLIT: "Split Pay"
 };
 
 /**
- * Normalizes a payment method code into a human-readable Indonesian label.
+ * Normalizes a payment method code into a human-readable display label.
  */
 export function getPaymentMethodDisplayLabel(method?: string): string {
-  if (!method) return "Tunai";
+  if (!method) return "Cash";
   if (method === "CASH") return POS_PAYMENT_METHOD_LABELS.CASH;
   if (method === "QRIS") return POS_PAYMENT_METHOD_LABELS.QRIS;
   if (method === "TRANSFER") return POS_PAYMENT_METHOD_LABELS.TRANSFER;
@@ -20,7 +20,7 @@ export function getPaymentMethodDisplayLabel(method?: string): string {
 }
 
 /**
- * Formats single or multi-part POS payments into a compact summary string (e.g. "Tunai + QRIS").
+ * Formats single or multi-part POS payments into a compact summary string (e.g. "Cash + QRIS").
  */
 export function formatPosPaymentBreakdown(tx: {
   paymentMethod: string;
@@ -122,19 +122,19 @@ export function buildPosReportCsv(params: {
 }): string {
   const { transactions, showProfitSummary } = params;
   const headers = [
-    "No Struk",
-    "Tanggal & Waktu",
-    "Meja / Order",
-    "Pelanggan / Kasir",
+    "Receipt No",
+    "Date & Time",
+    "Table / Order",
+    "Customer / Cashier",
     "Status",
-    "Metode Bayar",
-    "Rincian Pembayaran",
-    "Item Terjual",
-    "Diskon (Rp)",
-    "Total Penjualan (Rp)"
+    "Payment Method",
+    "Payment Details",
+    "Items Sold",
+    "Discount (Rp)",
+    "Total Sales (Rp)"
   ];
   if (showProfitSummary) {
-    headers.push("Total Modal HPP (Rp)", "Laba Kotor (Rp)");
+    headers.push("Total COGS (Rp)", "Gross Profit (Rp)");
   }
 
   const rows: string[] = [headers.map(escapeCsvCell).join(",")];
@@ -143,7 +143,7 @@ export function buildPosReportCsv(params: {
     const dt = new Date(tx.createdAt);
     const dateTime = Number.isNaN(dt.getTime())
       ? ""
-      : `${dt.toLocaleDateString("id-ID")} ${dt.toLocaleTimeString("id-ID", {
+      : `${dt.toLocaleDateString("en-US")} ${dt.toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit"
         })}`;
@@ -168,8 +168,8 @@ export function buildPosReportCsv(params: {
       tx.receiptNumber,
       dateTime,
       tx.tableOrQueueNumber || "-",
-      tx.customerName || "Pelanggan Kasir",
-      tx.status === "VOIDED" ? "BATAL (VOID)" : "SELESAI",
+      tx.customerName || "Walk-In Customer",
+      tx.status === "VOIDED" ? "VOIDED" : "COMPLETED",
       formatPosPaymentBreakdown(tx),
       paymentDetail,
       itemsSummary,

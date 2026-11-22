@@ -93,7 +93,7 @@ export const HeldBillsStrip: React.FC<HeldBillsStripProps> = ({
                   e.stopPropagation();
                   onDelete(bill.id);
                 }}
-                title="Hapus nota tersimpan"
+                title="Delete saved bill"
                 style={{
                   background: "transparent",
                   border: "none",
@@ -240,8 +240,8 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
                       onClick={() => onChangeTableNumber(m)}
                       title={
                         isEditingSelectedBill
-                          ? `Buka order baru di ${m}`
-                          : `${m} • Kosong`
+                          ? `Start new order at ${m}`
+                          : `${m} • Empty`
                       }
                       style={{
                         padding: "3px 8px",
@@ -262,14 +262,14 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
                 })
               ) : (
                 <span style={{ fontSize: 11, color: "#f59e0b", fontWeight: 600 }}>
-                  Semua meja terisi
+                  All tables occupied
                 </span>
               )}
               <button
                 type="button"
                 onClick={onRemoveTable}
                 disabled={tables.length <= 1}
-                title="Kurangi table"
+                title="Remove table"
                 style={{
                   width: 24,
                   height: 24,
@@ -289,7 +289,7 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
               <button
                 type="button"
                 onClick={onAddTable}
-                title="Tambah table baru"
+                title="Add new table"
                 style={{
                   width: 24,
                   height: 24,
@@ -348,7 +348,7 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
                       <button
                         type="button"
                         onClick={() => setShowMovePicker((p) => !p)}
-                        title="Pindahkan bill ke meja kosong lain"
+                        title="Move bill to another empty table"
                         style={{
                           border: `1px solid ${showMovePicker ? theme.accent : theme.border}`,
                           background: showMovePicker ? `${theme.accent}18` : theme.surface,
@@ -365,7 +365,7 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
                         }}
                       >
                         <ArrowLeftRight size={10} />
-                        <span>Pindah</span>
+                        <span>Move</span>
                       </button>
                     )}
                     {onCancelTableBill && (
@@ -384,7 +384,7 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
                           whiteSpace: "nowrap"
                         }}
                       >
-                        Batalkan Bill
+                        Cancel Bill
                       </button>
                     )}
                   </div>
@@ -405,7 +405,7 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
                         whiteSpace: "nowrap"
                       }}
                     >
-                      Buka Bill
+                      Open Bill
                     </button>
                   )
                 )}
@@ -423,7 +423,7 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
                   }}
                 >
                   <span style={{ fontSize: 10.5, fontWeight: 600, color: theme.inkSoft }}>
-                    Pindah ke:
+                    Move to:
                   </span>
                   {availableTables.map((dest) => {
                     const shortLabel = dest.startsWith("Table ")
@@ -459,7 +459,7 @@ export const FoodTableSelector: React.FC<FoodTableSelectorProps> = ({
 
           {!openBillEnabled && !activeTableBill && (
             <div style={{ fontSize: 10.5, color: theme.inkSoft }}>
-              Mode Bayar Dulu aktif — order langsung diselesaikan via pembayaran.
+              Pay-First Mode active: orders are completed immediately at checkout.
             </div>
           )}
         </>
@@ -517,7 +517,7 @@ export const CancelTableBillModal: React.FC<CancelTableBillModalProps> = ({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Batalkan Open Bill {bill.label}?
+            Cancel Open Bill {bill.label}?
           </h3>
           <button
             type="button"
@@ -528,7 +528,7 @@ export const CancelTableBillModal: React.FC<CancelTableBillModalProps> = ({
           </button>
         </div>
         <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.5, color: theme.inkSoft }}>
-          Meja ini memiliki <strong>{itemCount} item</strong> yang belum dibayar. Gunakan fitur ini hanya jika tamu batal memesan atau terjadi kesalahan input meja.
+          This table has <strong>{itemCount} unpaid items</strong>. Only use this if guests cancelled or an incorrect table was selected.
         </p>
         <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
           <button
@@ -547,7 +547,7 @@ export const CancelTableBillModal: React.FC<CancelTableBillModalProps> = ({
               cursor: "pointer"
             }}
           >
-            Kembali
+            Back
           </button>
           <button
             type="button"
@@ -565,7 +565,7 @@ export const CancelTableBillModal: React.FC<CancelTableBillModalProps> = ({
               cursor: isSubmitting ? "wait" : "pointer"
             }}
           >
-            Ya, Batalkan Bill
+            Yes, Cancel Bill
           </button>
         </div>
       </div>
@@ -593,7 +593,7 @@ export const HoldBillButton: React.FC<HoldBillButtonProps> = ({
     type="button"
     disabled={disabled}
     onClick={onClick}
-    title={isFoodStore ? "Simpan Open Bill Meja" : "Simpan Nota Sementara"}
+    title={isFoodStore ? "Save Table Open Bill" : "Save Temporary Bill"}
     style={{
       padding: "11px 10px",
       borderRadius: 12,
@@ -612,7 +612,7 @@ export const HoldBillButton: React.FC<HoldBillButtonProps> = ({
     }}
   >
     <Bookmark size={14} />
-    <span>{isFoodStore ? "Simpan Bill" : "Hold"}</span>
+    <span>{isFoodStore ? "Save Bill" : "Hold"}</span>
   </button>
 );
 
@@ -637,10 +637,10 @@ export const PrintKitchenTicketButton: React.FC<PrintKitchenTicketButtonProps> =
   const showAddBadge = hasPreviouslySent && pendingCount > 0;
   const allAlreadySent = !disabled && hasPreviouslySent && pendingCount === 0;
   const label = showAddBadge
-    ? `Dapur (+${pendingCount})`
+    ? `Kitchen (+${pendingCount})`
     : allAlreadySent
-      ? "Dapur ✓"
-      : "Dapur";
+      ? "Kitchen ✓"
+      : "Kitchen";
 
   return (
     <button
@@ -649,10 +649,10 @@ export const PrintKitchenTicketButton: React.FC<PrintKitchenTicketButtonProps> =
       onClick={onClick}
       title={
         showAddBadge
-          ? `Cetak ${pendingCount} porsi tambahan ke dapur (tanpa harga)`
+          ? `Print ${pendingCount} additional portions to kitchen (no prices)`
           : allAlreadySent
-            ? "Semua menu sudah dicetak ke dapur (klik untuk cetak ulang)"
-            : "Cetak Tiket Dapur / Barista (tanpa harga)"
+            ? "All items already sent to kitchen (click to reprint)"
+            : "Print Kitchen / Barista Ticket (no prices)"
       }
       style={{
         padding: "11px 10px",
@@ -745,15 +745,15 @@ export const KitchenReprintConfirmModal: React.FC<KitchenReprintConfirmModalProp
           </div>
           <div>
             <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-              Sudah Dicetak ke Dapur
+              Already Sent to Kitchen
             </div>
             <div style={{ fontSize: 11, color: theme.inkSoft }}>
-              {tableLabel || "Pesanan aktif"}
+              {tableLabel || "Active order"}
             </div>
           </div>
         </div>
         <p style={{ margin: 0, fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.5 }}>
-          Semua menu pada pesanan ini sudah pernah dikirim ke dapur. Ingin cetak ulang semua daftar menu untuk dapur?
+          All items on this order have already been sent to the kitchen. Reprint the full kitchen ticket?
         </p>
         <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 4 }}>
           <button
@@ -770,7 +770,7 @@ export const KitchenReprintConfirmModal: React.FC<KitchenReprintConfirmModalProp
               cursor: "pointer"
             }}
           >
-            Tutup
+            Close
           </button>
           <button
             type="button"
@@ -786,7 +786,7 @@ export const KitchenReprintConfirmModal: React.FC<KitchenReprintConfirmModalProp
               cursor: "pointer"
             }}
           >
-            Cetak Ulang Semua
+            Reprint All
           </button>
         </div>
       </div>

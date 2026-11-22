@@ -65,7 +65,7 @@ export function DeliveryQueueTabBar({
             transition: "all 0.18s ease"
           }}
         >
-          <span>Perlu Diantar</span>
+          <span>To Deliver</span>
           {pendingCount > 0 && (
             <span
               style={{
@@ -105,7 +105,7 @@ export function DeliveryQueueTabBar({
             transition: "all 0.18s ease"
           }}
         >
-          <span>Selesai</span>
+          <span>Completed</span>
           {completedCount > 0 && (
             <span
               style={{
@@ -144,7 +144,7 @@ export function DeliveryQueueTabBar({
             transition: "all 0.18s ease"
           }}
         >
-          <span>Profil</span>
+          <span>Profile</span>
         </button>
       </div>
     </div>

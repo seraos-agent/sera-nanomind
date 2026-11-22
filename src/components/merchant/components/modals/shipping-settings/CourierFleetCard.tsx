@@ -31,7 +31,7 @@ export function CourierFleetCard({
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Kurir Toko
+            Store Courier Fleet
           </div>
 
           <button
@@ -51,13 +51,13 @@ export function CourierFleetCard({
               transition: 'opacity 0.15s ease',
             }}
           >
-            Tambah
+            Add
           </button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ fontSize: 12.5, color: theme.inkSoft }}>
-            Staf pengantar pesanan langsung ke pembeli
+            Staff who deliver orders directly to buyers
           </div>
 
           <span
@@ -73,7 +73,7 @@ export function CourierFleetCard({
               flexShrink: 0,
             }}
           >
-            {couriers.linkedCouriers.length} Kurir
+            {couriers.linkedCouriers.length} Couriers
           </span>
         </div>
       </div>
@@ -94,7 +94,7 @@ export function CourierFleetCard({
           }}
         >
           <div style={{ fontSize: 13, color: theme.inkSoft }}>
-            Belum ada kurir terdaftar di toko Anda.
+            No couriers registered in your store yet.
           </div>
           <button
             type="button"
@@ -110,7 +110,7 @@ export function CourierFleetCard({
               textDecoration: 'underline',
             }}
           >
-            + Daftarkan Kurir Pertama
+            + Register First Courier
           </button>
         </div>
       ) : (

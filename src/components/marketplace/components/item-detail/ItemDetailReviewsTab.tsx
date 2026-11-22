@@ -61,7 +61,7 @@ export const ItemDetailReviewsTab: React.FC<ItemDetailReviewsTabProps> = ({
               onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
-              <span>Semua ({allReviews.length})</span>
+              <span>All ({allReviews.length})</span>
               <span style={{ fontSize: '0.85rem', lineHeight: 1 }}>›</span>
             </button>
           </div>
@@ -91,7 +91,7 @@ export const ItemDetailReviewsTab: React.FC<ItemDetailReviewsTabProps> = ({
               color: 'var(--text-muted)',
             }}
           >
-            Belum ada ulasan pembeli untuk produk ini.
+            No buyer reviews for this product yet.
           </div>
         ) : (
           allReviews.map((rev) => (
@@ -146,7 +146,7 @@ export const ItemDetailReviewsTab: React.FC<ItemDetailReviewsTabProps> = ({
               ))}
               {rev.variant && (
                 <span style={{ fontSize: '0.66rem', color: 'var(--text-muted)', marginLeft: '4px' }}>
-                  (Varian: {rev.variant})
+                  (Variant: {rev.variant})
                 </span>
               )}
             </div>
@@ -170,7 +170,7 @@ export const ItemDetailReviewsTab: React.FC<ItemDetailReviewsTabProps> = ({
                 }}
               >
                 <span style={{ fontSize: '0.66rem', fontWeight: 700, color: 'var(--color-brand)' }}>
-                  Respon Toko ({storeName}):
+                  Store Reply ({storeName}):
                 </span>
                 <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--text-main)', lineHeight: 1.35 }}>
                   {rev.reply.text}
@@ -185,7 +185,7 @@ export const ItemDetailReviewsTab: React.FC<ItemDetailReviewsTabProps> = ({
                   <img
                     key={pIdx}
                     src={photo}
-                    alt={`Foto ulasan ${rev.author}`}
+                    alt={`Review photo by ${rev.author}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       onPreviewPhoto(photo);

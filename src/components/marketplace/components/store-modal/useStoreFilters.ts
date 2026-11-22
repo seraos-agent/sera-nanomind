@@ -60,9 +60,9 @@ export function useStoreFilters(items: MarketplaceItem[]) {
   };
 
   const getPriceSortLabel = () => {
-    if (sortBy === 'harga_asc') return 'Harga ↑';
-    if (sortBy === 'harga_desc') return 'Harga ↓';
-    return 'Harga ↕';
+    if (sortBy === 'harga_asc') return 'Price ↑';
+    if (sortBy === 'harga_desc') return 'Price ↓';
+    return 'Price ↕';
   };
 
   return {

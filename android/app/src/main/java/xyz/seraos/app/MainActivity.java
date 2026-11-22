@@ -55,7 +55,7 @@ public class MainActivity extends BridgeActivity {
                     pendingFilename = null;
                 }
             } else {
-                Toast.makeText(this, "Izin penyimpanan dibutuhkan untuk mendownload gambar ke Galeri", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Storage permission is required to download images to the Gallery", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -175,7 +175,7 @@ public class MainActivity extends BridgeActivity {
         new Thread(() -> {
             try {
                 if (base64Data == null || base64Data.trim().isEmpty()) {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gagal: Data gambar kosong", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed: Image data is empty", Toast.LENGTH_SHORT).show());
                     return;
                 }
 
@@ -196,7 +196,7 @@ public class MainActivity extends BridgeActivity {
                 }
                 byte[] imageBytes = Base64.decode(cleanBase64, Base64.DEFAULT);
                 if (imageBytes == null || imageBytes.length == 0) {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gagal: Format gambar tidak valid", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed: Invalid image format", Toast.LENGTH_SHORT).show());
                     return;
                 }
 
@@ -254,15 +254,15 @@ public class MainActivity extends BridgeActivity {
                             MediaScannerConnection.scanFile(MainActivity.this, new String[]{filePath}, new String[]{mimeType}, null);
                         }
 
-                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gambar berhasil disimpan ke Galeri", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Image saved to Gallery", Toast.LENGTH_SHORT).show());
                     } else {
-                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gagal menyimpan gambar", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to save image", Toast.LENGTH_SHORT).show());
                     }
                 } else {
                     File picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     File seraDir = new File(picturesDir, "Sera");
                     if (!seraDir.exists() && !seraDir.mkdirs()) {
-                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gagal membuat folder Galeri", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to create Gallery folder", Toast.LENGTH_SHORT).show());
                         return;
                     }
                     File outFile = new File(seraDir, name);
@@ -271,10 +271,10 @@ public class MainActivity extends BridgeActivity {
                         fos.flush();
                     }
                     MediaScannerConnection.scanFile(MainActivity.this, new String[]{outFile.getAbsolutePath()}, new String[]{mimeType}, null);
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gambar berhasil disimpan ke Galeri", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Image saved to Gallery", Toast.LENGTH_SHORT).show());
                 }
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Gagal menyimpan: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to save: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();
     }

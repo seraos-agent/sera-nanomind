@@ -99,7 +99,7 @@ export function MerchantReviewsView({
 
   const handleSubmitReply = async (reviewId: string) => {
     if (!replyText.trim()) {
-      showToast("Teks balasan tidak boleh kosong.");
+      showToast("Reply text cannot be empty.");
       return;
     }
 
@@ -112,15 +112,15 @@ export function MerchantReviewsView({
       });
 
       if (!res.ok) {
-        throw new Error("Gagal mengirim balasan.");
+        throw new Error("Failed to send reply.");
       }
 
-      showToast("Balasan ulasan terkirim");
+      showToast("Reply posted");
       setReplyingReviewId(null);
       setReplyText("");
       await onRefreshReviews();
     } catch (err: any) {
-      showToast(`Gagal: ${err.message}`);
+      showToast(`Error: ${err.message}`);
     } finally {
       setSubmittingReply(false);
     }
@@ -246,8 +246,8 @@ export function MerchantReviewsView({
             <MessageSquare size={24} color={theme.inkFaint} />
             <span style={{ fontSize: 13, fontWeight: 600, color: theme.ink }}>
               {selectedFilter === "UNREPLIED"
-                ? "Tidak ada ulasan yang perlu dibalas"
-                : "Tidak ada ulasan pada kategori ini"}
+                ? "No reviews awaiting a reply"
+                : "No reviews in this category"}
             </span>
           </div>
         ) : (

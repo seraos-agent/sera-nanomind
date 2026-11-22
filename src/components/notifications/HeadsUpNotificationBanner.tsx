@@ -169,7 +169,7 @@ export const HeadsUpNotificationBanner: React.FC<HeadsUpNotificationBannerProps>
             gap: 2,
           }}
         >
-          Lihat
+          View
           <ChevronRight size={13} />
         </span>
 
@@ -187,7 +187,7 @@ export const HeadsUpNotificationBanner: React.FC<HeadsUpNotificationBannerProps>
             justifyContent: 'center',
             borderRadius: 6,
           }}
-          aria-label="Tutup Notifikasi"
+          aria-label="Close Notification"
         >
           <X size={15} />
         </button>

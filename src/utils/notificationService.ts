@@ -178,8 +178,8 @@ async function ensureNotificationChannel(): Promise<void> {
     const { LocalNotifications } = await import('@capacitor/local-notifications');
     await LocalNotifications.createChannel({
       id: 'sera_orders_channel',
-      name: 'Pesanan & Pengiriman SERA',
-      description: 'Notifikasi pesanan merchant, tugas kurir, dan progres pembeli',
+      name: 'SERA Orders & Deliveries',
+      description: 'Merchant order alerts, courier tasks, and customer delivery progress',
       importance: 5, // High importance (Heads-up banner & sound)
       visibility: 1, // Public on lockscreen
       vibration: true,

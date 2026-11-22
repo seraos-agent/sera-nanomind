@@ -100,7 +100,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
             <div>
               <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: theme.ink }}>{title}</h3>
               <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-                Arahkan barcode atau kode QR ke kotak tengah
+                Point a barcode or QR code inside the frame
               </p>
             </div>
           </div>
@@ -177,7 +177,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
               }}
             >
               <RefreshCw size={26} className="animate-spin" style={{ color: "#10B981" }} />
-              <span style={{ fontSize: 12, opacity: 0.8 }}>Menghubungkan ke kamera...</span>
+              <span style={{ fontSize: 12, opacity: 0.8 }}>Connecting to camera...</span>
             </div>
           )}
 
@@ -267,7 +267,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
                 }}
               >
                 <Flashlight size={14} />
-                <span>{isTorchOn ? "Flash Nyala" : "Nyalakan Flash"}</span>
+                <span>{isTorchOn ? "Flash On" : "Turn On Flash"}</span>
               </button>
             )}
           </div>
@@ -303,7 +303,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                  {totalCount > 0 ? `${totalCount} Item` : "Keranjang Kosong"}
+                  {totalCount > 0 ? `${totalCount} Items` : "Empty Cart"}
                 </span>
                 {totalCount > 0 && (
                   <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
@@ -330,7 +330,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
                   justifyContent: "center",
                 }}
               >
-                <span>Bayar</span>
+                <span>Pay</span>
               </button>
             )}
           </div>
@@ -353,7 +353,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
               />
               <input
                 type="text"
-                placeholder="Atau ketik barcode manual..."
+                placeholder="Or enter barcode manually..."
                 value={manualCode}
                 onChange={(e) => setManualCode(e.target.value)}
                 style={{
@@ -384,7 +384,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
                 whiteSpace: "nowrap",
               }}
             >
-              Gunakan
+              Use
             </button>
           </form>
 
@@ -404,7 +404,7 @@ export const ScannerDesktopLayout: React.FC<ScannerDesktopLayoutProps> = ({
                   cursor: "pointer",
                 }}
               >
-                Selesai Scan
+                Finish Scan
               </button>
             </div>
           )}

@@ -43,14 +43,14 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
     <>
       <div>
         <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
-          Nama lengkap
+          Full name
         </label>
         <input
           type="text"
           required
           value={name}
           onChange={(e) => onChangeName(e.target.value)}
-          placeholder="Contoh: Budi Santoso"
+          placeholder="Example: John Doe"
           style={{
             width: '100%',
             padding: '12px 14px',
@@ -67,14 +67,14 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
 
       <div>
         <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
-          Nomor WhatsApp
+          WhatsApp number
         </label>
         <input
           type="tel"
           required
           value={phone}
           onChange={(e) => onChangePhone(e.target.value)}
-          placeholder="Contoh: 081234567890"
+          placeholder="Example: 081234567890"
           style={{
             width: '100%',
             padding: '12px 14px',
@@ -92,7 +92,7 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
       {hasGoods && (
         <div>
           <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '8px' }}>
-            Pengiriman
+            Shipping
           </label>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
             <button
@@ -109,9 +109,9 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
                 transition: 'all 0.15s ease'
               }}
             >
-              <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>Kurir Toko</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>Store Courier</div>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px', fontWeight: 500 }}>
-                {isFreeStoreDelivery ? 'Gratis' : `Rp ${storeDeliveryFee.toLocaleString('id-ID')}`}
+                {isFreeStoreDelivery ? 'Free' : `Rp ${storeDeliveryFee.toLocaleString('id-ID')}`}
               </div>
             </button>
 
@@ -129,7 +129,7 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
                 transition: 'all 0.15s ease'
               }}
             >
-              <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>Mitra Kurir</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>Partner Courier</div>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px', fontWeight: 500 }}>
                 Rp 14.000
               </div>
@@ -149,9 +149,9 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
                 transition: 'all 0.15s ease'
               }}
             >
-              <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>Ambil ke Toko</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>Pick Up at Store</div>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px', fontWeight: 500 }}>
-                Gratis
+                Free
               </div>
             </button>
           </div>
@@ -162,7 +162,7 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
             <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>
-              Alamat pengiriman
+              Delivery address
             </label>
             <button
               type="button"
@@ -179,7 +179,7 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
                 transition: 'background 0.15s ease'
               }}
             >
-              {address.trim() ? 'Pilih lewat Peta' : '+ Pilih di Peta'}
+              {address.trim() ? 'Pick via Map' : '+ Pick on Map'}
             </button>
           </div>
           <textarea
@@ -187,7 +187,7 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
             rows={4}
             value={address}
             onChange={(e) => onChangeAddress(e.target.value)}
-            placeholder="Ketik alamat lengkap (nama jalan, nomor rumah, RT/RW, kecamatan, kota) atau klik Pilih lewat Peta di atas..."
+            placeholder="Enter full address (street name, house number, district, city) or click Pick via Map above..."
             style={{
               width: '100%',
               minHeight: '92px',
@@ -216,20 +216,20 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
           color: 'var(--text-sub)',
           lineHeight: 1.45
         }}>
-          Pesanan disiapkan oleh toko. Tunjukkan nama pemesan ke kasir saat mengambil pesanan.
+          Orders are prepared by the store. Show the buyer's name to the cashier when picking up your order.
         </div>
       )}
 
       {hasService && (
         <div>
           <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
-            Jadwal kunjungan jasa
+            Service visit schedule
           </label>
           <input
             type="text"
             value={bookingDate}
             onChange={(e) => onChangeBookingDate(e.target.value)}
-            placeholder="Contoh: Besok pukul 10:00 WIB"
+            placeholder="Example: Tomorrow at 10:00 AM"
             style={{
               width: '100%',
               padding: '12px 14px',
@@ -247,13 +247,13 @@ export const CheckoutShippingSection: React.FC<CheckoutShippingSectionProps> = (
 
       <div>
         <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
-          Catatan (opsional)
+          Notes (optional)
         </label>
         <input
           type="text"
           value={notes}
           onChange={(e) => onChangeNotes(e.target.value)}
-          placeholder="Instruksi tambahan untuk toko atau kurir..."
+          placeholder="Additional instructions for store or courier..."
           style={{
             width: '100%',
             padding: '12px 14px',

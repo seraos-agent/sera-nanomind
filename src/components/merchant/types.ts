@@ -6,40 +6,42 @@ export type StoreType = 'BARANG' | 'FOOD' | 'JASA';
 
 export const STORE_CATEGORIES: Record<StoreType, string[]> = {
   BARANG: [
-    "Sembako & Kebutuhan Pokok",
-    "Sayur, Buah & Bahan Segar",
-    "Fashion & Pakaian",
-    "Elektronik & Gadget",
-    "Perlengkapan Rumah Tangga",
-    "Kesehatan & Perawatan Diri",
-    "Ibu & Bayi",
-    "Hobi, Olahraga & Otomotif",
-    "Alat Tulis & Kantor",
-    "Bahan Bangunan & Perkakas"
+    "Groceries & Daily Essentials",
+    "Fresh Produce & Ingredients",
+    "Fashion & Apparel",
+    "Electronics & Gadgets",
+    "Home & Living",
+    "Health & Personal Care",
+    "Mom & Baby",
+    "Hobbies, Sports & Automotive",
+    "Stationery & Office",
+    "Hardware & Tools"
   ],
   FOOD: [
-    "Makanan Siap Saji & Aneka Nasi",
-    "Camilan & Snack",
-    "Kopi & Aneka Minuman",
-    "Kuliner Khas & Tradisional",
-    "Roti, Kue & Pastry",
-    "Frozen Food & Siap Masak",
-    "Dessert & Es Krim"
+    "Ready-to-Eat Meals & Rice",
+    "Snacks & Light Bites",
+    "Coffee & Beverages",
+    "Local & Traditional Cuisine",
+    "Bakery, Cakes & Pastry",
+    "Frozen Food & Meal Kits",
+    "Desserts & Ice Cream"
   ],
   JASA: [
-    "Servis & Perbaikan Elektronik",
-    "Jasa Kebersihan (Cleaning Service)",
-    "Montir & Servis Kendaraan",
-    "Barbershop & Salon Kecantikan",
-    "Jasa Tukang & Renovasi Rumah",
-    "Laundry & Cuci Sepatu",
-    "Les Privat & Jasa Edukasi",
-    "Jasa Fotografi & Desain"
+    "Electronics Repair & Maintenance",
+    "Home & Office Cleaning",
+    "Vehicle Repair & Mechanics",
+    "Barbershop & Beauty Salon",
+    "Handyman & Home Renovation",
+    "Laundry & Shoe Care",
+    "Private Tutoring & Education",
+    "Photography & Design Services"
   ]
 };
 
 export function getStoreProductCategories(customCategories?: string[]): string[] {
-  return (customCategories || []).filter(c => Boolean(c?.trim()) && c.trim().toLowerCase() !== "umum");
+  return (customCategories || []).filter(
+    (c) => Boolean(c?.trim()) && !["umum", "general"].includes(c.trim().toLowerCase())
+  );
 }
 
 export const normalizeStoreType = (type?: string): StoreType => {
@@ -144,18 +146,18 @@ export const DEFAULT_SHIPPING_CONFIG: StoreShippingConfig = {
   storeDeliveryFee: 5000,
   storeDeliveryFeePerKm: 2000,
   storeDeliveryMaxRadius: 5,
-  storeDeliveryNotes: "Pengantaran langsung oleh kurir toko untuk area sekitar.",
-  pickupInstructions: "Silakan tunjukkan nama atau nomor pesanan ke kasir saat mengambil pesanan."
+  storeDeliveryNotes: "Direct delivery by internal store courier within nearby radius.",
+  pickupInstructions: "Please show your customer name or order ID to the cashier when picking up."
 };
 
 export const ALL_DAYS = [
-  { id: "SENIN", label: "Sen", full: "Senin" },
-  { id: "SELASA", label: "Sel", full: "Selasa" },
-  { id: "RABU", label: "Rab", full: "Rabu" },
-  { id: "KAMIS", label: "Kam", full: "Kamis" },
-  { id: "JUMAT", label: "Jum", full: "Jumat" },
-  { id: "SABTU", label: "Sab", full: "Sabtu" },
-  { id: "MINGGU", label: "Min", full: "Minggu" }
+  { id: "SENIN", label: "Mon", full: "Monday" },
+  { id: "SELASA", label: "Tue", full: "Tuesday" },
+  { id: "RABU", label: "Wed", full: "Wednesday" },
+  { id: "KAMIS", label: "Thu", full: "Thursday" },
+  { id: "JUMAT", label: "Fri", full: "Friday" },
+  { id: "SABTU", label: "Sat", full: "Saturday" },
+  { id: "MINGGU", label: "Sun", full: "Sunday" }
 ];
 
 export function formatScheduleString(
@@ -165,15 +167,15 @@ export function formatScheduleString(
   is24Hours?: boolean,
   dailyCustomHours?: Record<string, { openTime: string; closeTime: string }>
 ): string {
-  if (!openDays || openDays.length === 0) return "Tutup Sementara";
+  if (!openDays || openDays.length === 0) return "Temporarily Closed";
 
   if (is24Hours) {
     let daysText = "";
-    if (openDays.length === 7) daysText = "Setiap Hari";
-    else if (openDays.length === 5 && !openDays.includes("SABTU") && !openDays.includes("MINGGU")) daysText = "Senin – Jumat";
-    else if (openDays.length === 6 && !openDays.includes("MINGGU")) daysText = "Senin – Sabtu";
+    if (openDays.length === 7) daysText = "Every Day";
+    else if (openDays.length === 5 && !openDays.includes("SABTU") && !openDays.includes("MINGGU")) daysText = "Mon - Fri";
+    else if (openDays.length === 6 && !openDays.includes("MINGGU")) daysText = "Mon - Sat";
     else daysText = openDays.map((d) => ALL_DAYS.find((x) => x.id === d)?.label || d).join(", ");
-    return `${daysText} (24 Jam)`;
+    return `${daysText} (24 Hours)`;
   }
 
   const defaultOpen = openTime || "08:00";
@@ -188,21 +190,21 @@ export function formatScheduleString(
   if (!hasCustom) {
     let daysText = "";
     if (openDays.length === 7) {
-      daysText = "Setiap Hari";
+      daysText = "Every Day";
     } else if (
       openDays.length === 5 &&
       !openDays.includes("SABTU") &&
       !openDays.includes("MINGGU")
     ) {
-      daysText = "Senin – Jumat";
+      daysText = "Mon - Fri";
     } else if (openDays.length === 6 && !openDays.includes("MINGGU")) {
-      daysText = "Senin – Sabtu";
+      daysText = "Mon - Sat";
     } else {
       daysText = openDays
         .map((d) => ALL_DAYS.find((x) => x.id === d)?.label || d)
         .join(", ");
     }
-    return `${daysText}, ${defaultOpen} - ${defaultClose} WIB`;
+    return `${daysText}, ${defaultOpen} - ${defaultClose}`;
   }
 
   const groups: { [timeRange: string]: string[] } = {};
@@ -217,15 +219,15 @@ export function formatScheduleString(
 
   const formattedParts = Object.entries(groups).map(([range, days]) => {
     let dayLabel = "";
-    if (days.length === 7) dayLabel = "Setiap Hari";
-    else if (days.length === 6 && !days.includes("MINGGU")) dayLabel = "Senin – Sabtu";
-    else if (days.length === 5 && !days.includes("SABTU") && !days.includes("MINGGU")) dayLabel = "Senin – Jumat";
+    if (days.length === 7) dayLabel = "Every Day";
+    else if (days.length === 6 && !days.includes("MINGGU")) dayLabel = "Mon - Sat";
+    else if (days.length === 5 && !days.includes("SABTU") && !days.includes("MINGGU")) dayLabel = "Mon - Fri";
     else if (days.length === 1) dayLabel = ALL_DAYS.find(x => x.id === days[0])?.full || days[0];
     else dayLabel = days.map(d => ALL_DAYS.find(x => x.id === d)?.label || d).join(", ");
     return `${dayLabel} (${range})`;
   });
 
-  return `${formattedParts.join(", ")} WIB`;
+  return formattedParts.join(", ");
 }
 
 export interface StoreOpenStatusResult {
@@ -246,8 +248,8 @@ export function isStoreCurrentlyOpen(
   if (!store) {
     return {
       isOpen: false,
-      statusLabel: "Tutup",
-      statusDescription: "Data toko tidak tersedia",
+      statusLabel: "Closed",
+      statusDescription: "Store data unavailable",
       isManualOverride: false,
       manualOverrideType: null
     };
@@ -257,8 +259,8 @@ export function isStoreCurrentlyOpen(
   if (store.isOpenManualOverride === false) {
     return {
       isOpen: false,
-      statusLabel: "Tutup Sementara",
-      statusDescription: "Tutup Sementara (Manual)",
+      statusLabel: "Temporarily Closed",
+      statusDescription: "Temporarily Closed (Manual)",
       isManualOverride: true,
       manualOverrideType: "FORCE_CLOSE"
     };
@@ -266,8 +268,8 @@ export function isStoreCurrentlyOpen(
   if (store.isOpenManualOverride === true) {
     return {
       isOpen: true,
-      statusLabel: "Buka",
-      statusDescription: "Buka (Manual Override)",
+      statusLabel: "Open",
+      statusDescription: "Open (Manual Override)",
       isManualOverride: true,
       manualOverrideType: "FORCE_OPEN"
     };
@@ -283,8 +285,8 @@ export function isStoreCurrentlyOpen(
   if (openDays.length === 0) {
     return {
       isOpen: false,
-      statusLabel: "Tutup",
-      statusDescription: "Tutup (Jadwal belum diatur)",
+      statusLabel: "Closed",
+      statusDescription: "Closed (Schedule not set)",
       isManualOverride: false,
       manualOverrideType: null
     };
@@ -294,8 +296,8 @@ export function isStoreCurrentlyOpen(
   if (!openDays.includes(currentDayId)) {
     return {
       isOpen: false,
-      statusLabel: "Tutup",
-      statusDescription: `Tutup (Libur hari ${currentDayLabel})`,
+      statusLabel: "Closed",
+      statusDescription: `Closed (Off on ${currentDayLabel})`,
       isManualOverride: false,
       manualOverrideType: null
     };
@@ -304,8 +306,8 @@ export function isStoreCurrentlyOpen(
   if (store.is24Hours) {
     return {
       isOpen: true,
-      statusLabel: "Buka",
-      statusDescription: "Buka (24 Jam)",
+      statusLabel: "Open",
+      statusDescription: "Open (24 Hours)",
       isManualOverride: false,
       manualOverrideType: null
     };
@@ -338,19 +340,19 @@ export function isStoreCurrentlyOpen(
   if (isWithinHours) {
     return {
       isOpen: true,
-      statusLabel: "Buka",
-      statusDescription: `Buka (Tutup pukul ${cTime} WIB)`,
+      statusLabel: "Open",
+      statusDescription: `Open (Closes at ${cTime})`,
       isManualOverride: false,
       manualOverrideType: null
     };
   } else {
     const nextTimeDesc = currentMinutes < openMinutes
-      ? `Buka pukul ${oTime} WIB`
-      : `Buka kembali sesuai jadwal`;
+      ? `Opens at ${oTime}`
+      : `Reopens on schedule`;
     return {
       isOpen: false,
-      statusLabel: "Tutup",
-      statusDescription: `Tutup (${nextTimeDesc})`,
+      statusLabel: "Closed",
+      statusDescription: `Closed (${nextTimeDesc})`,
       isManualOverride: false,
       manualOverrideType: null
     };
@@ -545,13 +547,13 @@ export interface MerchantPageProps {
 
 export const DEFAULT_SAMPLE_STORE: MerchantStore = {
   id: "toko-berkah-sembako",
-  name: "Toko Berkah Sembako",
-  tagline: "Pusat Sembako Murah & Kebutuhan Rumah Tangga",
-  description: "Menyediakan beras, minyak goreng, gula, dan aneka kebutuhan pokok sehari-hari dengan harga grosir dan pengiriman cepat.",
+  name: "Berkah Pantry Store",
+  tagline: "Affordable Daily Groceries & Household Essentials",
+  description: "Supplying rice, cooking oil, sugar, and daily essentials with wholesale pricing and fast local delivery.",
   logoUrl: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=160",
   bannerUrl: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200",
   type: "BARANG",
-  category: "Sembako & Kebutuhan Pokok",
+  category: "Groceries & Daily Essentials",
   rating: 4.9,
   totalProducts: 2,
   address: "Jl. Pasar Besar No. 12",
@@ -560,7 +562,7 @@ export const DEFAULT_SAMPLE_STORE: MerchantStore = {
   longitude: undefined,
   isOpen: true,
   isOpenManualOverride: null,
-  operatingHours: "Setiap Hari, 07:30 - 21:00 WIB",
+  operatingHours: "Every Day, 07:30 - 21:00",
   openTime: "07:30",
   closeTime: "21:00",
   openDays: ["SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU", "MINGGU"],
@@ -571,7 +573,7 @@ export const DEFAULT_SAMPLE_STORE: MerchantStore = {
   danaName: "Budi Santoso",
   qrisImageUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DANA-MERCHANT-BERKAH",
   acceptCod: true,
-  customCategories: ["Beras & Tepung", "Minyak & Bumbu"],
+  customCategories: ["Rice & Flour", "Oil & Spices"],
   bankName: "DANA",
   bankAccount: "081234567890",
   bankHolder: "Budi Santoso",
@@ -579,7 +581,7 @@ export const DEFAULT_SAMPLE_STORE: MerchantStore = {
     seraInstant: true,
     selfPickup: true,
     regularCourier: false,
-    pickupInstructions: "Silakan tunjukkan nama pemesan atau nomor pesanan ke kasir saat mengambil pesanan."
+    pickupInstructions: "Please show your customer name or order number to the cashier when picking up."
   },
   acceptedPayments: {
     qris: true,
@@ -594,10 +596,10 @@ export const DEFAULT_PRODUCTS: MerchantProduct[] = [
   {
     id: "prod-1",
     storeId: "toko-berkah-sembako",
-    name: "Beras Rojolele Super Premium (5kg)",
-    description: "Beras pulen pilihan kualitas super tanpa pemutih.",
+    name: "Premium Rojolele Rice (5kg)",
+    description: "Selected fluffy white rice, bleach-free quality.",
     type: "GOODS",
-    category: "Beras & Tepung",
+    category: "Rice & Flour",
     price: 72000,
     originalPrice: 75000,
     currency: "IDR",
@@ -605,16 +607,16 @@ export const DEFAULT_PRODUCTS: MerchantProduct[] = [
     barcode: "8992753123456",
     rating: 5.0,
     images: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500"],
-    badge: "Terlaris",
+    badge: "Bestseller",
     location: "Solo"
   },
   {
     id: "prod-2",
     storeId: "toko-berkah-sembako",
-    name: "Minyak Goreng Sawit Pouch (2 Liter)",
-    description: "Minyak goreng jernih berkualitas kemasan hemat pouch 2L.",
+    name: "Palm Cooking Oil Pouch (2 Liter)",
+    description: "Clear golden palm cooking oil in value 2L pouch.",
     type: "GOODS",
-    category: "Minyak & Bumbu",
+    category: "Oil & Spices",
     price: 34000,
     currency: "IDR",
     stock: 80,
@@ -630,21 +632,21 @@ export const DEFAULT_ORDERS: MerchantOrder[] = [
     id: "ORD-98214",
     customerName: "Budi Santoso",
     customerPhone: "081298765432",
-    itemsSummary: "1x Beras Rojolele Super (5kg), 1x Minyak 2L",
+    itemsSummary: "1x Premium Rojolele Rice (5kg), 1x Cooking Oil 2L",
     totalAmount: 106000,
     paymentMethod: "QRIS",
     paymentStatus: "PAID",
     status: "PROCESSING",
     createdAt: "14/10/26 • 08:30",
     shippingMethod: "SERA_INSTANT",
-    shippingAddress: "Jl. Slamet Riyadi No. 142, Solo (Pintu Belakang BCA)",
+    shippingAddress: "Jl. Slamet Riyadi No. 142, Solo (Back Gate near BCA)",
     shippingCost: 8000
   },
   {
     id: "ORD-98230",
     customerName: "Ahmad Dahlan",
     customerPhone: "081388776655",
-    itemsSummary: "1x Beras Rojolele Super (5kg)",
+    itemsSummary: "1x Premium Rojolele Rice (5kg)",
     totalAmount: 83000,
     paymentMethod: "QRIS",
     paymentStatus: "PAID",
@@ -659,7 +661,7 @@ export const DEFAULT_ORDERS: MerchantOrder[] = [
     id: "ORD-98240",
     customerName: "Hendro Wijaya",
     customerPhone: "081234567890",
-    itemsSummary: "1x Beras Rojolele Super (5kg), 2x Ikan Lele Segar (1kg)",
+    itemsSummary: "1x Premium Rojolele Rice (5kg), 2x Fresh Catfish (1kg)",
     totalAmount: 150000,
     paymentMethod: "COD",
     paymentStatus: "PENDING",
@@ -674,14 +676,14 @@ export const DEFAULT_ORDERS: MerchantOrder[] = [
     id: "ORD-98188",
     customerName: "Siti Rahma",
     customerPhone: "085712345678",
-    itemsSummary: "2x Minyak Goreng Sawit (2 Liter)",
+    itemsSummary: "2x Palm Cooking Oil Pouch (2 Liter)",
     totalAmount: 68000,
     paymentMethod: "DANA",
     paymentStatus: "PAID",
     status: "COMPLETED",
     createdAt: "13/10/26 • 14:20",
     shippingMethod: "PICKUP",
-    shippingAddress: "Ambil Sendiri di Toko",
+    shippingAddress: "In-Store Pickup",
     shippingCost: 0
   }
 ];
@@ -754,10 +756,10 @@ export function compressImage(file: File, maxWidth = 800, quality = 0.8): Promis
 }
 
 /**
- * Returns the localized merchant entity noun adapted to the store type ("Resto" for FOOD, "Toko" otherwise).
+ * Returns the localized merchant entity noun adapted to the store type ("Restaurant" for FOOD, "Store" otherwise).
  */
 export function getStoreEntityLabel(type?: StoreType | string, lowercase = false): string {
-  const label = type === "FOOD" ? "Resto" : "Toko";
+  const label = type === "FOOD" ? "Restaurant" : "Store";
   return lowercase ? label.toLowerCase() : label;
 }
 

@@ -82,7 +82,7 @@ export async function fetchUserProfileApi(
   });
   const data = await res.json();
   if (!res.ok || !data?.success || !data?.profile) {
-    throw new Error(data?.error || 'Gagal memuat profil dari server.');
+    throw new Error(data?.error || 'Failed to load profile from server.');
   }
   return { persisted: Boolean(data.persisted), profile: data.profile };
 }
@@ -98,7 +98,7 @@ export async function updateUserProfileApi(
   });
   const data = await res.json();
   if (!res.ok || !data?.success || !data?.profile) {
-    throw new Error(data?.error || 'Gagal menyimpan profil ke server.');
+    throw new Error(data?.error || 'Failed to save profile to server.');
   }
   return data.profile;
 }
@@ -110,7 +110,7 @@ export async function deleteUserProfileApi(auth: ProfileAuthContext): Promise<vo
   });
   const data = await res.json();
   if (!res.ok || !data?.success) {
-    throw new Error(data?.error || 'Gagal menghapus akun dari server.');
+    throw new Error(data?.error || 'Failed to delete account from server.');
   }
 }
 
@@ -285,7 +285,7 @@ export function extractLegacyLocalProfile(): {
       const obj = JSON.parse(rawAddrDetails);
       if (obj && typeof obj === 'object') {
         parsedAddr = {
-          label: obj.label || 'Rumah',
+          label: obj.label === 'Rumah' ? 'Home' : (obj.label || 'Home'),
           recipientName: obj.recipientName || fullName,
           phone: obj.phone || phone,
           streetAddress: obj.streetAddress || rawStreet,
@@ -299,7 +299,7 @@ export function extractLegacyLocalProfile(): {
     } catch {}
   } else if (rawStreet) {
     parsedAddr = {
-      label: 'Rumah',
+      label: 'Home',
       recipientName: fullName,
       phone,
       streetAddress: rawStreet,

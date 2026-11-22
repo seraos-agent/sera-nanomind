@@ -47,7 +47,7 @@ export interface ConnectedPlatform {
 export const CATEGORIES = [
   {
     id: "commerce",
-    name: "Commerce & Mitra",
+    name: "Commerce & Operations",
     icon: ShoppingBag,
     description: "Marketplace storefront, store hub, POS cash register, and courier fleet",
   },

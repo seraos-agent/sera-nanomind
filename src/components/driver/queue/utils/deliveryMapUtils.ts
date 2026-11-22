@@ -201,7 +201,11 @@ export function isRealCustomerAddress(address?: string): boolean {
   const lower = clean.toLowerCase();
   if (
     lower === "alamat pengantaran toko" ||
+    lower === "store delivery address" ||
     lower === "alamat pembeli" ||
+    lower === "buyer address" ||
+    lower === "in-store pickup" ||
+    lower === "pick up at store" ||
     lower === "ambil di toko" ||
     lower === "ambil ke toko" ||
     lower === "ambil sendiri di toko"

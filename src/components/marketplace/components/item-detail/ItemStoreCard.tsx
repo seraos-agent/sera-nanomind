@@ -75,7 +75,7 @@ export const ItemStoreCard: React.FC<ItemStoreCardProps> = ({
 
       {/* Store Details Column */}
       <div style={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column' }}>
-        {/* Header Row: Store Name & Kunjungi Toko */}
+        {/* Header Row: Store Name & Visit Store */}
         <div
           style={{
             display: 'flex',
@@ -99,7 +99,7 @@ export const ItemStoreCard: React.FC<ItemStoreCardProps> = ({
             {storeName}
           </div>
 
-          {/* Kunjungi Toko Compact Indicator */}
+          {/* Visit Store Compact Indicator */}
           <span
             style={{
               fontSize: '0.72rem',
@@ -112,7 +112,7 @@ export const ItemStoreCard: React.FC<ItemStoreCardProps> = ({
               gap: '2px',
             }}
           >
-            <span>Kunjungi Toko</span>
+            <span>Visit Store</span>
             <span style={{ fontSize: '0.8rem', lineHeight: 1 }}>›</span>
           </span>
         </div>

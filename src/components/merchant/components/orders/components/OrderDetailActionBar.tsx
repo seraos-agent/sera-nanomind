@@ -73,7 +73,7 @@ export function OrderDetailActionBar({
           }}
         >
           <Clock size={14} />
-          <span>{isActionPending ? "Memproses..." : "Proses Pesanan"}</span>
+          <span>{isActionPending ? "Processing..." : "Process Order"}</span>
         </button>
       )}
 
@@ -110,7 +110,7 @@ export function OrderDetailActionBar({
             }}
           >
             <Store size={14} />
-            <span>{isActionPending ? "Memproses..." : "Siap Diambil Pembeli"}</span>
+            <span>{isActionPending ? "Processing..." : "Ready for Buyer Pickup"}</span>
           </button>
         ) : (
           <button
@@ -145,16 +145,16 @@ export function OrderDetailActionBar({
             }}
           >
             {isActionPending ? (
-              <span>Memanggil Kurir...</span>
+              <span>Dispatching Courier...</span>
             ) : order.shippingMethod === "STORE_DELIVERY" ? (
               <>
                 <Truck size={14} />
-                <span>Kirim via Kurir Toko</span>
+                <span>Send via Store Courier</span>
               </>
             ) : (
               <>
                 <Bike size={14} />
-                <span>Panggil Mitra Kurir</span>
+                <span>Request Courier Partner</span>
               </>
             )}
           </button>
@@ -165,7 +165,7 @@ export function OrderDetailActionBar({
         <button
           type="button"
           disabled={true}
-          title="Menunggu kurir menyelesaikan pengantaran paket ke pembeli"
+          title="Waiting for courier to complete delivery to buyer"
           style={{
             padding: "9px 18px",
             borderRadius: 8,
@@ -182,7 +182,7 @@ export function OrderDetailActionBar({
           }}
         >
           <Clock size={14} />
-          <span>Menunggu Kurir...</span>
+          <span>Waiting for Courier...</span>
         </button>
       )}
 
@@ -218,7 +218,7 @@ export function OrderDetailActionBar({
           }}
         >
           <CheckCircle2 size={14} />
-          <span>{isActionPending ? "Menyelesaikan..." : "Selesaikan Pesanan"}</span>
+          <span>{isActionPending ? "Completing..." : "Complete Order"}</span>
         </button>
       )}
     </div>

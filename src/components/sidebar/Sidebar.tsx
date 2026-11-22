@@ -219,9 +219,9 @@ export function Sidebar({ theme, open, onClose, onToggle, isMobileView, currentV
             {/* Workspace-Activated Ecosystem Modules (Hidden until activated in Workspace) */}
             {([
               { id: "marketplace", view: "marketplace" as SidebarView, label: "Marketplace", icon: ShoppingBag },
-              { id: "mitra_store", view: "merchant" as SidebarView, label: "Mitra Store", icon: Store },
-              { id: "mitra_kurir", view: "driver" as SidebarView, label: "Mitra Kurir", icon: Bike },
-              { id: "mitra_kasir", view: "cashier" as SidebarView, label: "Mitra Kasir", icon: Calculator },
+              { id: "mitra_store", view: "merchant" as SidebarView, label: "Merchant Store", icon: Store },
+              { id: "mitra_kurir", view: "driver" as SidebarView, label: "Courier Dispatch", icon: Bike },
+              { id: "mitra_kasir", view: "cashier" as SidebarView, label: "POS Cashier", icon: Calculator },
             ]).filter(mod => activeConnectors?.some(c => c.id === mod.id && c.isActive)).map(mod => {
               const ModIcon = mod.icon;
               return (

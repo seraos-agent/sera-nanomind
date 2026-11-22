@@ -223,16 +223,16 @@ export const StoreModal: React.FC<StoreModalProps> = ({
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url);
     }
-    showToast('🔗 Tautan toko berhasil disalin ke clipboard!');
+    showToast('🔗 Store link copied to clipboard!');
   };
 
   const handleSubmitReport = () => {
     setIsReportModalOpen(false);
-    showToast(`🚩 Laporan terhadap toko "${store.name}" berhasil dikirim ke tim SERA.`);
+    showToast(`🚩 Report against store "${store.name}" submitted to the SERA team.`);
   };
 
   const handleWhatsAppChat = () => {
-    const waUrl = `https://wa.me/${store.whatsapp}?text=Halo%20${encodeURIComponent(store.name)},%20saya%20melihat%20toko%20Anda%20di%20SERA%20Market.`;
+    const waUrl = `https://wa.me/${store.whatsapp}?text=Hello%20${encodeURIComponent(store.name)},%20I%20saw%20your%20store%20on%20SERA%20Market.`;
     window.open(waUrl, '_blank');
   };
 
@@ -380,7 +380,7 @@ export const StoreModal: React.FC<StoreModalProps> = ({
               <StoreProfileBanner store={store} />
             </div>
 
-            {/* Store Segmented Capsule Tabs Bar (Toko | Produk | Kategori) */}
+            {/* Store Segmented Capsule Tabs Bar (Store | Products | Categories) */}
             <div
               ref={tabsRef}
               className="store-tabs-bar"
@@ -416,7 +416,7 @@ export const StoreModal: React.FC<StoreModalProps> = ({
               >
                 {(['TOKO', 'PRODUK', 'KATEGORI'] as const).map((tab) => {
                   const isActive = activeTab === tab;
-                  const label = tab === 'TOKO' ? 'Toko' : tab === 'PRODUK' ? 'Produk' : 'Kategori';
+                  const label = tab === 'TOKO' ? 'Store' : tab === 'PRODUK' ? 'Products' : 'Categories';
                   return (
                     <button
                       key={tab}

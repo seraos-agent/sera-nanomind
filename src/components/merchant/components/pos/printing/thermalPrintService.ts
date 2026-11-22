@@ -143,7 +143,7 @@ export function isAndroidMobileBrowser(): boolean {
 
 export async function listPairedBluetoothPrinters(): Promise<PairedBluetoothPrinter[]> {
   if (!isCapacitorNativeAndroid()) {
-    throw new Error("Bluetooth printer native hanya tersedia di aplikasi Android SERA.");
+    throw new Error("Native Bluetooth printer support is only available in the SERA Android app.");
   }
   const res = await ThermalPrinterNative.listPairedPrinters();
   return Array.isArray(res?.printers) ? res.printers : [];
@@ -154,7 +154,7 @@ export async function selectWebSerialPrinterPort(
 ): Promise<boolean> {
   const nav = navigator as NavigatorWithSerial;
   if (!nav.serial) {
-    throw new Error("Browser ini belum mendukung WebSerial. Gunakan Chrome atau Edge di PC.");
+    throw new Error("This browser does not support WebSerial. Use Chrome or Edge on desktop.");
   }
   const port = await nav.serial.requestPort();
   if (target === "kitchen") {
@@ -203,7 +203,7 @@ async function sendBytesOverWebSerial(
 
   const writer = port.writable?.getWriter();
   if (!writer) {
-    throw new Error("Gagal membuka stream tulis ke port printer USB.");
+    throw new Error("Failed to open write stream to USB printer port.");
   }
 
   try {
@@ -287,7 +287,7 @@ async function dispatchEscPosOrSystemPrint(
       return {
         ok: false,
         channel: "bluetooth",
-        message: "Mode Bluetooth native hanya berjalan di aplikasi Android (APK)."
+        message: "Native Bluetooth mode only runs in the Android app (APK)."
       };
     }
     if (!settings.bluetoothAddress) {
@@ -296,8 +296,8 @@ async function dispatchEscPosOrSystemPrint(
         channel: "bluetooth",
         message:
           serialTarget === "kitchen"
-            ? "Pilih printer Bluetooth khusus dapur terlebih dahulu di menu Atur Printer."
-            : "Pilih printer Bluetooth terlebih dahulu di menu Atur Printer."
+            ? "Please select a dedicated kitchen Bluetooth printer first under Printer Settings."
+            : "Please select a Bluetooth printer first under Printer Settings."
       };
     }
     await ThermalPrinterNative.printRawBytes({
@@ -307,7 +307,7 @@ async function dispatchEscPosOrSystemPrint(
     return {
       ok: true,
       channel: "bluetooth",
-      message: `Terkirim ke printer ${settings.bluetoothName || "Bluetooth"}`
+      message: `Sent to ${settings.bluetoothName || "Bluetooth"} printer`
     };
   }
 
@@ -318,8 +318,8 @@ async function dispatchEscPosOrSystemPrint(
       channel: "webserial",
       message:
         serialTarget === "kitchen"
-          ? "Tiket dapur dikirim lewat kabel USB/Serial"
-          : "Struk dikirim langsung lewat kabel USB/Serial"
+          ? "Kitchen ticket sent over USB/Serial cable"
+          : "Receipt sent directly over USB/Serial cable"
     };
   }
 
@@ -329,7 +329,7 @@ async function dispatchEscPosOrSystemPrint(
     return {
       ok: true,
       channel: "rawbt",
-      message: "Membuka aplikasi bridge RawBT di Android"
+      message: "Opening RawBT bridge app on Android"
     };
   }
 
@@ -338,7 +338,7 @@ async function dispatchEscPosOrSystemPrint(
     return {
       ok: false,
       channel: "system",
-      message: "Tes cetak dialog OS tidak memakai ESC/POS. Gunakan mode Bluetooth atau USB Serial."
+      message: "OS print dialog does not use ESC/POS test bytes. Use Bluetooth or USB Serial mode."
     };
   }
   applyDynamicPrintPageCss(settings.paperWidth, printTarget);
@@ -346,7 +346,7 @@ async function dispatchEscPosOrSystemPrint(
   return {
     ok: true,
     channel: "system",
-    message: systemMessage || `Membuka dialog cetak OS (${settings.paperWidth})`
+    message: systemMessage || `Opening OS print dialog (${settings.paperWidth})`
   };
 }
 
@@ -428,7 +428,7 @@ export async function printKitchenTicketHybrid(
     effectiveConfig,
     true,
     "kitchen",
-    `${payload.isAdditionalOrder ? "Tambahan dapur" : "Tiket dapur"} siap dicetak (${effectiveConfig.paperWidth})`,
+    `${payload.isAdditionalOrder ? "Kitchen add-on" : "Kitchen ticket"} ready to print (${effectiveConfig.paperWidth})`,
     useSeparateKitchen ? "kitchen" : "receipt"
   );
 }
@@ -467,7 +467,7 @@ export async function runThermalPrinterTest(
     return {
       ok: true,
       channel: "system",
-      message: `Tes dialog cetak OS (${effectiveConfig.paperWidth}) dibuka`
+      message: `OS print test dialog (${effectiveConfig.paperWidth}) opened`
     };
   }
   return dispatchEscPosOrSystemPrint(bytes, effectiveConfig, false, "test-page", undefined, target);

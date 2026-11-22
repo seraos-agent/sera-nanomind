@@ -54,7 +54,7 @@ export function DriverOfflineWarningToast({
 
       <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#F8FAFC" }}>
-          Tidak Dapat Offline
+          Cannot Go Offline
         </div>
         <div style={{ fontSize: 11.5, color: "#94A3B8", marginTop: 2, lineHeight: 1.45 }}>
           {message}
@@ -77,7 +77,7 @@ export function DriverOfflineWarningToast({
           alignItems: "center",
           justifyContent: "center"
         }}
-        title="Tutup"
+        title="Close"
       >
         ✕
       </button>

@@ -255,7 +255,9 @@ export function useMerchantRemoteSync({
                     status: finalStatus,
                     paymentProofUrl: resolvedPaymentProof,
                     customerName:
-                      m.customerName && m.customerName !== "Pelanggan Marketplace"
+                      m.customerName &&
+                      m.customerName !== "Marketplace Buyer" &&
+                      m.customerName !== "Pelanggan Marketplace"
                         ? m.customerName
                         : existing?.customerName || m.customerName,
                     customerPhone:
@@ -271,7 +273,7 @@ export function useMerchantRemoteSync({
                         ? m.shippingMethod
                         : existing?.shippingMethod || m.shippingMethod,
                     itemsSummary:
-                      m.itemsSummary && m.itemsSummary !== "Pesanan"
+                      m.itemsSummary && m.itemsSummary !== "Order" && m.itemsSummary !== "Pesanan"
                         ? m.itemsSummary
                         : existing?.itemsSummary || m.itemsSummary,
                     customerNote: m.customerNote || existing?.customerNote,

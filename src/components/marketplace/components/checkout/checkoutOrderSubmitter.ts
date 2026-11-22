@@ -48,7 +48,7 @@ function buildFallbackOrder(params: SubmitCheckoutParams, idSuffix: 'ID' | 'LCL'
     customer: {
       name,
       phone,
-      address: hasGoods ? (shippingMethod === 'PICKUP' ? 'Ambil ke Toko' : address) : undefined,
+      address: hasGoods ? (shippingMethod === 'PICKUP' ? 'In-Store Pickup' : address) : undefined,
       bookingDate: hasService ? bookingDate : undefined,
       notes,
       destCoords: hasGoods && shippingMethod !== 'PICKUP' ? destCoords : undefined
@@ -105,7 +105,7 @@ export async function submitCheckoutOrder(params: SubmitCheckoutParams): Promise
         customer: {
           name,
           phone,
-          address: hasGoods ? (shippingMethod === 'PICKUP' ? 'Ambil ke Toko' : address) : undefined,
+          address: hasGoods ? (shippingMethod === 'PICKUP' ? 'In-Store Pickup' : address) : undefined,
           bookingDate: hasService ? bookingDate : undefined,
           notes,
           destCoords: hasGoods && shippingMethod !== 'PICKUP' ? destCoords : undefined
@@ -130,7 +130,7 @@ export async function submitCheckoutOrder(params: SubmitCheckoutParams): Promise
           phone: serverOrder.customer?.phone || phone,
           address:
             serverOrder.customer?.address ||
-            (hasGoods ? (shippingMethod === 'PICKUP' ? 'Ambil ke Toko' : address) : undefined),
+            (hasGoods ? (shippingMethod === 'PICKUP' ? 'In-Store Pickup' : address) : undefined),
           bookingDate: serverOrder.customer?.bookingDate || (hasService ? bookingDate : undefined),
           notes: serverOrder.customer?.notes || notes,
           destCoords: serverOrder.customer?.destCoords || (hasGoods && shippingMethod !== 'PICKUP' ? destCoords : undefined)

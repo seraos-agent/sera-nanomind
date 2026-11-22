@@ -29,7 +29,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
   const menuItems = [
     {
       id: "profile" as const,
-      label: "Profil & Identitas",
+      label: "Profile & Identity",
       icon: Store,
       onClick: () => onNavigate("profile"),
       isComplete: completionStatus?.profile,
@@ -37,7 +37,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
     },
     {
       id: "payments" as const,
-      label: "Metode Pembayaran",
+      label: "Payment Methods",
       icon: QrCode,
       onClick: () => onNavigate("payments"),
       isComplete: completionStatus?.payments,
@@ -45,7 +45,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
     },
     {
       id: "location" as const,
-      label: "Alamat & Lokasi GPS",
+      label: "Address & GPS Location",
       icon: MapPin,
       onClick: () => onNavigate("location"),
       isComplete: completionStatus?.location,
@@ -53,7 +53,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
     },
     {
       id: "schedule" as const,
-      label: "Jadwal Operasional",
+      label: "Operating Hours",
       icon: Clock,
       onClick: () => onNavigate("schedule"),
       isComplete: completionStatus?.schedule,
@@ -61,7 +61,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
     },
     {
       id: "shipping" as const,
-      label: `Pengiriman ${entity}`,
+      label: `${entity} Shipping`,
       icon: Truck,
       onClick: onOpenShippingModal,
       isComplete: false,
@@ -69,7 +69,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
     },
     {
       id: "pos" as const,
-      label: "Pengaturan POS & Kasir",
+      label: "POS & Cashier Settings",
       icon: Calculator,
       onClick: () => onNavigate("pos"),
       isComplete: false,
@@ -124,14 +124,14 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
               {!isRegistered && item.isRequired && (
                 item.isComplete ? (
                   <span
-                    title="Lengkap"
+                    title="Complete"
                     style={{ display: "inline-flex", alignItems: "center", color: "#10B981" }}
                   >
                     <CheckCircle2 size={17} />
                   </span>
                 ) : (
                   <span
-                    title="Wajib diisi"
+                    title="Required"
                     style={{
                       fontSize: 16,
                       fontWeight: 700,
@@ -154,7 +154,7 @@ export const HubNavigationMenu: React.FC<HubNavigationMenuProps> = ({
                     borderRadius: 12
                   }}
                 >
-                  Opsional
+                  Optional
                 </span>
               )}
               <ChevronRight size={18} color={theme.inkSoft} />

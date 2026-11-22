@@ -41,7 +41,7 @@ export function StoreOnboardingRegistrationCard({
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
           <span style={{ fontSize: 14.5, fontWeight: 700, color: theme.ink }}>
-            Pendaftaran Mitra Toko
+            Merchant Store Registration
           </span>
           <span
             style={{
@@ -53,7 +53,7 @@ export function StoreOnboardingRegistrationCard({
               borderRadius: 20
             }}
           >
-            {completedCount}/4 Wajib
+            {completedCount}/4 Required
           </span>
         </div>
 
@@ -77,14 +77,14 @@ export function StoreOnboardingRegistrationCard({
             gap: 8
           }}
         >
-          <span>Peraturan & Syarat Ketentuan</span>
+          <span>Rules &amp; Terms and Conditions</span>
           {hasReadTerms ? (
             <span style={{ fontSize: 11, fontWeight: 700, color: "#10B981" }}>
-              Sudah Dibaca
+              Read
             </span>
           ) : (
             <span style={{ fontSize: 11, fontWeight: 600, color: theme.accent }}>
-              Baca
+              Read
             </span>
           )}
         </button>
@@ -126,7 +126,7 @@ export function StoreOnboardingRegistrationCard({
             }}
           />
           <span style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.45 }}>
-            Saya menyatakan data toko benar dan menyetujui{" "}
+            I confirm that the store information is accurate and agree to the{" "}
             <span
               onClick={(e) => {
                 e.preventDefault();
@@ -135,7 +135,7 @@ export function StoreOnboardingRegistrationCard({
               }}
               style={{ color: theme.accent, fontWeight: 600, textDecoration: "underline" }}
             >
-              Peraturan & Syarat Ketentuan Mitra SERA
+              SERA Merchant Rules &amp; Terms and Conditions
             </span>
             .
           </span>
@@ -150,9 +150,9 @@ export function StoreOnboardingRegistrationCard({
             setIsRegistering(true);
             try {
               await onRegisterStore();
-              onFeedback("Selamat! Toko Anda berhasil didaftarkan dan langsung aktif.");
+              onFeedback("Congratulations! Your store is now registered and active.");
             } catch (err: any) {
-              onFeedback(err?.message || "Gagal mendaftarkan toko.");
+              onFeedback(err?.message || "Failed to register store.");
             } finally {
               setIsRegistering(false);
             }
@@ -172,16 +172,16 @@ export function StoreOnboardingRegistrationCard({
             boxShadow: canRegister ? "0 4px 14px rgba(0, 0, 0, 0.14)" : "none"
           }}
         >
-          {isRegistering ? "Mendaftarkan Toko..." : "Daftar Mitra Toko"}
+          {isRegistering ? "Registering Store..." : "Register Merchant Store"}
         </button>
 
         {!canRegister && (
           <div style={{ fontSize: 11.5, color: theme.inkSoft, textAlign: "center" }}>
             {!isAllDataComplete
-              ? "Lengkapi semua data wajib di atas terlebih dahulu."
+              ? "Please complete all required sections above first."
               : !hasReadTerms
-                ? "Buka dan baca Peraturan Mitra terlebih dahulu."
-                : "Centang persetujuan peraturan untuk mengaktifkan tombol Daftar."}
+                ? "Please open and read the Merchant Rules first."
+                : "Check the terms agreement box to enable registration."}
           </div>
         )}
       </div>

@@ -90,10 +90,10 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
       >
         <div>
           <div style={{ fontSize: 13, fontWeight: 600, color: theme.ink }}>
-            Aktifkan Varian
+            Enable Variants
           </div>
           <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 2 }}>
-            Ukuran, porsi, atau rasa dengan harga & stok terpisah
+            Sizes, portions, or flavors with separate pricing and stock
           </div>
         </div>
         <input
@@ -104,7 +104,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
         />
       </div>
 
-      {/* DAFTAR VARIAN PRODUK */}
+      {/* VARIANT LIST */}
       {hasVariants && (
         <div
           style={{
@@ -119,10 +119,10 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-              Daftar Pilihan Varian
+              Variant Options
             </span>
             <span style={{ fontSize: 11, color: theme.inkSoft, fontWeight: 500 }}>
-              {variants.length} Varian
+              {variants.length} Variants
             </span>
           </div>
 
@@ -140,14 +140,14 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                   gap: 8
                 }}
               >
-                {/* Row 1: Nama Varian & Hapus */}
+                {/* Row 1: Variant Name & Remove */}
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <input
                     type="text"
                     placeholder={
                       idx === 0
-                        ? "Nama varian (misal: Reguler / Ukuran S)"
-                        : "Nama varian (misal: Jumbo / Ukuran L)"
+                        ? "Variant name (e.g., Regular / Size S)"
+                        : "Variant name (e.g., Large / Size L)"
                     }
                     value={v.name}
                     onChange={(e) => {
@@ -178,7 +178,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                         setVariantToDelete({ variant: v, index: idx });
                       }
                     }}
-                    title="Hapus Varian"
+                    title="Delete Variant"
                     style={{
                       width: 30,
                       height: 30,
@@ -226,12 +226,12 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                         whiteSpace: "nowrap"
                       }}
                     >
-                      Harga Jual (Rp)
+                      Sell Price (Rp)
                     </div>
                     <input
                       type="text"
                       inputMode="numeric"
-                      placeholder="Harga"
+                      placeholder="Price"
                       value={v.price ? Number(v.price).toLocaleString("id-ID") : ""}
                       onChange={(e) => {
                         const clean = e.target.value.replace(/\D/g, "");
@@ -270,12 +270,12 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                         whiteSpace: "nowrap"
                       }}
                     >
-                      Modal (Rp)
+                      Cost (Rp)
                     </div>
                     <input
                       type="text"
                       inputMode="numeric"
-                      placeholder="Opsional"
+                      placeholder="Optional"
                       value={v.costPrice ? Number(v.costPrice).toLocaleString("id-ID") : ""}
                       onChange={(e) => {
                         const clean = e.target.value.replace(/\D/g, "");
@@ -314,12 +314,12 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                           whiteSpace: "nowrap"
                         }}
                       >
-                        Stok
+                        Stock
                       </div>
                       <input
                         type="text"
                         inputMode="numeric"
-                        placeholder="Stok"
+                        placeholder="Stock"
                         value={
                           v.stock !== undefined && v.stock !== null
                             ? Number(v.stock).toLocaleString("id-ID")
@@ -392,12 +392,12 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
               }}
             >
               <Plus size={13} />
-              <span>Tambah Varian</span>
+              <span>Add Variant</span>
             </button>
 
             {storeType !== "JASA" && (
               <div style={{ fontSize: 11, color: theme.inkSoft, textAlign: "right" }}>
-                Total Stok:{" "}
+                Total Stock:{" "}
                 <strong style={{ color: theme.ink }}>
                   {variants.reduce((acc, curr) => acc + (curr.stock || 0), 0)}
                 </strong>
@@ -407,7 +407,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
         </div>
       )}
 
-      {/* POPUP KONFIRMASI HAPUS VARIAN */}
+      {/* REMOVE VARIANT CONFIRMATION MODAL */}
       {variantToDelete && (
         <div
           onClick={() => setVariantToDelete(null)}
@@ -457,7 +457,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
             </div>
 
             <h3 style={{ margin: "0 0 12px 0", fontSize: 16, fontWeight: 700, color: theme.ink }}>
-              Hapus Varian?
+              Delete Variant?
             </h3>
 
             <div
@@ -477,7 +477,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                 marginBottom: 12
               }}
             >
-              "{variantToDelete.variant.name || `Pilihan #${variantToDelete.index + 1}`}"
+              "{variantToDelete.variant.name || `Option #${variantToDelete.index + 1}`}"
             </div>
 
             <p
@@ -488,7 +488,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                 color: theme.inkSoft
               }}
             >
-              Varian ini akan dihapus dari daftar pilihan produk.
+              This variant will be removed from the product options list.
             </p>
 
             <div
@@ -515,7 +515,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                   cursor: "pointer"
                 }}
               >
-                Batal
+                Cancel
               </button>
               <button
                 type="button"
@@ -536,7 +536,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                   boxShadow: "0 2px 6px rgba(0, 0, 0, 0.12)"
                 }}
               >
-                Ya, Hapus
+                Yes, Delete
               </button>
             </div>
           </div>
@@ -593,7 +593,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
             </div>
 
             <h3 style={{ margin: "0 0 8px 0", fontSize: 16, fontWeight: 700, color: theme.ink }}>
-              Varian Terakhir
+              Last Remaining Variant
             </h3>
 
             <p
@@ -604,8 +604,8 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                 color: theme.inkSoft
               }}
             >
-              Minimal harus ada 1 varian aktif saat fitur varian menyala. Jika produk ini tidak
-              memiliki varian, Anda dapat mematikan fitur varian.
+              At least 1 active variant is required while variants are enabled. If this product has
+              no variants, you can turn off the variant feature.
             </p>
 
             <div
@@ -636,7 +636,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                   cursor: "pointer"
                 }}
               >
-                Matikan Fitur Varian
+                Disable Variants Feature
               </button>
               <button
                 type="button"
@@ -653,7 +653,7 @@ export const ProductVariantManager: React.FC<ProductVariantManagerProps> = ({
                   cursor: "pointer"
                 }}
               >
-                Tetap Gunakan Varian
+                Keep Using Variants
               </button>
             </div>
           </div>

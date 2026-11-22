@@ -55,17 +55,21 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
               <ProcessingIcon size={46} color="currentColor" />
             </div>
             <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px', fontSize: '0.95rem' }}>
-              Tidak Ada Pesanan Diproses
+              No Orders in Progress
             </div>
             <p style={{ fontSize: '0.78rem', lineHeight: 1.5, margin: 0 }}>
-              Pesanan baru yang sedang disiapkan penjual akan muncul di sini.
+              New orders being prepared by the seller will appear here.
             </p>
           </div>
         ) : (
           orders.map((ord) => {
+            const addrLower = (ord.customer?.address || '').trim().toLowerCase();
             const isCourierDelivery =
               ord.shippingMethod !== 'PICKUP' &&
-              (!ord.customer?.address || ord.customer.address !== 'Ambil di Toko');
+              addrLower !== 'in-store pickup' &&
+              addrLower !== 'pick up at store' &&
+              addrLower !== 'ambil di toko' &&
+              addrLower !== 'ambil ke toko';
             const isShipped = ord.orderStatus === 'SHIPPED' || ord.orderStatus === 'DELIVERED';
             const isDelivered = ord.orderStatus === 'DELIVERED';
 
@@ -103,12 +107,12 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                     }}
                   >
                     {isDelivered
-                      ? 'Pesanan Tiba'
+                      ? 'Order Arrived'
                       : isShipped
-                      ? 'Sedang Dikirim'
+                      ? 'Out for Delivery'
                       : !isCourierDelivery
-                      ? 'Ambil di Toko'
-                      : 'Sedang Diproses'}
+                      ? 'In-Store Pickup'
+                      : 'Being Prepared'}
                   </span>
                 </div>
 
@@ -217,7 +221,7 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                         </div>
                       </div>
 
-                      {/* Labels: Proses, Dikirim, Tiba */}
+                      {/* Labels: Preparing, Shipped, Arrived */}
                       <div
                         style={{
                           display: 'flex',
@@ -236,7 +240,7 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                             minWidth: '45px',
                           }}
                         >
-                          Proses
+                          Preparing
                         </div>
                         <div
                           style={{
@@ -247,7 +251,7 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                             transition: 'color 0.3s ease',
                           }}
                         >
-                          Dikirim
+                          Shipped
                         </div>
                         <div
                           style={{
@@ -258,7 +262,7 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                             transition: 'color 0.3s ease',
                           }}
                         >
-                          Tiba
+                          Arrived
                         </div>
                       </div>
                     </div>
@@ -324,7 +328,7 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                 >
                   <div>
                     <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>
-                      Total Pembayaran • <span style={{ fontFamily: 'monospace' }}>{ord.id}</span>
+                      Total Payment • <span style={{ fontFamily: 'monospace' }}>{ord.id}</span>
                     </div>
                     <div
                       style={{
@@ -384,7 +388,7 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                           boxSizing: 'border-box',
                         }}
                       >
-                        <span>Selesai</span>
+                        <span>Complete</span>
                       </button>
                     )}
                   </div>

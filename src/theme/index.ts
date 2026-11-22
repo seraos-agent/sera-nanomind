@@ -52,10 +52,10 @@ export const CONNECTORS = [
 ];
 
 export const SUGGESTIONS = [
-  "Cek sisa kuota AI saya",
-  "Cari produk di Marketplace",
-  "Bantu koordinasi order Mitra Store",
-  "Hubungkan ke WhatsApp & Telegram",
+  "Check my remaining AI quota",
+  "Find products on Marketplace",
+  "Help coordinate Merchant Store orders",
+  "Connect to WhatsApp & Telegram",
 ];
 
 export const FONT_LINK_ID = "chatui-fonts";

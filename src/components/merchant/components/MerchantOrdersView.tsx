@@ -149,9 +149,9 @@ export function MerchantOrdersView({
               />
               <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                 {[
-                  { id: "ALL" as const, label: `Semua (${completedOrders.length})` },
+                  { id: "ALL" as const, label: `All (${completedOrders.length})` },
                   { id: "ONLINE" as const, label: `Online (${onlineCompletedOrders.length})` },
-                  { id: "POS" as const, label: `Kasir Offline (${posCompletedOrders.length})` }
+                  { id: "POS" as const, label: `Offline POS (${posCompletedOrders.length})` }
                 ].map((chip) => {
                   const active = completedSourceFilter === chip.id;
                   return (
@@ -210,15 +210,15 @@ export function MerchantOrdersView({
               </div>
               <div style={{ fontSize: 14, fontWeight: 600, color: theme.ink }}>
                 {filter === "ACTIVE"
-                  ? "Tidak ada pesanan yang perlu diproses"
+                  ? "No orders awaiting processing"
                   : filter === "COMPLETED"
-                    ? "Belum ada pesanan yang selesai"
-                    : "Belum ada pesanan masuk"}
+                    ? "No completed orders yet"
+                    : "No incoming orders yet"}
               </div>
               <div style={{ fontSize: 12 }}>
                 {filter === "COMPLETED"
-                  ? "Pesanan yang telah selesai akan tercatat di bagian ini."
-                  : "Pesanan dari pembeli akan muncul otomatis di halaman ini."}
+                  ? "Completed orders will appear here."
+                  : "Orders from buyers will appear here automatically."}
               </div>
             </div>
           ) : (

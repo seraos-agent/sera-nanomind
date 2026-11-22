@@ -107,7 +107,7 @@ export function PosTransactionCard({
                 fontWeight: 700
               }}
             >
-              BATAL (VOID)
+              VOIDED
             </span>
           )}
         </div>
@@ -167,7 +167,7 @@ export function PosTransactionCard({
             <button
               type="button"
               onClick={() => onReprintReceipt(tx)}
-              title="Cetak Ulang Struk"
+              title="Reprint Receipt"
               style={{
                 padding: "5px 10px",
                 borderRadius: 6,
@@ -184,13 +184,13 @@ export function PosTransactionCard({
               }}
             >
               <Printer size={12} />
-              <span>Cetak</span>
+              <span>Print</span>
             </button>
 
             <button
               type="button"
               onClick={() => onRequestVoid(tx)}
-              title="Batalkan Transaksi (Kembalikan Stok)"
+              title="Void Transaction (Restore Stock)"
               style={{
                 padding: "5px 10px",
                 borderRadius: 6,
@@ -208,7 +208,7 @@ export function PosTransactionCard({
           </div>
         ) : (
           <span style={{ fontSize: 11, color: "#EF4444", fontWeight: 600 }}>
-            Dibatalkan
+            Voided
           </span>
         )}
       </div>

@@ -76,8 +76,8 @@ interface PosSettingsSubpageFormProps {
 }
 
 /**
- * PosSettingsSubpageForm — Store Owner control panel inside Info Toko for configuring
- * POS tax/service rules, supervisor PIN, and managing Mitra Kasir staff activation codes.
+ * PosSettingsSubpageForm - Store Owner control panel inside Store Info for configuring
+ * POS tax/service rules, supervisor PIN, and managing POS Cashier staff activation codes.
  */
 export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
   theme,
@@ -175,7 +175,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
         setOpenShifts(Array.isArray(json.data.openShifts) ? json.data.openShifts : []);
       } else if (res.status === 404 && !json) {
         showBanner(
-          "Endpoint POS belum aktif di server (HTTP 404). Pastikan backend sudah di-restart atau di-deploy.",
+          "POS endpoint is not active on server (HTTP 404). Make sure backend is deployed or restarted.",
           "error"
         );
       }
@@ -197,7 +197,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
         }
       }
     } catch {
-      showBanner("Gagal memuat pengaturan POS dari server.", "error");
+      showBanner("Failed to load POS settings from server.", "error");
     } finally {
       setIsLoading(false);
     }
@@ -243,7 +243,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
       if (!res.ok || !json?.success) {
         showBanner(
           json?.error ||
-            `Gagal menyimpan pengaturan POS (HTTP ${res.status}). Pastikan server backend sudah versi terbaru.`,
+            `Failed to save POS settings (HTTP ${res.status}). Ensure backend server is up to date.`,
           "error"
         );
         return;
@@ -260,9 +260,9 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
           })
         );
       } catch {}
-      showBanner("Pengaturan POS berhasil disimpan!", "success");
+      showBanner("POS settings saved!", "success");
     } catch {
-      showBanner("Gagal menghubungi server. Periksa koneksi atau status backend.", "error");
+      showBanner("Failed to reach server. Check network connection or backend status.", "error");
     } finally {
       setIsSavingConfig(false);
     }
@@ -271,16 +271,16 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
   const handleCreateCashier = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!store?.id) {
-      showBanner("Data toko tidak ditemukan.", "error");
+      showBanner("Store data not found.", "error");
       return;
     }
     if (!newName.trim()) {
-      showBanner("Nama staf kasir wajib diisi.", "error");
+      showBanner("Cashier staff name is required.", "error");
       return;
     }
     const cleanPin = newPin.trim();
     if (!/^\d{4,6}$/.test(cleanPin)) {
-      showBanner("PIN Kasir wajib diisi (4–6 digit angka).", "error");
+      showBanner("Cashier PIN is required (4-6 digits).", "error");
       return;
     }
     setIsAddingCashier(true);
@@ -315,7 +315,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
       if (!res.ok || !json?.success) {
         showBanner(
           json?.error ||
-            `Gagal menambahkan staf kasir (HTTP ${res.status}). Pastikan server backend sudah versi terbaru.`,
+            `Failed to add cashier staff (HTTP ${res.status}). Ensure backend server is up to date.`,
           "error"
         );
         return;
@@ -329,9 +329,9 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
       setCanDiscount(false);
       setCanViewReport(true);
       setShowAddForm(false);
-      showBanner(`Kasir "${json.data.name}" ditambahkan (${json.data.activationCode}).`, "success");
+      showBanner(`Cashier "${json.data.name}" added (${json.data.activationCode}).`, "success");
     } catch {
-      showBanner("Gagal menghubungi server. Periksa koneksi atau status backend.", "error");
+      showBanner("Failed to reach server. Check network connection or backend status.", "error");
     } finally {
       setIsAddingCashier(false);
     }
@@ -341,7 +341,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
     if (!store?.id) return;
     const cleanPin = editPinValue.trim();
     if (!/^\d{4,6}$/.test(cleanPin)) {
-      showBanner("PIN Kasir wajib 4–6 digit angka.", "error");
+      showBanner("Cashier PIN must be 4-6 digits.", "error");
       return;
     }
     setIsUpdatingPin(true);
@@ -361,12 +361,12 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
         );
         setEditingPinCashierId(null);
         setEditPinValue("");
-        showBanner(`PIN untuk kasir "${cashier.name}" berhasil disimpan.`, "success");
+        showBanner(`PIN saved for cashier "${cashier.name}".`, "success");
       } else {
-        showBanner(json?.error || "Gagal menyimpan PIN kasir.", "error");
+        showBanner(json?.error || "Failed to save cashier PIN.", "error");
       }
     } catch {
-      showBanner("Gagal menyimpan PIN kasir.", "error");
+      showBanner("Failed to save cashier PIN.", "error");
     } finally {
       setIsUpdatingPin(false);
     }
@@ -381,7 +381,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
   const handleShareWhatsApp = (cashier: LinkedCashier) => {
     const cleanPhone = (cashier.phone || "").replace(/[^0-9]/g, "");
     const target = cleanPhone.startsWith("0") ? `62${cleanPhone.slice(1)}` : cleanPhone;
-    const text = `Halo ${cashier.name}, berikut Kode Aktivasi Mitra Kasir untuk toko *${store?.name || "SERA"}*:\n\nKode Aktivasi: *${cashier.activationCode}*\n\nBuka menu *Mitra Kasir* di aplikasi SERA, lalu masukkan Kode Aktivasi di atas dan *PIN pribadi (4–6 digit)* yang diberikan pemilik toko secara terpisah untuk memulai shift.`;
+    const text = `Hello ${cashier.name}, here is your POS Cashier Activation Code for *${store?.name || "SERA"}*:\n\nActivation Code: *${cashier.activationCode}*\n\nOpen *POS Cashier* in the SERA app and enter the code above along with your *personal PIN (4-6 digits)* provided separately by the store owner to start your shift.`;
     const url = target
       ? `https://wa.me/${target}?text=${encodeURIComponent(text)}`
       : `https://wa.me/?text=${encodeURIComponent(text)}`;
@@ -404,12 +404,12 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               : c
           )
         );
-        showBanner(`Kode ${cashier.name} diperbarui ke ${json.data.activationCode}.`, "success");
+        showBanner(`Code for ${cashier.name} updated to ${json.data.activationCode}.`, "success");
       } else {
-        showBanner(json?.error || "Gagal me-reset kode aktivasi.", "error");
+        showBanner(json?.error || "Failed to reset activation code.", "error");
       }
     } catch {
-      showBanner("Gagal me-reset kode aktivasi.", "error");
+      showBanner("Failed to reset activation code.", "error");
     }
   };
 
@@ -429,10 +429,10 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
       if (json?.success && json.data) {
         setCashiers((prev) => prev.map((c) => (c.id === cashier.id ? json.data : c)));
       } else {
-        showBanner(json?.error || "Gagal mengubah status kasir.", "error");
+        showBanner(json?.error || "Failed to update cashier status.", "error");
       }
     } catch {
-      showBanner("Gagal mengubah status kasir.", "error");
+      showBanner("Failed to update cashier status.", "error");
     }
   };
 
@@ -446,12 +446,12 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
       const json = await parseJsonSafe(res);
       if (json?.success) {
         setCashiers((prev) => prev.filter((c) => c.id !== cashier.id));
-        showBanner(`Kasir "${cashier.name}" dihapus.`, "success");
+        showBanner(`Cashier "${cashier.name}" removed.`, "success");
       } else {
-        showBanner(json?.error || "Gagal menghapus kasir.", "error");
+        showBanner(json?.error || "Failed to remove cashier.", "error");
       }
     } catch {
-      showBanner("Gagal menghapus kasir.", "error");
+      showBanner("Failed to remove cashier.", "error");
     }
   };
 
@@ -467,7 +467,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
           color: theme.inkSoft
         }}
       >
-        Toko belum terdaftar di server. Simpan profil toko terlebih dahulu untuk mengatur POS dan Staf Kasir.
+        Store is not registered yet. Save the store profile first to configure POS settings and Cashier staff.
       </div>
     );
   }
@@ -524,10 +524,10 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
           <Calculator size={18} color={theme.accent} style={{ flexShrink: 0 }} />
           <div style={{ flex: 1, minWidth: 0 }}>
             <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-              Aturan Pajak, Layanan & Keamanan Kasir
+              Tax, Service Charge &amp; POS Security Rules
             </h4>
             <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-              Berlaku otomatis untuk terminal Mitra Kasir toko ini
+              Applied automatically across POS Cashier terminals for this store
             </p>
           </div>
         </div>
@@ -551,7 +551,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               checked={posConfig.taxEnabled}
               onChange={(e) => setPosConfig((p) => ({ ...p, taxEnabled: e.target.checked }))}
             />
-            Aktifkan Pajak (PPN / PB1)
+            Enable Tax (VAT / Sales Tax)
           </label>
           <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
             <input
@@ -597,7 +597,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               checked={posConfig.serviceChargeEnabled}
               onChange={(e) => setPosConfig((p) => ({ ...p, serviceChargeEnabled: e.target.checked }))}
             />
-            Aktifkan Service Charge
+            Enable Service Charge
           </label>
           <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
             <input
@@ -648,7 +648,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
             checked={posConfig.allowManualDiscount}
             onChange={(e) => setPosConfig((p) => ({ ...p, allowManualDiscount: e.target.checked }))}
           />
-          Izinkan Kasir Memberi Diskon Manual
+          Allow Cashiers to Apply Manual Discounts
         </label>
 
         {/* Allow Open Bill vs Pay First */}
@@ -674,11 +674,11 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
             style={{ marginTop: 2 }}
           />
           <div>
-            <div>Aktifkan Open Bill (Simpan Tagihan Meja / Bayar Belakangan)</div>
+            <div>Enable Open Bill (Hold Table Tab / Pay Later)</div>
             <div style={{ fontSize: 11, fontWeight: 400, color: theme.inkSoft, marginTop: 2 }}>
               {store?.type === "FOOD"
-                ? "Jika dimatikan, pembeli wajib langsung bayar di kasir sebelum pesanan diproses."
-                : "Jika dimatikan, kasir wajib langsung menyelesaikan pembayaran tanpa simpan nota sementara."}
+                ? "If disabled, customers must pay upfront at the register before orders are processed."
+                : "If disabled, cashiers must settle payment immediately without holding temporary tabs."}
             </div>
           </div>
         </label>
@@ -687,10 +687,10 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
             <label style={{ fontSize: 12, fontWeight: 600, color: theme.ink, display: "flex", alignItems: "center", gap: 5 }}>
-              <Lock size={13} /> PIN Otorisasi Supervisor (untuk Void)
+              <Lock size={13} /> Supervisor Authorization PIN (for Voids)
             </label>
             {posConfig.hasSupervisorPin && (
-              <span style={{ fontSize: 11, fontWeight: 600, color: "#10B981" }}>PIN Aktif</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#10B981" }}>PIN Active</span>
             )}
           </div>
           <input
@@ -698,7 +698,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
             inputMode="numeric"
             value={supervisorPinInput}
             onChange={(e) => setSupervisorPinInput(e.target.value)}
-            placeholder={posConfig.hasSupervisorPin ? "Isi untuk mengganti PIN (kosongkan jika tetap)" : "Contoh: 8888"}
+            placeholder={posConfig.hasSupervisorPin ? "Enter to change PIN (leave blank to keep)" : "Example: 8888"}
             style={{
               width: "100%",
               padding: "9px 12px",
@@ -732,11 +732,11 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
           }}
         >
           <Save size={15} />
-          <span>{isSavingConfig ? "Menyimpan..." : "Simpan Pengaturan POS"}</span>
+          <span>{isSavingConfig ? "Saving..." : "Save POS Settings"}</span>
         </button>
       </form>
 
-      {/* Section 2: Mitra Kasir Staff Management */}
+      {/* Section 2: POS Cashier Staff Management */}
       <div
         style={{
           background: theme.surface,
@@ -756,10 +756,10 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
             <Users size={18} color={theme.accent} style={{ flexShrink: 0 }} />
             <div style={{ minWidth: 0 }}>
               <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-                Staf Mitra Kasir ({cashiers.length})
+                POS Cashier Staff ({cashiers.length})
               </h4>
               <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-                Buat kode aktivasi agar staf bisa bertugas di menu Mitra Kasir
+                Generate activation codes so staff can operate POS Cashier
               </p>
             </div>
           </div>
@@ -783,7 +783,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
             }}
           >
             <Plus size={14} />
-            <span>Tambah</span>
+            <span>Add</span>
           </button>
         </div>
 
@@ -799,7 +799,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               fontWeight: 600
             }}
           >
-            Shift Aktif: {openShifts.map((s) => `${s.cashierName} (Modal Rp ${s.openingCash.toLocaleString("id-ID")})`).join(", ")}
+            Active Shift: {openShifts.map((s) => `${s.cashierName} (Opening Rp ${s.openingCash.toLocaleString("id-ID")})`).join(", ")}
           </div>
         )}
 
@@ -823,7 +823,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              placeholder="Nama Staf Kasir (wajib)"
+              placeholder="Cashier Staff Name (required)"
               required
               style={{
                 width: "100%",
@@ -842,7 +842,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                 type="text"
                 value={newPhone}
                 onChange={(e) => setNewPhone(e.target.value)}
-                placeholder="No. WA (opsional)"
+                placeholder="WhatsApp No. (optional)"
                 style={{
                   width: "100%",
                   minWidth: 0,
@@ -862,7 +862,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                 required
                 value={newPin}
                 onChange={(e) => setNewPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                placeholder="PIN Kasir 4–6 digit angka (wajib)"
+                placeholder="Cashier PIN 4-6 digits (required)"
                 style={{
                   width: "100%",
                   minWidth: 0,
@@ -901,7 +901,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                     cursor: "pointer"
                   }}
                 >
-                  {r === "SUPERVISOR" ? "Supervisor" : "Kasir"}
+                  {r === "SUPERVISOR" ? "Supervisor" : "Cashier"}
                 </button>
               ))}
             </div>
@@ -909,15 +909,15 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, fontSize: 12, color: theme.ink }}>
               <label style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <input type="checkbox" checked={canVoid} onChange={(e) => setCanVoid(e.target.checked)} />
-                Boleh Void
+                Can Void
               </label>
               <label style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <input type="checkbox" checked={canDiscount} onChange={(e) => setCanDiscount(e.target.checked)} />
-                Boleh Diskon
+                Can Discount
               </label>
               <label style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <input type="checkbox" checked={canViewReport} onChange={(e) => setCanViewReport(e.target.checked)} />
-                Lihat Laporan
+                View Reports
               </label>
             </div>
 
@@ -935,16 +935,16 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                 cursor: isAddingCashier ? "wait" : "pointer"
               }}
             >
-              {isAddingCashier ? "Membuat Kode..." : "Buat Akun & Kode Kasir"}
+              {isAddingCashier ? "Generating Code..." : "Create Cashier Account & Code"}
             </button>
           </form>
         )}
 
         {isLoading ? (
-          <div style={{ fontSize: 12, color: theme.inkSoft }}>Memuat daftar staf kasir...</div>
+          <div style={{ fontSize: 12, color: theme.inkSoft }}>Loading cashier staff list...</div>
         ) : cashiers.length === 0 ? (
           <div style={{ fontSize: 12, color: theme.inkSoft }}>
-            Belum ada staf kasir terdaftar. Klik <strong>Tambah</strong> untuk membuat kode aktivasi <strong>KS-XXXXXX</strong>.
+            No cashier staff registered yet. Click <strong>Add</strong> to create an activation code <strong>KS-XXXXXX</strong>.
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -971,14 +971,14 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                       </span>
                     </div>
                     <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 2 }}>
-                      Kode: <strong style={{ color: theme.accent }}>{c.activationCode}</strong>
+                      Code: <strong style={{ color: theme.accent }}>{c.activationCode}</strong>
                       {c.hasPin ? (
-                        <span style={{ color: "#10B981", fontWeight: 600 }}> • PIN Aktif</span>
+                        <span style={{ color: "#10B981", fontWeight: 600 }}> • PIN Active</span>
                       ) : (
-                        <span style={{ color: "#D97706", fontWeight: 600 }}> • Belum Ada PIN</span>
+                        <span style={{ color: "#D97706", fontWeight: 600 }}> • No PIN Set</span>
                       )}
-                      {c.status === "SHIFT_OPEN" && " • Sedang Bertugas"}
-                      {c.status === "DISABLED" && " • Nonaktif"}
+                      {c.status === "SHIFT_OPEN" && " • On Shift"}
+                      {c.status === "DISABLED" && " • Disabled"}
                     </div>
                   </div>
 
@@ -986,7 +986,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                     <button
                       type="button"
                       onClick={() => handleCopyCode(c)}
-                      title="Salin Kode"
+                      title="Copy Code"
                       style={{
                         padding: "6px 8px",
                         borderRadius: 8,
@@ -1001,7 +1001,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                     <button
                       type="button"
                       onClick={() => handleShareWhatsApp(c)}
-                      title="Kirim ke WhatsApp"
+                      title="Send via WhatsApp"
                       style={{
                         padding: "6px 8px",
                         borderRadius: 8,
@@ -1035,7 +1035,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                       maxLength={6}
                       value={editPinValue}
                       onChange={(e) => setEditPinValue(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                      placeholder="PIN baru (4–6 digit)"
+                      placeholder="New PIN (4-6 digits)"
                       autoFocus
                       style={{
                         flex: 1,
@@ -1066,7 +1066,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                         cursor: isUpdatingPin || !/^\d{4,6}$/.test(editPinValue.trim()) ? "not-allowed" : "pointer"
                       }}
                     >
-                      {isUpdatingPin ? "Menyimpan..." : "Simpan PIN"}
+                      {isUpdatingPin ? "Saving..." : "Save PIN"}
                     </button>
                     <button
                       type="button"
@@ -1086,7 +1086,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                         cursor: "pointer"
                       }}
                     >
-                      Batal
+                      Cancel
                     </button>
                   </div>
                 )}
@@ -1094,9 +1094,9 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, fontSize: 11 }}>
                   <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, color: theme.inkSoft }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 3, whiteSpace: "nowrap" }}>
-                      <Shield size={11} /> Void: {c.permissions.canVoid ? "Ya" : "PIN"}
+                      <Shield size={11} /> Void: {c.permissions.canVoid ? "Yes" : "PIN"}
                     </span>
-                    <span style={{ whiteSpace: "nowrap" }}>Diskon: {c.permissions.canDiscount ? "Ya" : "Tidak"}</span>
+                    <span style={{ whiteSpace: "nowrap" }}>Discount: {c.permissions.canDiscount ? "Yes" : "No"}</span>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
                     <button
@@ -1118,7 +1118,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                         whiteSpace: "nowrap"
                       }}
                     >
-                      <Lock size={11} /> {c.hasPin ? "Ganti PIN" : "Atur PIN"}
+                      <Lock size={11} /> {c.hasPin ? "Change PIN" : "Set PIN"}
                     </button>
                     <button
                       type="button"
@@ -1132,7 +1132,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                       onClick={() => void handleToggleDisable(c)}
                       style={{ background: "transparent", border: "none", color: c.status === "DISABLED" ? "#10B981" : "#F59E0B", fontSize: 11, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}
                     >
-                      {c.status === "DISABLED" ? "Aktifkan" : "Nonaktifkan"}
+                      {c.status === "DISABLED" ? "Enable" : "Disable"}
                     </button>
                     <button
                       type="button"
@@ -1167,10 +1167,10 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 700, color: theme.ink }}>
-              Riwayat Tutup Shift &amp; Selisih Laci
+              Closed Shift History &amp; Drawer Variance
             </h4>
             <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-              Rekap modal awal, kas sistem vs kas fisik kasir saat tutup shift
+              Opening cash, expected system cash vs actual counted cash at shift close
             </p>
           </div>
           <button
@@ -1192,7 +1192,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               whiteSpace: "nowrap"
             }}
           >
-            <RefreshCw size={11} /> Muat Ulang
+            <RefreshCw size={11} /> Reload
           </button>
         </div>
 
@@ -1207,7 +1207,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               borderRadius: 12
             }}
           >
-            Belum ada riwayat tutup shift dari terminal kasir.
+            No closed shift history from POS terminals yet.
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 280, overflowY: "auto" }}>
@@ -1218,8 +1218,8 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               const openedDate = new Date(shift.openedAt);
               const closedDate = new Date(shift.closedAt || shift.openedAt);
               const fmtTime = (d: Date) =>
-                d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
-              const fmtDay = closedDate.toLocaleDateString("id-ID", {
+                d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+              const fmtDay = closedDate.toLocaleDateString("en-US", {
                 day: "numeric",
                 month: "short"
               });
@@ -1249,7 +1249,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                         {shift.cashierName}
                       </span>
                       <span style={{ fontSize: 11, color: theme.inkSoft, marginLeft: 8 }}>
-                        {fmtDay}, {fmtTime(openedDate)} – {fmtTime(closedDate)}
+                        {fmtDay}, {fmtTime(openedDate)} - {fmtTime(closedDate)}
                       </span>
                     </div>
                     <span
@@ -1267,10 +1267,10 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                       }}
                     >
                       {isMatch
-                        ? "Laci Cocok"
+                        ? "Drawer Matched"
                         : isShort
-                          ? `Selisih -Rp ${Math.abs(variance).toLocaleString("id-ID")}`
-                          : `Lebih +Rp ${variance.toLocaleString("id-ID")}`}
+                          ? `Short -Rp ${Math.abs(variance).toLocaleString("id-ID")}`
+                          : `Over +Rp ${variance.toLocaleString("id-ID")}`}
                     </span>
                   </div>
 
@@ -1283,7 +1283,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                     }}
                   >
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ color: theme.inkSoft }}>Modal Awal</div>
+                      <div style={{ color: theme.inkSoft }}>Opening Cash</div>
                       <div style={{ fontWeight: 700, color: theme.ink }}>
                         Rp {(shift.openingCash || 0).toLocaleString("id-ID")}
                       </div>
@@ -1295,13 +1295,13 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                       )}
                     </div>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ color: theme.inkSoft }}>Kas Sistem</div>
+                      <div style={{ color: theme.inkSoft }}>System Cash</div>
                       <div style={{ fontWeight: 700, color: theme.ink }}>
                         Rp {(shift.expectedCash ?? 0).toLocaleString("id-ID")}
                       </div>
                     </div>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ color: theme.inkSoft }}>Kas Fisik</div>
+                      <div style={{ color: theme.inkSoft }}>Actual Cash</div>
                       <div style={{ fontWeight: 700, color: theme.ink }}>
                         Rp {(shift.actualCash ?? 0).toLocaleString("id-ID")}
                       </div>
@@ -1310,7 +1310,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
 
                   {shift.notes && (
                     <div style={{ fontSize: 11, color: theme.inkSoft, fontStyle: "italic" }}>
-                      Catatan: &ldquo;{shift.notes}&rdquo;
+                      Notes: &ldquo;{shift.notes}&rdquo;
                     </div>
                   )}
                 </div>
@@ -1338,10 +1338,10 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 700, color: theme.ink }}>
-              Log Aktivitas Open Bill Meja
+              Table Open Bill Audit Log
             </h4>
             <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-              Audit pindah meja &amp; pembatalan bill belum bayar
+              Audit trail for table transfers &amp; unpaid bill cancellations
             </p>
           </div>
           <button
@@ -1363,7 +1363,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               whiteSpace: "nowrap"
             }}
           >
-            <RefreshCw size={11} /> Muat Ulang
+            <RefreshCw size={11} /> Reload
           </button>
         </div>
 
@@ -1378,7 +1378,7 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
               borderRadius: 12
             }}
           >
-            Belum ada catatan pindah meja atau pembatalan open bill.
+            No table transfer or open bill cancellation logs yet.
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 240, overflowY: "auto" }}>
@@ -1410,17 +1410,17 @@ export const PosSettingsSubpageForm: React.FC<PosSettingsSubpageFormProps> = ({
                           color: isCancelled ? "#EF4444" : theme.accent
                         }}
                       >
-                        {isCancelled ? "BATAL BILL" : "PINDAH MEJA"}
+                        {isCancelled ? "CANCEL BILL" : "MOVE TABLE"}
                       </span>
                       <span style={{ fontSize: 12.5, fontWeight: 700, color: theme.ink }}>
                         {log.label}
                       </span>
                       <span style={{ fontSize: 11, color: theme.inkSoft }}>
-                        ({log.itemCount} item • Rp {(log.totalAmount || 0).toLocaleString("id-ID")})
+                        ({log.itemCount} items • Rp {(log.totalAmount || 0).toLocaleString("id-ID")})
                       </span>
                     </div>
                     <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 2 }}>
-                      Oleh <strong style={{ color: theme.ink }}>{log.actorName}</strong>
+                      By <strong style={{ color: theme.ink }}>{log.actorName}</strong>
                       {log.detail ? ` • ${log.detail}` : ""}
                     </div>
                   </div>

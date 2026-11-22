@@ -38,16 +38,16 @@ export function DeliveryProfileTab({
   const fleetType = getDriverFleet(driver);
   const fleetLabel =
     fleetType === "PICKUP"
-      ? "Pickup / Roda 3"
+      ? "Pickup / Cargo"
       : fleetType === "MOBIL"
-        ? "Mobil / Blind Van"
-        : "Sepeda Motor";
+        ? "Car / Box Van"
+        : "Motorcycle";
 
   const hasPlate = Boolean(driver.plateNumber && driver.plateNumber !== "-");
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      {/* 1. KARTU IDENTITAS & ARMADA KURIR */}
+      {/* 1. Courier Identity & Fleet Card */}
       <div
         style={{
           background: theme.surface,
@@ -60,7 +60,7 @@ export function DeliveryProfileTab({
           boxShadow: "0 1px 3px rgba(0,0,0,0.02)"
         }}
       >
-        {/* Header Profil (Tanpa icon foto profile) */}
+        {/* Profile Header */}
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <h3 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: theme.ink }}>
@@ -81,16 +81,16 @@ export function DeliveryProfileTab({
               }}
             >
               <ShieldCheck size={12} color={theme.status} />
-              <span>Kurir Terverifikasi</span>
+              <span>Verified Courier</span>
             </span>
           </div>
 
           <div style={{ fontSize: 12, color: theme.inkSoft }}>
-            ID Akun: <span style={{ color: theme.ink, fontFamily: "monospace", fontWeight: 600 }}>{driver.id}</span>
+            Account ID: <span style={{ color: theme.ink, fontFamily: "monospace", fontWeight: 600 }}>{driver.id}</span>
           </div>
         </div>
 
-        {/* Grid Informasi Kontak & Armada (Clean & Muted) */}
+        {/* Contact & Fleet Grid */}
         <div
           style={{
             display: "grid",
@@ -100,7 +100,7 @@ export function DeliveryProfileTab({
             borderTop: `1px solid ${theme.border}`
           }}
         >
-          {/* WhatsApp Kurir */}
+          {/* Courier WhatsApp */}
           <div
             style={{
               background: theme.surface2,
@@ -113,14 +113,14 @@ export function DeliveryProfileTab({
             }}
           >
             <span style={{ fontSize: 11.5, color: theme.inkSoft }}>
-              Nomor WhatsApp
+              WhatsApp Number
             </span>
             <span style={{ fontSize: 13.5, fontWeight: 600, color: theme.ink }}>
               {formatIndonesianPhone(driver.phone)}
             </span>
           </div>
 
-          {/* Armada Ditugaskan */}
+          {/* Assigned Fleet */}
           <div
             style={{
               background: theme.surface2,
@@ -133,7 +133,7 @@ export function DeliveryProfileTab({
             }}
           >
             <span style={{ fontSize: 11.5, color: theme.inkSoft }}>
-              Armada Ditugaskan
+              Assigned Fleet
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
               <span style={{ fontSize: 13.5, fontWeight: 600, color: theme.ink }}>
@@ -160,7 +160,7 @@ export function DeliveryProfileTab({
         </div>
       </div>
 
-      {/* 2. KARTU TOKO PENUGASAN (STORE HUB) */}
+      {/* 2. Assigned Store Card */}
       <div
         style={{
           background: theme.surface,
@@ -176,7 +176,7 @@ export function DeliveryProfileTab({
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-              {driver.linkedStoreName || "Toko Mitra SERA"}
+              {driver.linkedStoreName || "SERA Partner Store"}
             </div>
           </div>
 
@@ -200,14 +200,14 @@ export function DeliveryProfileTab({
               }}
             >
               <WhatsAppIcon size={14} color={theme.status} />
-              <span>Chat Kasir Toko</span>
+              <span>Chat Store Cashier</span>
             </button>
 
             {onUnlinkStore && (
               <button
                 type="button"
                 onClick={onUnlinkStore}
-                title="Keluar dari kurir toko ini dan masukkan kode toko baru"
+                title="Leave this store's courier dispatch and enter a new store code"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -224,7 +224,7 @@ export function DeliveryProfileTab({
                 }}
               >
                 <LogOut size={13} color="#EF4444" />
-                <span>Keluar dari Toko</span>
+                <span>Leave Store</span>
               </button>
             )}
           </div>

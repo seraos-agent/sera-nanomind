@@ -73,8 +73,8 @@ export const OrderCompletedCard: React.FC<OrderCompletedCardProps> = ({
           >
             {isOfflinePos
               ? order.tableOrQueueNumber
-                ? `Kasir • ${order.tableOrQueueNumber}`
-                : "Kasir Offline"
+                ? `POS • ${order.tableOrQueueNumber}`
+                : "Offline POS"
               : "Online"}
           </span>
         </div>

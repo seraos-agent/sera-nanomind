@@ -54,7 +54,7 @@ export const OrderRevenueSummary: React.FC<OrderRevenueSummaryProps> = ({
         }}
       >
         <span style={{ color: theme.inkSoft }}>Total:</span>
-        <strong>{completedCount} transaksi selesai</strong>
+        <strong>{completedCount} completed transactions</strong>
       </div>
     </div>
   );

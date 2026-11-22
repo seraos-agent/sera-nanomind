@@ -95,7 +95,7 @@ export const ScannerMobileLayout: React.FC<ScannerMobileLayoutProps> = ({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Kembali"
+          aria-label="Back"
           style={{
             background: theme.isDark ? "rgba(255, 255, 255, 0.08)" : theme.surface2,
             border: `1px solid ${theme.border}`,
@@ -115,7 +115,7 @@ export const ScannerMobileLayout: React.FC<ScannerMobileLayoutProps> = ({
         <div style={{ textAlign: "center", flex: 1, padding: "0 8px" }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>{title}</h3>
           <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-            Arahkan barcode / QR ke dalam kotak
+            Point barcode / QR inside the frame
           </p>
         </div>
 
@@ -231,7 +231,7 @@ export const ScannerMobileLayout: React.FC<ScannerMobileLayoutProps> = ({
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                  {totalCount > 0 ? `${totalCount} Item` : "Keranjang Kosong"}
+                  {totalCount > 0 ? `${totalCount} Items` : "Empty Cart"}
                 </span>
                 {totalCount > 0 && (
                   <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
@@ -256,7 +256,7 @@ export const ScannerMobileLayout: React.FC<ScannerMobileLayoutProps> = ({
                 color: totalCount > 0 ? theme.ink : theme.inkSoft,
               }}
             >
-              <span>{totalCount > 0 ? "Daftar" : "0 Item"}</span>
+              <span>{totalCount > 0 ? "List" : "0 Items"}</span>
               <ChevronUp size={13} color={theme.inkSoft} />
             </div>
           </div>
@@ -272,7 +272,7 @@ export const ScannerMobileLayout: React.FC<ScannerMobileLayoutProps> = ({
             />
             <input
               type="text"
-              placeholder="Atau ketik barcode manual..."
+              placeholder="Or enter barcode manually..."
               value={manualCode}
               onChange={(e) => setManualCode(e.target.value)}
               style={{
@@ -307,7 +307,7 @@ export const ScannerMobileLayout: React.FC<ScannerMobileLayoutProps> = ({
               whiteSpace: "nowrap",
             }}
           >
-            Gunakan
+            Use
           </button>
         </form>
 
@@ -328,7 +328,7 @@ export const ScannerMobileLayout: React.FC<ScannerMobileLayoutProps> = ({
               cursor: "pointer",
             }}
           >
-            Selesai Scan
+            Finish Scan
           </button>
         )}
       </div>

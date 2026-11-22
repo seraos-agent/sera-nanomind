@@ -331,10 +331,10 @@ export function StoreDeliveryQueueView({
                       <CheckCircle2 size={24} />
                     </div>
                     <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink, marginBottom: 4 }}>
-                      Semua Antaran Telah Selesai
+                      All Deliveries Completed
                     </div>
                     <div style={{ fontSize: 12, color: theme.inkSoft, maxWidth: 360, margin: "0 auto", lineHeight: 1.5 }}>
-                      Tidak ada paket yang menunggu pengantaran saat ini. Anda dapat memeriksa rekap setoran kas COD di tab Rekap Kas.
+                      No packages are currently waiting for delivery. You can review your COD cash totals in the Cash Ledger tab.
                     </div>
                   </div>
                 ) : (

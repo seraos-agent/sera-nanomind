@@ -62,10 +62,10 @@ export function DeleteCategoryModal({ category, onClose, onConfirm, theme }: Del
           fontWeight: 700,
           color: theme.ink
         }}>
-          Hapus Kategori?
+          Delete Category?
         </h3>
 
-        {/* Kotak Highlight Nama Kategori */}
+        {/* Category Name Highlight Box */}
         <div style={{
           width: "100%",
           padding: "10px 14px",
@@ -90,7 +90,7 @@ export function DeleteCategoryModal({ category, onClose, onConfirm, theme }: Del
           lineHeight: 1.5,
           color: theme.inkSoft
         }}>
-          Kategori ini akan dihapus dari etalase toko. Produk di dalamnya tidak akan terhapus dan otomatis dipindahkan ke etalase utama (Semua).
+          This category will be removed from your store. Products inside will not be deleted and will automatically move to the main catalog (All).
         </p>
 
         <div style={{
@@ -115,7 +115,7 @@ export function DeleteCategoryModal({ category, onClose, onConfirm, theme }: Del
               cursor: "pointer"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -133,7 +133,7 @@ export function DeleteCategoryModal({ category, onClose, onConfirm, theme }: Del
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.12)"
             }}
           >
-            Ya, Hapus
+            Yes, Delete
           </button>
         </div>
       </div>

@@ -110,7 +110,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
             {isMobileView && (
               <div
                 onClick={() => onSetMobileCartOpen(false)}
-                title="Tutup Keranjang"
+                title="Close Cart"
                 style={{
                   width: "100%",
                   padding: "10px 0 6px",
@@ -149,11 +149,11 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                 <span style={{ fontSize: isMobileView ? 15 : 14, fontWeight: 700, color: theme.ink }}>
                   {storeType === "FOOD"
                     ? foodOrderType === "TAKEAWAY"
-                      ? `Pesanan Takeaway (${totalItemCount})`
-                      : `Pesanan Table (${totalItemCount})`
+                      ? `Takeaway Order (${totalItemCount})`
+                      : `Table Order (${totalItemCount})`
                     : storeType === "JASA"
-                      ? `Pesanan Layanan (${totalItemCount})`
-                      : `Keranjang Kasir (${totalItemCount})`}
+                      ? `Service Order (${totalItemCount})`
+                      : `POS Cart (${totalItemCount})`}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -161,7 +161,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                   <button
                     type="button"
                     onClick={onClearCart}
-                    title="Kosongkan Keranjang"
+                    title="Clear Cart"
                     style={{
                       background: "transparent",
                       border: "none",
@@ -208,18 +208,18 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                   <p style={{ margin: 0, fontSize: 13, fontWeight: 600 }}>
                     {storeType === "FOOD"
                       ? foodOrderType === "TAKEAWAY"
-                        ? "Pesanan takeaway masih kosong"
-                        : "Table belum ada pesanan"
+                        ? "Takeaway order is empty"
+                        : "Table has no items yet"
                       : storeType === "JASA"
-                        ? "Belum ada layanan dipilih"
-                        : "Keranjang masih kosong"}
+                        ? "No services selected yet"
+                        : "Cart is empty"}
                   </p>
                   <p style={{ margin: "4px 0 0", fontSize: 11 }}>
                     {storeType === "FOOD"
-                      ? "Tap menu makanan atau minuman untuk memulai pesanan"
+                      ? "Tap food or drink items to start an order"
                       : storeType === "JASA"
-                        ? "Pilih paket layanan untuk ditambahkan ke pesanan"
-                        : "Klik produk di sebelah kiri atau scan barcode produk"}
+                        ? "Select service packages to add to the order"
+                        : "Tap products on the left or scan a product barcode"}
                   </p>
                 </div>
               ) : (
@@ -258,7 +258,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                         </div>
                         {item.variant && (
                           <div style={{ fontSize: 11, color: theme.inkSoft }}>
-                            Varian: {item.variant.name}
+                            Variant: {item.variant.name}
                           </div>
                         )}
                         <div style={{ display: "flex", alignItems: "baseline", gap: 5, marginTop: 2 }}>
@@ -345,7 +345,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                         maxLength={120}
                         value={item.notes || ""}
                         onChange={(e) => onUpdateItemNote(idx, e.target.value)}
-                        placeholder="+ Catatan"
+                        placeholder="+ Note"
                         style={{
                           width: "100%",
                           padding: "5px 8px",
@@ -385,7 +385,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
               {/* Discount Section */}
               {(allowManualDiscount || totalDiscount > 0) && (
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 12, color: theme.inkSoft }}>Diskon Pesanan</span>
+                  <span style={{ fontSize: 12, color: theme.inkSoft }}>Order Discount</span>
 
                   {!allowManualDiscount ? (
                     <span style={{ fontSize: 13, fontWeight: 700, color: "#10B981" }}>
@@ -399,7 +399,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                         borderRadius: 6
                       }}
                       onClick={() => onSetShowDiscountInput(true)}
-                      title="Klik untuk ubah nominal diskon"
+                      title="Click to edit discount amount"
                     >
                       <span
                         style={{
@@ -447,7 +447,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                           e.stopPropagation();
                           onSetShowDiscountInput(false);
                         }}
-                        title="Selesai"
+                        title="Done"
                         style={{
                           background: `${theme.accent}14`,
                           border: "none",
@@ -469,7 +469,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                             onSetManualDiscountNominal(0);
                             onSetShowDiscountInput(false);
                           }}
-                          title="Hapus diskon manual"
+                          title="Clear manual discount"
                           style={{
                             background: "#EF444414",
                             border: "none",
@@ -518,7 +518,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                 }}
               >
                 <span style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-                  Total Tagihan
+                  Total Due
                 </span>
                 <span
                   style={{
@@ -558,7 +558,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
                     transition: "all 0.15s ease"
                   }}
                 >
-                  <span>Bayar Sekarang</span>
+                  <span>Pay Now</span>
                 </button>
               </div>
             </div>
@@ -571,7 +571,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
         <button
           type="button"
           onClick={() => onSetMobileCartOpen(true)}
-          title="Keranjang Kasir"
+          title="POS Cart"
           style={{
             position: "fixed",
             bottom: 22,
@@ -595,7 +595,7 @@ export const PosCartDrawer: React.FC<PosCartDrawerProps> = ({
             WebkitTapHighlightColor: "transparent",
             padding: 0
           }}
-          aria-label="Keranjang Kasir"
+          aria-label="POS Cart"
         >
           {/* Cashier / Shopping Bag Icon */}
           <ShoppingBag size={24} strokeWidth={2.2} />

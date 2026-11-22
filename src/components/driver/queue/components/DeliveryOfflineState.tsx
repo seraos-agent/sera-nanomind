@@ -41,10 +41,10 @@ export function DeliveryOfflineState({ theme, onToggleOnline }: DeliveryOfflineS
       </div>
       <div>
         <div style={{ fontSize: 14.5, fontWeight: 700, color: theme.ink }}>
-          Status Driver Sedang Offline
+          Courier Status is Offline
         </div>
         <div style={{ fontSize: 12, color: theme.inkSoft, maxWidth: 300, margin: "4px auto 0", lineHeight: 1.5 }}>
-          Anda sedang offline dan tidak dapat menerima tugas pengantaran baru dari toko.
+          You are currently offline and cannot receive new store delivery tasks.
         </div>
       </div>
       {onToggleOnline && (
@@ -65,7 +65,7 @@ export function DeliveryOfflineState({ theme, onToggleOnline }: DeliveryOfflineS
             transition: "opacity 0.15s ease"
           }}
         >
-          Mulai Online
+          Go Online
         </button>
       )}
     </div>

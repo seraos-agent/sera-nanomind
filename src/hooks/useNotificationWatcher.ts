@@ -22,18 +22,18 @@ function formatRupiah(amount: number): string {
 function getStatusLabel(status: string): string {
   switch (status) {
     case 'CONFIRMED':
-      return 'Dikonfirmasi Toko';
+      return 'Confirmed by Store';
     case 'PREPARING':
     case 'PROCESSING':
-      return 'Sedang Diproses Toko';
+      return 'Being Prepared';
     case 'SHIPPED':
-      return 'Sedang Diantar Kurir';
+      return 'Out for Delivery';
     case 'DELIVERED':
-      return 'Telah Tiba di Tujuan';
+      return 'Arrived at Destination';
     case 'COMPLETED':
-      return 'Selesai';
+      return 'Completed';
     case 'CANCELLED':
-      return 'Dibatalkan';
+      return 'Cancelled';
     default:
       return status;
   }
@@ -109,8 +109,8 @@ export function useNotificationWatcher({ socket, onNavigate }: UseNotificationWa
 
       if (isMerchantOwner) {
         dispatchDirectNotification({
-          title: 'Pesanan Baru Masuk!',
-          body: `Pesanan #${order.id} sebesar ${formatRupiah(order.totalAmount)} diterima`,
+          title: 'New Incoming Order!',
+          body: `Order #${order.id} for ${formatRupiah(order.totalAmount)} received`,
           type: 'merchant_order',
           deepLink: {
             view: 'merchant',
@@ -141,8 +141,8 @@ export function useNotificationWatcher({ socket, onNavigate }: UseNotificationWa
       if (isBuyerOrder) {
         const label = getStatusLabel(newStatus);
         dispatchDirectNotification({
-          title: `Status Pesanan: ${label}`,
-          body: `Pesanan #${orderId} kini ${label.toLowerCase()}`,
+          title: `Order Status: ${label}`,
+          body: `Order #${orderId} is now ${label.toLowerCase()}`,
           type: 'buyer_order',
           deepLink: {
             view: 'marketplace',
@@ -194,10 +194,10 @@ export function useNotificationWatcher({ socket, onNavigate }: UseNotificationWa
       } catch {}
 
       if (isCourierRegistered) {
-        const dest = order.shippingAddress || order.destAddress || order.customerName || 'Pelanggan';
+        const dest = order.shippingAddress || order.destAddress || order.customerName || 'Customer';
         dispatchDirectNotification({
-          title: 'Tugas Pengantaran Baru!',
-          body: `Paket #${order.id} ke ${dest} siap diantar`,
+          title: 'New Delivery Task!',
+          body: `Package #${order.id} to ${dest} is ready for delivery`,
           type: 'courier_delivery',
           deepLink: {
             view: 'driver',
@@ -228,8 +228,8 @@ export function useNotificationWatcher({ socket, onNavigate }: UseNotificationWa
       if (isBuyerOrder) {
         const label = getStatusLabel(status);
         dispatchDirectNotification({
-          title: `Status Pesanan: ${label}`,
-          body: `Pesanan #${orderId} kini ${label.toLowerCase()}`,
+          title: `Order Status: ${label}`,
+          body: `Order #${orderId} is now ${label.toLowerCase()}`,
           type: 'buyer_order',
           deepLink: {
             view: 'marketplace',
@@ -259,8 +259,8 @@ export function useNotificationWatcher({ socket, onNavigate }: UseNotificationWa
 
       if (isMerchantOwner) {
         dispatchDirectNotification({
-          title: 'Pesanan Baru Masuk!',
-          body: `Pesanan #${order.id} sebesar ${formatRupiah(order.totalAmount)} diterima`,
+          title: 'New Incoming Order!',
+          body: `Order #${order.id} for ${formatRupiah(order.totalAmount)} received`,
           type: 'merchant_order',
           deepLink: {
             view: 'merchant',

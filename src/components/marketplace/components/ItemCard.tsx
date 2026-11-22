@@ -113,7 +113,7 @@ export const ItemCard: React.FC<ItemCardProps> = React.memo(({
               display: 'inline-flex',
               alignItems: 'center'
             }}>
-              {item.stock <= 0 ? 'Habis' : `Stok: ${item.stock}`}
+              {item.stock <= 0 ? 'Out of stock' : `Stock: ${item.stock}`}
             </span>
           </div>
         )}
@@ -131,7 +131,7 @@ export const ItemCard: React.FC<ItemCardProps> = React.memo(({
               display: 'inline-flex',
               alignItems: 'center'
             }}>
-              {variants.length} Varian
+              {variants.length} Variants
             </span>
           </div>
         )}
@@ -174,7 +174,7 @@ export const ItemCard: React.FC<ItemCardProps> = React.memo(({
           {item.name}
         </h3>
 
-        {/* Pricing: Nominal Harga (Biru) & Harga Coret (Tidak tembus ke samping) */}
+        {/* Pricing: Price & Strikethrough Original Price */}
         <div style={{
           marginTop: 'auto',
           paddingTop: '2px',
@@ -200,7 +200,7 @@ export const ItemCard: React.FC<ItemCardProps> = React.memo(({
             <span>{(hasVariants ? minVariantPrice : item.price).toLocaleString('id-ID')}</span>
             {isService && (
               <span style={{ fontSize: '0.68rem', fontWeight: 500, color: 'var(--text-muted)', marginLeft: '2px' }}>
-                /sesi
+                /session
               </span>
             )}
           </div>

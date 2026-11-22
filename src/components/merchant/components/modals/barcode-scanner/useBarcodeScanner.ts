@@ -152,7 +152,7 @@ export function useBarcodeScanner({
         const errMsg = err instanceof Error ? err.message : String(err);
         console.warn("[BarcodeScannerModal] Camera error:", errMsg);
         setCameraError(
-          "Kamera tidak dapat diakses atau izin ditolak. Anda dapat menggunakan input manual di bawah."
+          "Camera could not be accessed or permission was denied. You can use manual input below."
         );
       }
     };

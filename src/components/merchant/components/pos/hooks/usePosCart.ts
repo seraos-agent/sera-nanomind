@@ -26,7 +26,7 @@ export function usePosCart({ onNotify }: UsePosCartProps = {}) {
           const currentQty = next[existingIdx].quantity;
           const maxStock = variant?.stock ?? product.stock ?? 9999;
           if (currentQty >= maxStock) {
-            onNotify?.(`Stok ${product.name} telah mencapai batas maksimum (${maxStock})`);
+            onNotify?.(`${product.name} stock reached its maximum (${maxStock})`);
             return prev;
           }
           next[existingIdx].quantity += 1;
@@ -35,7 +35,7 @@ export function usePosCart({ onNotify }: UsePosCartProps = {}) {
         } else {
           const maxStock = variant?.stock ?? product.stock ?? 9999;
           if (maxStock <= 0) {
-            onNotify?.(`Stok ${product.name} habis`);
+            onNotify?.(`${product.name} is out of stock`);
             return prev;
           }
           return [
@@ -63,7 +63,7 @@ export function usePosCart({ onNotify }: UsePosCartProps = {}) {
         const item = next[index];
         const maxStock = item.variant?.stock ?? item.product.stock ?? 9999;
         if (nextQty > maxStock) {
-          onNotify?.(`Stok hanya tersisa ${maxStock}`);
+          onNotify?.(`Only ${maxStock} left in stock`);
           return prev;
         }
         const itemPrice = item.variant ? item.variant.price : item.product.price;

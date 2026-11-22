@@ -48,9 +48,9 @@ export function BillingSubView({
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: 13, color: theme.inkSoft, fontWeight: 600 }}>PAKET AKTIF</div>
+          <div style={{ fontSize: 13, color: theme.inkSoft, fontWeight: 600 }}>ACTIVE PLAN</div>
           <span style={{ fontSize: 11, fontWeight: 700, color: theme.status, background: theme.statusSoft, padding: '3px 8px', borderRadius: 8 }}>
-            AKTIF
+            ACTIVE
           </span>
         </div>
 
@@ -59,22 +59,22 @@ export function BillingSubView({
         </div>
 
         <div style={{ fontSize: 13.5, color: theme.inkSoft }}>
-          Sisa Kuota: <strong style={{ color: theme.ink }}>{isUnlimited ? '∞ Unlimited' : `${agentCredits.toLocaleString('id-ID')} Kredit`}</strong>
+          Remaining Quota: <strong style={{ color: theme.ink }}>{isUnlimited ? '∞ Unlimited' : `${agentCredits.toLocaleString('id-ID')} Credits`}</strong>
         </div>
 
         <div style={{ height: 1, background: theme.border, margin: '8px 0' }} />
 
         <div style={{ fontSize: 12, color: theme.inkSoft }}>
           {billingState.tierExpiresAt
-            ? `Perpanjangan otomatis: ${new Date(billingState.tierExpiresAt).toLocaleDateString('id-ID')}`
-            : 'Paket gratis tanpa batas waktu'}
+            ? `Auto-renewal: ${new Date(billingState.tierExpiresAt).toLocaleDateString('en-US')}`
+            : 'Free tier with no time limit'}
         </div>
       </div>
 
       {/* Upgrade Tiers (3 Options) */}
       <div>
         <h3 style={{ fontSize: 16, fontWeight: 700, color: theme.ink, margin: '0 0 12px' }}>
-          Pilihan Paket Keanggotaan
+          Membership Plans
         </h3>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -93,10 +93,10 @@ export function BillingSubView({
           >
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>Free Explorer</div>
-              <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 2 }}>Rp 0 / selamanya • 1.000.000 Kredit awal</div>
+              <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 2 }}>Rp 0 / forever • 1,000,000 Starter Credits</div>
             </div>
             {currentTier === 'FREE' ? (
-              <span style={{ fontSize: 12, fontWeight: 700, color: theme.inkSoft }}>Aktif ✓</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: theme.inkSoft }}>Active ✓</span>
             ) : null}
           </div>
 
@@ -117,14 +117,14 @@ export function BillingSubView({
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>Starter Pass</span>
                 <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 6, background: theme.statusSoft, color: theme.status }}>
-                  POPULER
+                  POPULAR
                 </span>
               </div>
-              <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 2 }}>Rp 75.000 / bulan • 1.500.000 Kredit bulanan</div>
+              <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 2 }}>Rp 75,000 / month • 1,500,000 Monthly Credits</div>
             </div>
 
             {currentTier === 'STARTER' ? (
-              <span style={{ fontSize: 12, fontWeight: 700, color: theme.status }}>Aktif ✓</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: theme.status }}>Active ✓</span>
             ) : (
               <button
                 onClick={() => onSubscribePass('STARTER')}
@@ -139,7 +139,7 @@ export function BillingSubView({
                   cursor: 'pointer',
                 }}
               >
-                Pilih
+                Select
               </button>
             )}
           </div>
@@ -159,11 +159,11 @@ export function BillingSubView({
           >
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>Enterprise Pass</div>
-              <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 2 }}>Rp 450.000 / bulan • 10.000.000 Kredit bulanan</div>
+              <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 2 }}>Rp 450,000 / month • 10,000,000 Monthly Credits</div>
             </div>
 
             {currentTier === 'ENTERPRISE' ? (
-              <span style={{ fontSize: 12, fontWeight: 700, color: theme.accent }}>Aktif ✓</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: theme.accent }}>Active ✓</span>
             ) : (
               <button
                 onClick={() => onSubscribePass('ENTERPRISE')}
@@ -178,7 +178,7 @@ export function BillingSubView({
                   cursor: 'pointer',
                 }}
               >
-                Pilih
+                Select
               </button>
             )}
           </div>
@@ -195,10 +195,10 @@ export function BillingSubView({
         }}
       >
         <h3 style={{ fontSize: 16, fontWeight: 700, color: theme.ink, margin: '0 0 4px' }}>
-          Isi Ulang Kredit Fleksibel
+          Flexible Credit Top-Up
         </h3>
         <p style={{ fontSize: 13, color: theme.inkSoft, margin: '0 0 16px' }}>
-          Kredit komputasi tidak memiliki masa kedaluwarsa.
+          Compute credits never expire.
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -260,7 +260,7 @@ export function BillingSubView({
               }}
             >
               <Lock size={15} />
-              <span>Buka Starter Pass untuk Isi Ulang</span>
+              <span>Unlock Starter Pass to Top Up</span>
             </button>
           ) : (
             <button
@@ -285,12 +285,12 @@ export function BillingSubView({
               {isProcessing ? (
                 <>
                   <Loader2 size={16} className="spin" />
-                  <span>Memproses...</span>
+                  <span>Processing...</span>
                 </>
               ) : (
                 <>
                   <Zap size={16} />
-                  <span>Isi Ulang Rp {selectedTopup.toLocaleString('id-ID')}</span>
+                  <span>Top Up Rp {selectedTopup.toLocaleString('id-ID')}</span>
                 </>
               )}
             </button>
@@ -301,13 +301,13 @@ export function BillingSubView({
       {/* Dev Simulation */}
       {import.meta.env.DEV && (
         <div style={{ padding: 14, borderRadius: 14, background: theme.surface2, border: `1px dashed ${theme.border}`, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>Simulator Dev (Lokal):</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>Dev Simulator (Local):</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <button
               onClick={() => onDevMockSubscribe('STARTER')}
               style={{ padding: '6px 12px', borderRadius: 8, border: `1px solid ${theme.border}`, background: theme.surface, color: theme.ink, fontSize: 11, cursor: 'pointer' }}
             >
-              Buka Starter
+              Unlock Starter
             </button>
             <button
               onClick={() => onDevMockSubscribe('FREE')}

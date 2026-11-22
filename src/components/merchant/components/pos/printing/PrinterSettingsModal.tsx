@@ -94,11 +94,11 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
       if (devices.length === 0) {
         setStatusFeedback({
           type: "err",
-          text: "Belum ada printer Bluetooth yang di-pair di pengaturan Bluetooth Android HP ini."
+          text: "No paired Bluetooth printers found in this Android device's Bluetooth settings."
         });
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Gagal membaca daftar Bluetooth.";
+      const msg = err instanceof Error ? err.message : "Failed to read Bluetooth devices list.";
       setStatusFeedback({ type: "err", text: msg });
     } finally {
       setIsScanningBt(false);
@@ -113,17 +113,17 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
         updateKitchenSettings({ connectionMode: "webserial" });
         setStatusFeedback({
           type: "ok",
-          text: "Port USB khusus printer dapur berhasil dipilih."
+          text: "Dedicated kitchen USB printer port selected successfully."
         });
       } else {
         updateSettings({ connectionMode: "webserial" });
         setStatusFeedback({
           type: "ok",
-          text: "Port printer USB/Serial berhasil dipilih untuk cetak 1-klik."
+          text: "USB/Serial printer port selected for 1-click printing."
         });
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Pemilihan port USB dibatalkan.";
+      const msg = err instanceof Error ? err.message : "USB port selection cancelled.";
       setStatusFeedback({ type: "err", text: msg });
     }
   };
@@ -145,7 +145,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
         onNotify(res.message);
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Gagal menjalankan tes cetak.";
+      const msg = err instanceof Error ? err.message : "Failed to run test print.";
       setStatusFeedback({ type: "err", text: msg });
     } finally {
       setIsTesting(false);
@@ -161,24 +161,24 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
   }> = [
     {
       id: "auto",
-      label: "Otomatis (Hybrid)",
+      label: "Automatic (Hybrid)",
       desc: isNativeApk
-        ? "Pakai Bluetooth jika sudah dipilih, atau fallback ke OS"
-        : "Pakai USB Direct jika aktif di PC, atau dialog cetak OS",
+        ? "Uses Bluetooth if configured, otherwise falls back to OS print dialog"
+        : "Uses USB Direct if active on PC, otherwise opens OS print dialog",
       icon: <Printer size={15} />
     },
     {
       id: "system",
-      label: "Printer Kabel / Driver OS",
-      desc: "Cocok untuk kasir PC/Laptop Windows & Mac (USB / LAN)",
+      label: "Cable Printer / OS Driver",
+      desc: "Best for Windows & Mac desktop/laptop POS (USB / LAN)",
       icon: <Cable size={15} />
     },
     ...(hasWebSerial
       ? [
           {
             id: "webserial" as PrinterConnectionMode,
-            label: "USB Direct 1-Klik (Chrome PC)",
-            desc: "Cetak langsung ke kabel USB/Serial tanpa dialog print",
+            label: "1-Click USB Direct (Desktop Chrome)",
+            desc: "Print directly over USB/Serial cable without a print dialog",
             icon: <Cable size={15} />
           }
         ]
@@ -187,8 +187,8 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
       ? [
           {
             id: "bluetooth" as PrinterConnectionMode,
-            label: "Bluetooth Thermal (APK Native)",
-            desc: "Cetak langsung ke printer Bluetooth SPP (EPPOS, Blueprint, RPP02)",
+            label: "Bluetooth Thermal (Native APK)",
+            desc: "Print directly to SPP Bluetooth printers (EPPOS, Blueprint, RPP02)",
             icon: <Bluetooth size={15} />
           }
         ]
@@ -197,8 +197,8 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
       ? [
           {
             id: "rawbt" as PrinterConnectionMode,
-            label: "RawBT Bridge (Browser HP)",
-            desc: "Kirim struk ESC/POS via aplikasi pendamping RawBT di Chrome Android",
+            label: "RawBT Bridge (Mobile Browser)",
+            desc: "Send ESC/POS receipts via the RawBT companion app on Android Chrome",
             icon: <Smartphone size={15} />
           }
         ]
@@ -248,10 +248,10 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
             <Printer size={18} color={theme.ink} />
             <div>
               <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-                Pengaturan Printer Thermal
+                Thermal Printer Settings
               </h3>
               <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-                Hybrid PC Kabel & Android Bluetooth
+                Hybrid USB Desktop & Android Bluetooth
               </p>
             </div>
           </div>
@@ -283,7 +283,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
           {/* Paper Width Selector */}
           <div>
             <div style={{ fontSize: 12, fontWeight: 700, color: theme.ink, marginBottom: 8 }}>
-              Ukuran Kertas Struk
+              Receipt Paper Width
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
               {(["58mm", "80mm"] as PaperWidth[]).map((w) => {
@@ -310,7 +310,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                   >
                     <div style={{ fontSize: 13, fontWeight: 700 }}>{w}</div>
                     <div style={{ fontSize: 11, color: theme.inkSoft }}>
-                      {w === "58mm" ? "32 kolom (Mini / BT)" : "48 kolom (Kasir PC)"}
+                      {w === "58mm" ? "32 cols (Mini / BT)" : "48 cols (Desktop POS)"}
                     </div>
                   </button>
                 );
@@ -321,7 +321,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
           {/* Connection Mode */}
           <div>
             <div style={{ fontSize: 12, fontWeight: 700, color: theme.ink, marginBottom: 8 }}>
-              Jalur Koneksi Printer
+              Printer Connection Mode
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {modeOptions.map((opt) => {
@@ -373,12 +373,12 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
                     <div style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-                      Printer Bluetooth Terpilih
+                      Selected Bluetooth Printer
                     </div>
                     <div style={{ fontSize: 11, color: theme.inkSoft }}>
                       {settings.bluetoothName
                         ? `${settings.bluetoothName} (${settings.bluetoothAddress})`
-                        : "Belum ada printer dipilih"}
+                        : "No printer selected"}
                     </div>
                   </div>
                   <button
@@ -400,7 +400,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                     }}
                   >
                     <RefreshCw size={13} />
-                    <span>{isScanningBt ? "Memuat..." : "Cari Printer"}</span>
+                    <span>{isScanningBt ? "Loading..." : "Scan Printers"}</span>
                   </button>
                 </div>
 
@@ -461,10 +461,10 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-                    Port Kabel USB / Serial
+                    USB / Serial Cable Port
                   </div>
                   <div style={{ fontSize: 11, color: theme.inkSoft }}>
-                    Pilih port COM/USB printer kasir Anda
+                    Select your POS printer COM/USB port
                   </div>
                 </div>
                 <button
@@ -482,11 +482,11 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                     whiteSpace: "nowrap"
                   }}
                 >
-                  Pilih Port USB
+                  Select USB Port
                 </button>
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 12, color: theme.ink }}>Baud Rate Printer</span>
+                <span style={{ fontSize: 12, color: theme.ink }}>Printer Baud Rate</span>
                 <select
                   value={settings.baudRate}
                   onChange={(e) =>
@@ -501,10 +501,10 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                     fontSize: 12
                   }}
                 >
-                  <option value={9600}>9600 bps (Standar)</option>
+                  <option value={9600}>9600 bps (Standard)</option>
                   <option value={19200}>19200 bps</option>
                   <option value={38400}>38400 bps</option>
-                  <option value={115200}>115200 bps (Cepat)</option>
+                  <option value={115200}>115200 bps (Fast)</option>
                 </select>
               </div>
             </div>
@@ -527,10 +527,10 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
               <Scissors size={15} color={theme.inkSoft} />
               <div>
                 <div style={{ fontSize: 12, fontWeight: 600, color: theme.ink }}>
-                  Auto-Cut Kertas (ESC/POS)
+                  Auto-Cut Paper (ESC/POS)
                 </div>
                 <div style={{ fontSize: 10, color: theme.inkSoft }}>
-                  Aktifkan jika printer 80mm mendukung pemotong otomatis
+                  Enable if your 80mm printer supports automatic paper cutting
                 </div>
               </div>
             </div>
@@ -563,12 +563,12 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                 <ChefHat size={15} color={kitchenSettings.enabled ? theme.accent : theme.inkSoft} />
                 <div>
                   <div style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-                    Printer Khusus Dapur / Bar (Opsional)
+                    Dedicated Kitchen / Bar Printer (Optional)
                   </div>
                   <div style={{ fontSize: 10, color: theme.inkSoft }}>
                     {kitchenSettings.enabled
-                      ? "Tiket dapur dikirim ke printer terpisah ini"
-                      : "Nonaktif: tiket dapur ikut printer utama kasir"}
+                      ? "Kitchen tickets are sent to this separate printer"
+                      : "Disabled: kitchen tickets print on the main cashier printer"}
                   </div>
                 </div>
               </div>
@@ -614,7 +614,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                           cursor: "pointer"
                         }}
                       >
-                        Kertas Dapur {w}
+                        Kitchen Paper {w}
                       </button>
                     );
                   })}
@@ -622,7 +622,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
 
                 <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: theme.inkSoft }}>
-                    Jalur Printer Dapur
+                    Kitchen Printer Connection
                   </span>
                   <select
                     value={kitchenSettings.connectionMode}
@@ -656,8 +656,8 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <div style={{ fontSize: 11, color: theme.inkSoft }}>
                           {kitchenSettings.bluetoothName
-                            ? `BT Dapur: ${kitchenSettings.bluetoothName}`
-                            : "Belum pilih Bluetooth dapur"}
+                            ? `Kitchen BT: ${kitchenSettings.bluetoothName}`
+                            : "No kitchen Bluetooth selected"}
                         </div>
                         <button
                           type="button"
@@ -674,7 +674,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                             cursor: "pointer"
                           }}
                         >
-                          {isScanningBt ? "Memuat..." : "Cari BT"}
+                          {isScanningBt ? "Loading..." : "Scan BT"}
                         </button>
                       </div>
                       {pairedPrinters.length > 0 && (
@@ -755,7 +755,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                         cursor: "pointer"
                       }}
                     >
-                      Pilih Port USB Dapur
+                      Select Kitchen USB Port
                     </button>
                   </div>
                 )}
@@ -767,7 +767,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                       checked={kitchenSettings.autoCut}
                       onChange={(e) => updateKitchenSettings({ autoCut: e.target.checked })}
                     />
-                    <span>Auto-Cut Dapur</span>
+                    <span>Kitchen Auto-Cut</span>
                   </label>
                   <button
                     type="button"
@@ -784,7 +784,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
                       cursor: "pointer"
                     }}
                   >
-                    {isTestingKitchen ? "Mengirim..." : "Tes Printer Dapur"}
+                    {isTestingKitchen ? "Sending..." : "Test Kitchen Printer"}
                   </button>
                 </div>
               </div>
@@ -832,7 +832,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
               cursor: "pointer"
             }}
           >
-            {isTesting ? "Mengirim Tes..." : "Tes Cetak"}
+            {isTesting ? "Sending Test..." : "Test Print"}
           </button>
           <button
             type="button"
@@ -849,7 +849,7 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
               cursor: "pointer"
             }}
           >
-            Simpan & Tutup
+            Save & Close
           </button>
         </div>
       </div>
@@ -857,15 +857,15 @@ export const PrinterSettingsModal: React.FC<PrinterSettingsModalProps> = ({
       {/* Hidden Printable Test Slip for PC System Print Dialog */}
       <div id="sera-thermal-test-page" style={{ display: "none" }}>
         <div style={{ textAlign: "center", fontWeight: "bold", fontSize: 13 }}>
-          {store?.name || "MITRA SERA"}
+          {store?.name || "SERA MERCHANT"}
         </div>
         <div style={{ textAlign: "center", fontSize: 10 }}>
-          TES CETAK PRINTER THERMAL
+          THERMAL PRINTER TEST PRINT
         </div>
         <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
-        <div style={{ fontSize: 10 }}>Kertas: {settings.paperWidth}</div>
-        <div style={{ fontSize: 10 }}>Mode: Dialog OS (PC USB / LAN)</div>
-        <div style={{ fontSize: 10 }}>Status: Printer siap digunakan</div>
+        <div style={{ fontSize: 10 }}>Paper: {settings.paperWidth}</div>
+        <div style={{ fontSize: 10 }}>Mode: OS Print Dialog (PC USB / LAN)</div>
+        <div style={{ fontSize: 10 }}>Status: Printer ready</div>
         <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
         <div style={{ textAlign: "center", fontSize: 9 }}>SERA POS Hybrid Print</div>
       </div>

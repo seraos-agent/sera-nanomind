@@ -20,8 +20,8 @@ interface StoreCashierPairingGateProps {
 }
 
 /**
- * StoreCashierPairingGate — Terminal activation screen for Mitra Kasir staff.
- * Connects a cashier device to a store using its KS-XXXX activation code and optional PIN.
+ * StoreCashierPairingGate - Terminal activation screen for POS Cashier staff.
+ * Connects a cashier device to a store using its KS-XXXX activation code and required PIN.
  */
 export function StoreCashierPairingGate({
   theme,
@@ -41,11 +41,11 @@ export function StoreCashierPairingGate({
     const cleanCode = activationCode.trim().toUpperCase();
     const cleanPin = pinCode.trim();
     if (!cleanCode) {
-      setErrorMsg("Silakan masukkan Kode Aktivasi Kasir (contoh: KS-8F4K2M).");
+      setErrorMsg("Please enter a Cashier Activation Code (example: KS-8F4K2M).");
       return;
     }
     if (!/^\d{4,6}$/.test(cleanPin)) {
-      setErrorMsg("PIN Kasir wajib diisi (4–6 digit angka).");
+      setErrorMsg("Cashier PIN is required (4-6 digits).");
       return;
     }
 
@@ -87,10 +87,10 @@ export function StoreCashierPairingGate({
           items: Array.isArray(json.data.items) ? json.data.items : []
         });
       } else {
-        setErrorMsg(json.error || "Kode kasir tidak ditemukan atau PIN salah.");
+        setErrorMsg(json.error || "Invalid cashier code or PIN.");
       }
     } catch {
-      setErrorMsg("Gagal menghubungi server. Periksa koneksi internet Anda.");
+      setErrorMsg("Failed to reach server. Please check your internet connection.");
     } finally {
       setIsSubmitting(false);
     }
@@ -120,7 +120,7 @@ export function StoreCashierPairingGate({
         <button
           type="button"
           onClick={onBack}
-          title="Kembali ke Dashboard Utama"
+          title="Back to Main Dashboard"
           style={{
             background: "transparent",
             border: "none",
@@ -134,7 +134,7 @@ export function StoreCashierPairingGate({
           <CloseIcon size={20} />
         </button>
         <span style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-          Aktivasi Mitra Kasir
+          POS Cashier Activation
         </span>
       </div>
 
@@ -177,10 +177,10 @@ export function StoreCashierPairingGate({
             </div>
             <div>
               <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: theme.ink }}>
-                Terminal Mitra Kasir
+                POS Cashier Terminal
               </h2>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: theme.inkSoft }}>
-                Hubungkan perangkat ini ke kasir toko Anda
+                Link this device to your store register
               </p>
             </div>
           </div>
@@ -223,7 +223,7 @@ export function StoreCashierPairingGate({
           >
             <Info size={16} style={{ flexShrink: 0, marginTop: 1, color: theme.accent }} />
             <span>
-              Minta <strong>Kode Aktivasi Kasir (KS-XXXX)</strong> dari pemilik toko di menu Mitra Store untuk mulai bertugas tanpa masuk ke akun pemilik.
+              Request a <strong>Cashier Activation Code (KS-XXXX)</strong> from the store owner inside Merchant Store to begin a shift without signing in to the owner account.
             </span>
           </div>
 
@@ -238,7 +238,7 @@ export function StoreCashierPairingGate({
                   marginBottom: 6
                 }}
               >
-                Kode Aktivasi Kasir
+                Cashier Activation Code
               </label>
               <input
                 type="text"
@@ -247,7 +247,7 @@ export function StoreCashierPairingGate({
                   setActivationCode(e.target.value.toUpperCase());
                   setErrorMsg("");
                 }}
-                placeholder="Contoh: KS-8F4K2M"
+                placeholder="Example: KS-8F4K2M"
                 autoFocus
                 style={{
                   width: "100%",
@@ -276,7 +276,7 @@ export function StoreCashierPairingGate({
                   marginBottom: 6
                 }}
               >
-                PIN Kasir <span style={{ fontWeight: 400, color: theme.inkSoft }}>(4–6 digit angka, wajib)</span>
+                Cashier PIN <span style={{ fontWeight: 400, color: theme.inkSoft }}>(4-6 digits, required)</span>
               </label>
               <input
                 type="password"
@@ -288,7 +288,7 @@ export function StoreCashierPairingGate({
                   setPinCode(e.target.value.replace(/\D/g, "").slice(0, 6));
                   setErrorMsg("");
                 }}
-                placeholder="Masukkan 4–6 digit PIN"
+                placeholder="Enter 4-6 digit PIN"
                 style={{
                   width: "100%",
                   padding: "11px 14px",
@@ -351,7 +351,7 @@ export function StoreCashierPairingGate({
               }}
             >
               <ShieldCheck size={18} />
-              <span>{isSubmitting ? "Menghubungkan..." : "Aktifkan Terminal Kasir"}</span>
+              <span>{isSubmitting ? "Connecting..." : "Activate Cashier Terminal"}</span>
             </button>
           </form>
         </div>

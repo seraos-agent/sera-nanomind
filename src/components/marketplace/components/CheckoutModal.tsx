@@ -148,7 +148,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const handleDownloadQris = (url: string) => {
     const a = document.createElement('a');
     a.href = url;
-    a.download = `QRIS-${(storeName || 'toko').replace(/\s+/g, '_')}.png`;
+    a.download = `QRIS-${(storeName || 'store').replace(/\s+/g, '_')}.png`;
     a.target = '_blank';
     document.body.appendChild(a);
     a.click();
@@ -159,11 +159,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      setErrorMessage('Harap unggah file foto bukti pembayaran (JPG, PNG, atau WebP)');
+      setErrorMessage('Please upload a payment proof image file (JPG, PNG, or WebP)');
       return;
     }
     if (file.size > 12 * 1024 * 1024) {
-      setErrorMessage('Ukuran file maksimal 12MB');
+      setErrorMessage('Maximum file size is 12MB');
       return;
     }
 
@@ -177,7 +177,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       });
       setPaymentProof(compressedDataUrl);
     } catch {
-      setErrorMessage('Gagal memproses file gambar. Silakan coba kembali.');
+      setErrorMessage('Failed to process image file. Please try again.');
     } finally {
       setIsUploadingProof(false);
     }
@@ -186,15 +186,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) {
-      setErrorMessage('Nama dan nomor WhatsApp wajib diisi.');
+      setErrorMessage('Name and WhatsApp number are required.');
       return;
     }
     if (isAddressMissing) {
-      setErrorMessage('Alamat pengiriman wajib diisi di Pengaturan Profil untuk pengantaran kurir.');
+      setErrorMessage('Delivery address is required in Profile Settings for courier delivery.');
       return;
     }
     if (!paymentProof) {
-      setErrorMessage('Silakan unggah foto / screenshot bukti pembayaran terlebih dahulu.');
+      setErrorMessage('Please upload a payment proof photo or screenshot first.');
       return;
     }
 
@@ -247,17 +247,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
           <div>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)', margin: 0 }}>
-              Checkout Pesanan
+              Order Checkout
             </h2>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-              Lengkapi informasi pengiriman & pembayaran
+              Complete shipping & payment details
             </p>
           </div>
 
           <button
             type="button"
             onClick={onClose}
-            aria-label="Tutup"
+            aria-label="Close"
             style={{
               width: '32px',
               height: '32px',
@@ -353,10 +353,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             }}
           >
             {isSubmitting
-              ? 'Memproses pesanan...'
+              ? 'Processing order...'
               : !paymentProof
-                ? 'Unggah bukti bayar untuk lanjut'
-                : 'Buat pesanan'}
+                ? 'Upload payment proof to continue'
+                : 'Place order'}
           </button>
         </form>
       </div>
@@ -364,7 +364,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       <StoreLocationPickerModal
         isOpen={isMapPickerOpen}
         onClose={() => setIsMapPickerOpen(false)}
-        title="Titik Alamat Pengiriman"
+        title="Delivery Address Pin"
         initialLat={destCoords?.lat}
         initialLng={destCoords?.lng}
         initialAddress={address}

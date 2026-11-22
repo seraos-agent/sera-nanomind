@@ -65,8 +65,8 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
       <button
         type="button"
         onClick={onBack}
-        title="Kembali"
-        aria-label="Kembali"
+        title="Back"
+        aria-label="Back"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -93,7 +93,7 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
           type="text"
           value={storeSearch}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Cari di Toko ini..."
+          placeholder="Search in this Store..."
           className="marketplace-search-input"
         />
         <span className="marketplace-search-icon">
@@ -128,8 +128,8 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
           <button
             type="button"
             onClick={onOpenCart}
-            title="Keranjang Belanja"
-            aria-label="Keranjang Belanja"
+            title="Shopping Cart"
+            aria-label="Shopping Cart"
             style={{
               position: 'relative',
               background: 'transparent',
@@ -179,8 +179,8 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
         <div style={{ position: 'relative' }}>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            title="Pilihan Toko"
-            aria-label="Pilihan Toko"
+            title="Store Options"
+            aria-label="Store Options"
             style={{
               width: '32px',
               height: '32px',
@@ -248,7 +248,7 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
                 >
                   <span>🔗</span>
-                  <span>Bagikan Toko</span>
+                  <span>Share Store</span>
                 </button>
 
                 <button
@@ -278,7 +278,7 @@ export const StoreHeader: React.FC<StoreHeaderProps> = ({
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
                 >
                   <span>🚩</span>
-                  <span>Laporkan Toko</span>
+                  <span>Report Store</span>
                 </button>
               </div>
             </>

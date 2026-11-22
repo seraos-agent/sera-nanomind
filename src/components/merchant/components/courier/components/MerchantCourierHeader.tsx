@@ -40,12 +40,12 @@ export function MerchantCourierHeader({
       {/* Left: Title & Subtitle */}
       <div style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, paddingRight: 16 }}>
         <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-          Layanan Kurir {entity}
+          {entity} Courier Service
         </div>
         <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.4 }}>
           {enabled
-            ? `Layanan aktif — pembeli dapat memilih pengantaran kurir ${entityLower} saat checkout`
-            : `Layanan nonaktif — opsi pengantaran mandiri ${entityLower} sedang ditutup`}
+            ? `Service active: buyers can select ${entityLower} courier delivery at checkout`
+            : `Service inactive: self-managed ${entityLower} delivery is currently disabled`}
         </div>
       </div>
 

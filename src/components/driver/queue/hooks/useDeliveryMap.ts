@@ -250,7 +250,7 @@ export function useDeliveryMap({
         script.async = true;
         script.defer = true;
         script.onerror = () => {
-          if (isMounted) setMapError("Google Maps tidak dapat dimuat.");
+          if (isMounted) setMapError("Google Maps could not be loaded.");
         };
         document.head.appendChild(script);
       }
@@ -295,7 +295,7 @@ export function useDeliveryMap({
         setIsMapLoaded(true);
       } catch (e: any) {
         console.warn("Google Maps init error:", e);
-        if (isMounted) setMapError("Gagal menginisialisasi peta.");
+        if (isMounted) setMapError("Failed to initialize map.");
       }
     };
 
@@ -336,7 +336,7 @@ export function useDeliveryMap({
       driverMarkerRef.current = new w.google.maps.Marker({
         position: driverCoords,
         map,
-        title: `${driver.name} (Kurir)`,
+        title: `${driver.name} (Courier)`,
         zIndex: 99,
         icon: courierArrowIcon
       });

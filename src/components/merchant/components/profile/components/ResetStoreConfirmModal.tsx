@@ -72,10 +72,10 @@ export function ResetStoreConfirmModal({
 
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: theme.ink }}>
-            Reset Toko Uji Coba?
+            Reset Demo Store?
           </h3>
           <p style={{ margin: 0, fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-            Tindakan ini akan menghapus data profil toko lokal <strong>{storeName || "Toko Ini"}</strong>, seluruh produk, dan riwayat pesanan uji coba. Anda akan langsung diarahkan kembali ke <strong>Halaman Pendaftaran Toko (Onboarding)</strong> dari awal.
+            This will remove local store data for <strong>{storeName || "This Store"}</strong>, all products, and sample order history. You will be redirected back to the <strong>Store Onboarding</strong> screen to start fresh.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export function ResetStoreConfirmModal({
               opacity: isResetting ? 0.6 : 1
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -131,7 +131,7 @@ export function ResetStoreConfirmModal({
             }}
           >
             <RotateCcw size={15} />
-            <span>{isResetting ? "Mereset..." : "Ya, Reset Toko"}</span>
+            <span>{isResetting ? "Resetting..." : "Yes, Reset Store"}</span>
           </button>
         </div>
       </div>

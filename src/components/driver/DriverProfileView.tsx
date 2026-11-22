@@ -34,7 +34,7 @@ export function DriverProfileView({
     if (!storePhone) return;
     const cleanPhone = storePhone.replace(/^0/, "62").replace(/[^0-9]/g, "");
     const text = encodeURIComponent(
-      `Halo Kasir / Admin ${driver.linkedStoreName || "Toko"}, saya ${driver.name} (Kurir Resmi). Mohon informasi terkait jadwal pengantaran atau koordinasi orderan, terima kasih!`
+      `Hello Cashier / Admin at ${driver.linkedStoreName || "Store"}, this is ${driver.name} (Official Store Courier). Checking in regarding today's delivery schedule.`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
   };
@@ -58,7 +58,7 @@ export function DriverProfileView({
           <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
               <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: theme.ink }}>
-                {driver.linkedStoreName || "Toko Mitra SERA"}
+                {driver.linkedStoreName || "SERA Partner Store"}
               </h3>
               <span
                 style={{
@@ -75,7 +75,7 @@ export function DriverProfileView({
                 }}
               >
                 <ShieldCheck size={12} color={theme.status} />
-                <span>Kurir Terverifikasi</span>
+                <span>Verified Courier</span>
               </span>
             </div>
           </div>
@@ -100,14 +100,14 @@ export function DriverProfileView({
               }}
             >
               <MessageCircle size={14} color={theme.status} />
-              <span>Chat Kasir Toko</span>
+              <span>Chat Store Cashier</span>
             </button>
 
             {onUnlinkStore && (
               <button
                 type="button"
                 onClick={onUnlinkStore}
-                title="Keluar dari kurir toko ini dan masukkan kode toko baru"
+                title="Leave this store's courier dispatch and enter a new store code"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -124,13 +124,13 @@ export function DriverProfileView({
                 }}
               >
                 <LogOut size={13} color="#EF4444" />
-                <span>Keluar dari Toko</span>
+                <span>Leave Store</span>
               </button>
             )}
           </div>
         </div>
 
-        {/* Store Address & Management Notice (Tanpa icon pin maps) */}
+        {/* Store Address & Management Notice */}
         <div
           style={{
             background: theme.surface2,
@@ -143,10 +143,10 @@ export function DriverProfileView({
           }}
         >
           <div style={{ fontSize: 12.5, color: theme.ink, lineHeight: 1.45 }}>
-            {driver.linkedStoreAddress || `Area Wilayah Toko • ${driver.city || "Kota Toko"}`}
+            {driver.linkedStoreAddress || `Store Territory • ${driver.city || "Store City"}`}
           </div>
           <div style={{ fontSize: 11.5, color: theme.inkSoft, lineHeight: 1.4 }}>
-            💡 <b>Catatan Operasional:</b> Seluruh rute pengantaran, pembagian tugas kurir, dan tipe armada diatur secara terpusat oleh pemilik toko di dasbor toko.
+            <b>Operations Note:</b> All delivery routes, task assignments, and fleet types are centrally managed by the store owner in the Merchant Store dashboard.
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@ export function DriverProfileView({
               <Bike size={18} color={theme.accent} />
             )}
             <h4 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: theme.ink }}>
-              Armada Penugasan dari Toko
+              Store-Assigned Fleet
             </h4>
           </div>
 
@@ -193,7 +193,7 @@ export function DriverProfileView({
             }}
           >
             <Lock size={10} />
-            <span>Ditetapkan oleh Toko</span>
+            <span>Assigned by Store</span>
           </span>
         </div>
 
@@ -213,14 +213,14 @@ export function DriverProfileView({
             }}
           >
             <span style={{ fontSize: 11, fontWeight: 500, color: theme.inkSoft }}>
-              Tipe Kendaraan Ditugaskan
+              Assigned Vehicle Type
             </span>
             <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink, marginTop: 4 }}>
               {currentFleet === "PICKUP"
-                ? "Pickup / Roda 3 (Muatan Besar)"
+                ? "Pickup / Cargo (Heavy Load)"
                 : currentFleet === "MOBIL"
-                ? "Mobil / Blind Van (Muatan Sedang)"
-                : "Sepeda Motor (Antaran Cepat)"}
+                ? "Car / Van (Medium Load)"
+                : "Motorcycle (Fast Delivery)"}
             </div>
           </div>
 
@@ -233,10 +233,10 @@ export function DriverProfileView({
             }}
           >
             <span style={{ fontSize: 11, fontWeight: 500, color: theme.inkSoft }}>
-              Merk / Model Kendaraan
+              Vehicle Brand / Model
             </span>
             <div style={{ fontSize: 13, fontWeight: 600, color: theme.ink, marginTop: 4 }}>
-              {driver.vehicleBrand || "Motor Operasional Toko"}
+              {driver.vehicleBrand || "Store Delivery Motorcycle"}
             </div>
           </div>
 
@@ -249,7 +249,7 @@ export function DriverProfileView({
             }}
           >
             <span style={{ fontSize: 11, fontWeight: 500, color: theme.inkSoft }}>
-              Nomor Plat Polisi
+              License Plate Number
             </span>
             <div style={{ fontSize: 13, fontWeight: 600, color: theme.ink, marginTop: 4 }}>
               {driver.plateNumber || "-"}
@@ -258,7 +258,7 @@ export function DriverProfileView({
         </div>
 
         <div style={{ fontSize: 11.5, color: theme.inkSoft, fontStyle: "italic" }}>
-          * Bila armada Anda diganti oleh pihak toko (misal dari Motor ke Mobil/Pickup saat hujan atau muatan besar), pihak toko dapat langsung mengubahnya di dasbor toko.
+          * If the store switches your assigned fleet (for example from Motorcycle to Van/Pickup for large loads), it updates automatically from the Merchant Store dashboard.
         </div>
       </div>
 
@@ -299,7 +299,7 @@ export function DriverProfileView({
           </div>
 
           <p style={{ margin: 0, fontSize: 12.5, color: theme.inkSoft }}>
-            WA: {driver.phone || "-"}{driver.city ? ` • Wilayah: ${driver.city}` : ""}
+            WA: {driver.phone || "-"}{driver.city ? ` • Territory: ${driver.city}` : ""}
           </p>
         </div>
 
@@ -319,7 +319,7 @@ export function DriverProfileView({
           }}
         >
           <Lock size={11} />
-          <span>Dikelola oleh Toko</span>
+          <span>Managed by Store</span>
         </span>
       </div>
 
@@ -340,7 +340,7 @@ export function DriverProfileView({
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <FileText size={16} color={theme.accent} />
             <h4 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: theme.ink }}>
-              Dokumen & Legalitas Kurir Toko
+              Store Courier Documents & Permits
             </h4>
           </div>
 
@@ -365,7 +365,7 @@ export function DriverProfileView({
               >
                 <div>
                   <span style={{ fontSize: 11, fontWeight: 500, color: theme.inkSoft }}>
-                    Surat Izin Mengemudi (SIM)
+                    Driver License (SIM)
                   </span>
                   <div style={{ fontSize: 13, fontWeight: 600, color: theme.ink, marginTop: 2 }}>
                     {driver.simNumber}
@@ -393,7 +393,7 @@ export function DriverProfileView({
               >
                 <div>
                   <span style={{ fontSize: 11, fontWeight: 500, color: theme.inkSoft }}>
-                    Surat Tanda Nomor Kendaraan (STNK)
+                    Vehicle Registration (STNK)
                   </span>
                   <div style={{ fontSize: 13, fontWeight: 600, color: theme.ink, marginTop: 2 }}>
                     {driver.stnkNumber}

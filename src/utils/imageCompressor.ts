@@ -17,14 +17,14 @@ export function compressImageFile(file: File, options: CompressOptions = {}): Pr
 
   return new Promise((resolve, reject) => {
     if (!file.type.startsWith("image/")) {
-      return reject(new Error("File bukan format gambar yang valid"));
+      return reject(new Error("Invalid image file format"));
     }
 
     const reader = new FileReader();
     reader.onload = (e) => {
       const rawDataUrl = e.target?.result as string;
       if (!rawDataUrl) {
-        return reject(new Error("Gagal membaca data gambar"));
+        return reject(new Error("Failed to read image data"));
       }
 
       const img = new Image();
@@ -79,14 +79,14 @@ export function compressImageFile(file: File, options: CompressOptions = {}): Pr
       };
 
       img.onerror = () => {
-        reject(new Error("Gagal memuat format gambar"));
+        reject(new Error("Failed to load image format"));
       };
 
       img.src = rawDataUrl;
     };
 
     reader.onerror = () => {
-      reject(new Error("Gagal membaca file gambar"));
+      reject(new Error("Failed to read image file"));
     };
 
     reader.readAsDataURL(file);

@@ -118,7 +118,7 @@ function hydrateServerBillItems(rawItems: any[], products: MerchantProduct[]): P
       price: Number(raw?.price ?? unitPrice),
       originalPrice: raw?.originalPrice !== undefined ? Number(raw.originalPrice) : undefined,
       type: "GOODS",
-      category: "Umum",
+      category: "General",
       currency: "IDR",
       rating: 5,
       images: raw?.image ? [String(raw.image)] : [],
@@ -128,13 +128,13 @@ function hydrateServerBillItems(rawItems: any[], products: MerchantProduct[]): P
       raw?.variantId && matchedProduct?.variants
         ? matchedProduct.variants.find((v) => v.id === raw.variantId) || {
             id: String(raw.variantId),
-            name: String(raw.variantName || "Varian"),
+            name: String(raw.variantName || "Variant"),
             price: Number(raw.variantPrice ?? unitPrice)
           }
         : raw?.variantId
           ? {
               id: String(raw.variantId),
-              name: String(raw.variantName || "Varian"),
+              name: String(raw.variantName || "Variant"),
               price: Number(raw.variantPrice ?? unitPrice)
             }
           : undefined;
@@ -245,7 +245,7 @@ export function useAdaptivePosMode({
   storeType,
   products,
   socket,
-  actorName = "Kasir",
+  actorName = "Cashier",
   cart,
   manualDiscountNominal,
   setCart,
@@ -488,11 +488,11 @@ export function useAdaptivePosMode({
           setCart(occupiedBill.items);
           setManualDiscountNominal(occupiedBill.manualDiscountNominal || 0);
           setActiveHeldBillId(occupiedBill.id);
-          onNotify?.(`Membuka ${occupiedBill.label} (Terisi)`);
+          onNotify?.(`Opened ${occupiedBill.label} (Occupied)`);
         } else {
           setActiveHeldBillId(null);
           clearCart();
-          onNotify?.(`Order baru: ${nextTable}`);
+          onNotify?.(`New order: ${nextTable}`);
         }
         return;
       }
@@ -502,7 +502,7 @@ export function useAdaptivePosMode({
         setCart(occupiedBill.items);
         setManualDiscountNominal(occupiedBill.manualDiscountNominal || 0);
         setActiveHeldBillId(occupiedBill.id);
-        onNotify?.(`Membuka ${occupiedBill.label} (Terisi)`);
+        onNotify?.(`Opened ${occupiedBill.label} (Occupied)`);
       }
     },
     [
@@ -541,7 +541,7 @@ export function useAdaptivePosMode({
       setCart(occupiedBill.items);
       setManualDiscountNominal(occupiedBill.manualDiscountNominal || 0);
       setActiveHeldBillId(occupiedBill.id);
-      onNotify?.(`Membuka ${occupiedBill.label} (Terisi)`);
+      onNotify?.(`Opened ${occupiedBill.label} (Occupied)`);
     },
     [tableNumber, occupiedTableBills, setCart, setManualDiscountNominal, onNotify]
   );
@@ -549,7 +549,7 @@ export function useAdaptivePosMode({
   const handleRemoveTable = useCallback(() => {
     const currentOccupied = occupiedTableBills.get(normalizeTableKey(tableNumber));
     if (currentOccupied) {
-      onNotify?.(`${tableNumber} sedang terisi bill aktif`);
+      onNotify?.(`${tableNumber} currently has an active bill`);
       return;
     }
     setTables((prev) => {
@@ -573,7 +573,7 @@ export function useAdaptivePosMode({
         activeHeldBillId && existingForTable && existingForTable.id === activeHeldBillId
       );
 
-      let notifyMessage = `Disimpan ke ${cleanTable} (Terisi)`;
+      let notifyMessage = `Saved to ${cleanTable} (Occupied)`;
       const newBillId = isEditingSameTableBill ? activeHeldBillId! : existingForTable?.id || `bill-${Date.now()}`;
 
       setHeldBills((prev) => {
@@ -596,8 +596,8 @@ export function useAdaptivePosMode({
             : (existing.manualDiscountNominal || 0) + manualDiscountNominal;
           const totalQty = updatedItems.reduce((sum, it) => sum + it.quantity, 0);
           notifyMessage = isEditingSameTableBill
-            ? `Bill ${cleanTable} diperbarui (${totalQty} item)`
-            : `Menu ditambahkan ke ${cleanTable} (${totalQty} item)`;
+            ? `Updated ${cleanTable} bill (${totalQty} items)`
+            : `Added items to ${cleanTable} (${totalQty} items)`;
 
           const copy = [...filteredPrev];
           copy[targetIdx] = {
@@ -695,7 +695,7 @@ export function useAdaptivePosMode({
     });
     setActiveHeldBillId(null);
     clearCart();
-    onNotify?.(`Disimpan ke ${label}`);
+    onNotify?.(`Saved to ${label}`);
   }, [
     cart,
     isFoodStore,
@@ -726,7 +726,7 @@ export function useAdaptivePosMode({
       } else if (bill.orderType === "TAKEAWAY") {
         setFoodOrderType("TAKEAWAY");
       }
-      onNotify?.(`Membuka ${bill.label}`);
+      onNotify?.(`Opened ${bill.label}`);
     },
     [activeHeldBillId, persistActiveHeldBillSnapshot, setCart, setManualDiscountNominal, onNotify]
   );
@@ -742,12 +742,12 @@ export function useAdaptivePosMode({
           normalizeTableKey(b.tableNumber || b.label) === targetKey
       );
       if (conflict) {
-        onNotify?.(`${targetDisplay} sedang terisi bill lain.`);
+        onNotify?.(`${targetDisplay} already has an active bill.`);
         return false;
       }
 
       const sourceBill = heldBills.find((b) => b.id === billId);
-      const fromLabel = sourceBill?.tableNumber || sourceBill?.label || "Meja";
+      const fromLabel = sourceBill?.tableNumber || sourceBill?.label || "Table";
 
       // Optimistic local move
       setHeldBills((prev) =>
@@ -788,7 +788,7 @@ export function useAdaptivePosMode({
         } catch {}
       }
 
-      onNotify?.(`${fromLabel} dipindah ke ${targetDisplay}`);
+      onNotify?.(`${fromLabel} moved to ${targetDisplay}`);
       return true;
     },
     [heldBills, activeHeldBillId, storeId, actorName, applyServerSnapshot, onNotify]

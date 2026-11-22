@@ -34,7 +34,7 @@ export function DevResetStoreBanner({
             letterSpacing: "0.5px"
           }}
         >
-          Mode Pengujian (Developer Testing)
+          Testing Mode (Developer)
         </span>
       </div>
       <p
@@ -45,7 +45,7 @@ export function DevResetStoreBanner({
           lineHeight: 1.45
         }}
       >
-        Hapus data toko lokal ini untuk menguji ulang alur pendaftaran toko baru (Onboarding) dari awal.
+        Clear local store data to restart and test the new store onboarding flow from scratch.
       </p>
       <button
         type="button"
@@ -75,7 +75,7 @@ export function DevResetStoreBanner({
         }}
       >
         <RotateCcw size={15} />
-        <span>Reset Toko Uji Coba (Mulai dari Awal)</span>
+        <span>Reset Demo Store (Start Fresh)</span>
       </button>
     </div>
   );

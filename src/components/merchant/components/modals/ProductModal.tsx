@@ -129,22 +129,22 @@ export function ProductModal({
 
   const modalTitle = editingProduct
     ? storeType === "JASA"
-      ? "Edit Jasa"
+      ? "Edit Service"
       : storeType === "FOOD"
-        ? "Edit Menu"
-        : "Edit Produk"
+        ? "Edit Menu Item"
+        : "Edit Product"
     : storeType === "JASA"
-      ? "Tambah Jasa"
+      ? "Add Service"
       : storeType === "FOOD"
-        ? "Tambah Menu Food"
-        : "Tambah Barang";
+        ? "Add Menu Item"
+        : "Add Product";
 
   const modalSubtitle =
     storeType === "FOOD"
-      ? "Lengkapi detail menu makanan atau minuman"
+      ? "Complete food or beverage menu details"
       : storeType === "JASA"
-        ? "Lengkapi detail layanan untuk etalase jasa"
-        : "Lengkapi informasi produk untuk etalase toko";
+        ? "Complete service listing details"
+        : "Complete product details for your store catalog";
 
   const StoreHeaderIcon =
     storeType === "FOOD"
@@ -232,7 +232,7 @@ export function ProductModal({
             type="button"
             onClick={onClose}
             disabled={isSaving || isSuccess}
-            title="Kembali"
+            title="Back"
             style={{
               background: "transparent",
               border: "none",
@@ -441,7 +441,7 @@ export function ProductModal({
               transition: "all 0.15s ease"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="submit"
@@ -469,20 +469,20 @@ export function ProductModal({
             {isSuccess ? (
               <>
                 <Check size={15} strokeWidth={2.5} />
-                <span>Tersimpan</span>
+                <span>Saved</span>
               </>
             ) : isSaving ? (
               <>
                 <RefreshCw size={14} className="animate-spin" />
-                <span>Menyimpan...</span>
+                <span>Saving...</span>
               </>
             ) : (
               <span>
                 {prodImages.length === 0
-                  ? "Simpan ke Draft"
+                  ? "Save as Draft"
                   : editingProduct?.status === "DRAFT"
-                    ? "Terbitkan"
-                    : "Simpan"}
+                    ? "Publish"
+                    : "Save"}
               </span>
             )}
           </button>
@@ -498,7 +498,7 @@ export function ProductModal({
           setIsScannerOpen(false);
         }}
         theme={theme}
-        title="Scan Barcode Produk"
+        title="Scan Product Barcode"
       />
       </div>
     </div>

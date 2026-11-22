@@ -96,14 +96,14 @@ export function MerchantPaymentsView({
             <ChevronLeft size={20} />
           </button>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>Metode Pembayaran</div>
-            <div style={{ fontSize: 12, color: theme.inkSoft }}>Atur rekening, QRIS, dan opsi tunai toko Anda</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>Payment Methods</div>
+            <div style={{ fontSize: 12, color: theme.inkSoft }}>Configure your store bank account, QRIS, and cash options</div>
           </div>
         </div>
       )}
 
       <form onSubmit={onSavePayments} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-        {/* 1. KARTU REKENING / E-WALLET PENERIMA */}
+        {/* 1. RECEIVING BANK / E-WALLET CARD */}
         <div style={{
           background: theme.surface,
           border: `1px solid ${theme.border}`,
@@ -115,14 +115,14 @@ export function MerchantPaymentsView({
         }}>
           <div>
             <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-              Rekening / E-Wallet Penerima
+              Payout Account / E-Wallet
             </div>
             <div style={{ fontSize: 12.5, color: theme.inkSoft, marginTop: 2 }}>
-              Tujuan transfer langsung dari pembeli ke rekening atau dompet digital Anda
+              Direct transfer destination from buyers to your bank account or digital wallet
             </div>
           </div>
 
-          {/* Segment Selector: Rekening Bank vs E-Wallet */}
+          {/* Segment Selector: Bank Account vs E-Wallet */}
           <div style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
@@ -155,7 +155,7 @@ export function MerchantPaymentsView({
                 userSelect: "none"
               }}
             >
-              Rekening Bank
+              Bank Account
             </button>
 
             <button
@@ -188,7 +188,7 @@ export function MerchantPaymentsView({
           {/* Quick Provider Chips depending on selected mode */}
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft }}>
-              {isBank ? "Pilihan Cepat Bank:" : "Pilihan Cepat E-Wallet:"}
+              {isBank ? "Quick Bank Presets:" : "Quick E-Wallet Presets:"}
             </div>
             <div style={{
               display: "flex",
@@ -226,13 +226,13 @@ export function MerchantPaymentsView({
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div>
               <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-                {isBank ? "Nama Bank" : "Nama E-Wallet"}
+                {isBank ? "Bank Name" : "E-Wallet Provider"}
               </label>
               <input
                 type="text"
                 value={editBankName}
                 onChange={e => setEditBankName?.(e.target.value)}
-                placeholder={isBank ? "Contoh: BCA, Mandiri, BRI, SeaBank" : "Contoh: DANA, GoPay, OVO, ShopeePay"}
+                placeholder={isBank ? "Example: Chase, BCA, Mandiri, SeaBank" : "Example: DANA, GoPay, OVO, PayPal"}
                 style={{
                   width: "100%",
                   height: 48,
@@ -252,14 +252,14 @@ export function MerchantPaymentsView({
             <div style={{ display: "grid", gridTemplateColumns: isMobileView ? "1fr" : "1fr 1fr", gap: 14 }}>
               <div>
                 <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-                  {isBank ? "Nomor Rekening" : "Nomor HP E-Wallet"}
+                  {isBank ? "Account Number" : "E-Wallet Phone Number"}
                 </label>
                 <input
                   type="tel"
                   inputMode="numeric"
                   value={editDanaPhone}
                   onChange={e => setEditDanaPhone(e.target.value.replace(/[^0-9]/g, ""))}
-                  placeholder={isBank ? "Contoh: 1234567890" : "Contoh: 081234567890"}
+                  placeholder={isBank ? "Example: 1234567890" : "Example: 081234567890"}
                   style={{
                     width: "100%",
                     height: 48,
@@ -278,13 +278,13 @@ export function MerchantPaymentsView({
 
               <div>
                 <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-                  {isBank ? "Nama Pemilik Rekening" : "Nama Akun E-Wallet"}
+                  {isBank ? "Account Holder Name" : "E-Wallet Account Name"}
                 </label>
                 <input
                   type="text"
                   value={editDanaName}
                   onChange={e => setEditDanaName(e.target.value)}
-                  placeholder={isBank ? "Sesuai buku tabungan" : "Nama terdaftar di akun"}
+                  placeholder={isBank ? "Matches bank statement" : "Registered account name"}
                   style={{
                     width: "100%",
                     height: 48,
@@ -316,10 +316,10 @@ export function MerchantPaymentsView({
         }}>
           <div>
             <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-              QRIS {entity} (Universal)
+              {entity} QRIS (Universal)
             </div>
             <div style={{ fontSize: 12.5, color: theme.inkSoft, marginTop: 2 }}>
-              Upload barcode QRIS Anda untuk menerima pembayaran instan dari seluruh m-Banking dan E-Wallet
+              Upload your QRIS code to accept instant payments from all mobile banking and e-wallet apps
             </div>
           </div>
 
@@ -358,7 +358,7 @@ export function MerchantPaymentsView({
                   textAlign: "center"
                 }}>
                   <Upload size={22} color={theme.inkSoft} />
-                  <span style={{ fontSize: 11, fontWeight: 600 }}>Pilih Foto QRIS</span>
+                  <span style={{ fontSize: 11, fontWeight: 600 }}>Choose QRIS Photo</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -387,7 +387,7 @@ export function MerchantPaymentsView({
                   transition: "all 0.15s ease"
                 }}>
                   <Upload size={14} color={theme.ink} />
-                  <span>{editQrisImageUrl ? "Ganti Gambar QRIS" : "Upload Gambar QRIS"}</span>
+                  <span>{editQrisImageUrl ? "Replace QRIS Image" : "Upload QRIS Image"}</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -424,18 +424,18 @@ export function MerchantPaymentsView({
                     }}
                   >
                     <Trash2 size={13} />
-                    <span>Hapus</span>
+                    <span>Remove</span>
                   </button>
                 )}
               </div>
               <div style={{ fontSize: 11.5, color: theme.inkSoft, lineHeight: 1.4 }}>
-                Format file JPG, PNG, atau WEBP. Pastikan barcode terlihat jelas dan tidak buram.
+                JPG, PNG, or WEBP format. Ensure the QR barcode is clear and sharp.
               </div>
             </div>
           </div>
         </div>
 
-        {/* 3. KARTU BAYAR TUNAI DI TEMPAT (COD) */}
+        {/* 3. CASH ON DELIVERY (COD) CARD */}
         <div style={{
           background: theme.surface,
           border: `1px solid ${theme.border}`,
@@ -457,12 +457,12 @@ export function MerchantPaymentsView({
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, paddingRight: 14 }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-                Bayar Tunai di Tempat (COD)
+                Cash on Delivery (COD)
               </div>
               <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.35 }}>
                 {editAcceptCod
-                  ? `${entity} menerima pembayaran uang tunai langsung dari pembeli saat pesanan tiba`
-                  : `${entity} hanya melayani pembayaran digital non-tunai (Transfer / QRIS)`}
+                  ? `${entity} accepts direct cash payment from buyers upon delivery`
+                  : `${entity} only accepts digital cashless payments (Transfer / QRIS)`}
               </div>
             </div>
 
@@ -524,7 +524,7 @@ export function MerchantPaymentsView({
             (e.currentTarget as HTMLElement).style.opacity = "1";
           }}
         >
-          <span>Simpan Metode Pembayaran</span>
+          <span>Save Payment Methods</span>
         </button>
       </form>
     </div>

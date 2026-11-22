@@ -116,10 +116,10 @@ export function CodeBlockCard({ children, theme }: { children: any; theme: Theme
             borderRadius: 4,
             transition: "all 0.2s ease"
           }}
-          title="Salin ke clipboard"
+          title="Copy to clipboard"
         >
           {copied ? <Check size={13} /> : <Copy size={13} />}
-          <span>{copied ? "Disalin!" : "Salin"}</span>
+          <span>{copied ? "Copied!" : "Copy"}</span>
         </button>
       </div>
       <pre

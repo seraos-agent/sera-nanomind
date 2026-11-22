@@ -21,28 +21,28 @@ export const MerchantTermsModal: React.FC<MerchantTermsModalProps> = ({
 
   const sections = [
     {
-      title: "1. Keaslian Identitas & Data Toko",
-      body: "Mitra wajib mengisi informasi toko secara jujur dan akurat, termasuk nama toko, nomor WhatsApp aktif, titik koordinat lokasi GPS di peta, alamat lengkap, serta metode pembayaran yang sah. Penggunaan data fiktif dapat mengakibatkan penolakan atau penonaktifan toko."
+      title: "1. Identity Authenticity & Store Data",
+      body: "Partners must provide store details honestly and accurately, including store name, active WhatsApp number, map GPS coordinates, full address, and valid payment methods. Using fictitious data may result in rejection or store deactivation."
     },
     {
-      title: "2. Standar Produk, Harga & Ketersediaan Stok",
-      body: "Setiap produk, makanan, atau jasa yang diunggah wajib menggunakan foto yang sesuai, deskripsi yang jelas, serta harga yang wajar dan transparan. Mitra bertanggung jawab menjaga akurasi stok agar tidak mengecewakan pelanggan."
+      title: "2. Product Standards, Pricing & Stock Availability",
+      body: "Every uploaded product, food item, or service must use an appropriate photo, clear description, and fair, transparent pricing. Partners are responsible for maintaining accurate stock levels to avoid disappointing customers."
     },
     {
-      title: "3. Barang & Layanan yang Dilarang",
-      body: "Mitra dilarang keras memperjualbelikan barang ilegal, narkotika, senjata tajam/api, obat-obatan tanpa izin edar, produk bajakan, konten pornografi, maupun barang berbahaya lainnya yang melanggar hukum di Indonesia."
+      title: "3. Prohibited Goods & Services",
+      body: "Partners are strictly prohibited from selling illegal items, narcotics, sharp weapons or firearms, unapproved medications, counterfeit products, pornographic content, or other hazardous goods that violate applicable laws."
     },
     {
-      title: "4. Kewajiban Pelayanan & Pengiriman",
-      body: "Mitra wajib merespons pesanan masuk sesuai jam operasional yang telah ditetapkan. Pesanan harus dikemas dengan aman dan diserahkan tepat waktu kepada kurir maupun pelanggan yang melakukan pengambilan mandiri."
+      title: "4. Service & Delivery Obligations",
+      body: "Partners must respond to incoming orders within their configured operating hours. Orders must be packaged securely and handed over on time to couriers or customers picking up orders directly."
     },
     {
-      title: "5. Pembayaran, QRIS & Transparansi Transaksi",
-      body: "Rekening bank, akun DANA, atau gambar QRIS yang didaftarkan harus milik sah pemilik/pengelola toko. Segala bentuk penipuan pembayaran atau manipulasi transaksi di luar ketentuan platform akan ditindak tegas."
+      title: "5. Payments, QRIS & Transaction Transparency",
+      body: "Registered bank accounts, DANA accounts, or QRIS images must legitimately belong to the store owner or manager. Any form of payment fraud or transaction manipulation outside platform terms will be strictly penalized."
     },
     {
-      title: "6. Peninjauan Admin & Sanksi Pelanggaran",
-      body: "Tim SERA berhak meninjau, menangguhkan sementara, atau menonaktifkan akun mitra apabila ditemukan pelanggaran terhadap peraturan ini, laporan penipuan dari pembeli, atau penyalahgunaan sistem."
+      title: "6. Admin Review & Violation Sanctions",
+      body: "The SERA team reserves the right to review, temporarily suspend, or deactivate partner accounts if violations of these terms, buyer fraud reports, or system abuse are detected."
     }
   ];
 
@@ -73,7 +73,7 @@ export const MerchantTermsModal: React.FC<MerchantTermsModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          title="Kembali"
+          title="Back"
           style={{
             background: theme.surface2,
             border: `1px solid ${theme.border}`,
@@ -100,7 +100,7 @@ export const MerchantTermsModal: React.FC<MerchantTermsModalProps> = ({
               lineHeight: 1.25
             }}
           >
-            Syarat & Ketentuan
+            Terms & Conditions
           </h2>
           <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 2 }}>
             SERA Marketplace Partner Agreement
@@ -136,10 +136,10 @@ export const MerchantTermsModal: React.FC<MerchantTermsModalProps> = ({
             }}
           >
             <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-              Komitmen Kemitraan SERA
+              SERA Partnership Commitment
             </div>
             <p style={{ margin: "4px 0 0", fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-              Harap baca seluruh poin peraturan di bawah ini dengan saksama sebelum mengajukan pendaftaran Mitra Toko SERA.
+              Please read all terms and policies below carefully before submitting your SERA Store Partner registration.
             </p>
           </div>
 
@@ -199,7 +199,7 @@ export const MerchantTermsModal: React.FC<MerchantTermsModalProps> = ({
               boxShadow: "0 4px 14px rgba(0, 0, 0, 0.14)"
             }}
           >
-            <span>Saya Sudah Membaca & Memahami Peraturan</span>
+            <span>I Have Read & Understood the Terms</span>
           </button>
         </div>
       </div>

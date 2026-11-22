@@ -57,10 +57,10 @@ export function ConfirmClearChatModal({ theme, onCancel, onConfirm }: ConfirmCle
         </div>
 
         <h3 style={{ margin: "0 0 8px", fontSize: 17, fontWeight: 600, color: theme.ink }}>
-          Hapus Seluruh Percakapan?
+          Clear Entire Conversation?
         </h3>
         <p style={{ margin: "0 0 20px", fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-          Seluruh riwayat chat dalam sesi ini akan dihapus permanen dan memulai percakapan baru. Tindakan ini tidak dapat dibatalkan.
+          All chat history in this session will be permanently deleted and a fresh conversation will start. This action cannot be undone.
         </p>
 
         <div style={{ display: "flex", gap: 10, width: "100%" }}>
@@ -80,7 +80,7 @@ export function ConfirmClearChatModal({ theme, onCancel, onConfirm }: ConfirmCle
               transition: "all 150ms"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -99,7 +99,7 @@ export function ConfirmClearChatModal({ theme, onCancel, onConfirm }: ConfirmCle
               transition: "all 150ms"
             }}
           >
-            Hapus
+            Clear
           </button>
         </div>
       </div>

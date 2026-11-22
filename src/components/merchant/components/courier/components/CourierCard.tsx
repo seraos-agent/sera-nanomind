@@ -57,7 +57,7 @@ export function CourierCard({
     >
       {/* Row 1: Courier Name & Status (Left) + Trash Icon (Right) */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-        {/* Left: Nama & Status Sejajar */}
+        {/* Left: Name & Status Inline */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0, flex: 1 }}>
           <span
             style={{
@@ -93,7 +93,7 @@ export function CourierCard({
               }}
             />
             <span>
-              {courier.status === "OFFLINE" ? "Offline" : courier.status === "BUSY" ? "Mengantar" : isActivated ? "Online" : "Menunggu"}
+              {courier.status === "OFFLINE" ? "Offline" : courier.status === "BUSY" ? "Delivering" : isActivated ? "Online" : "Pending"}
             </span>
           </span>
         </div>
@@ -102,7 +102,7 @@ export function CourierCard({
         <button
           type="button"
           onClick={() => onRequestUnlink({ id: courier.id, name: courier.name })}
-          title="Keluarkan Kurir"
+          title="Remove Courier"
           style={{
             background: "transparent",
             border: "none",
@@ -127,7 +127,7 @@ export function CourierCard({
 
       {/* Row 2: Plate Number below Name (Left) + Vehicle Icon below Trash Icon (Right) */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-        {/* Left: Plat Nomor tepat dibawah nama */}
+        {/* Left: License Plate below name */}
         <span
           style={{
             fontSize: 12.5,
@@ -139,10 +139,10 @@ export function CourierCard({
             textOverflow: "ellipsis"
           }}
         >
-          {courier.plateNumber && courier.plateNumber !== "-" ? courier.plateNumber : "Plat belum diisi"}
+          {courier.plateNumber && courier.plateNumber !== "-" ? courier.plateNumber : "No plate number"}
         </span>
 
-        {/* Right: Icon Kendaraan (Hitam) tepat dibawah icon sampah */}
+        {/* Right: Vehicle icon below trash icon */}
         <div
           style={{
             width: 24,
@@ -168,7 +168,7 @@ export function CourierCard({
         <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
           <div
             onClick={() => courier.activationCode && onCopyCode(courier.activationCode)}
-            title="Klik untuk salin Kode Aktivasi"
+            title="Click to copy Activation Code"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -183,7 +183,7 @@ export function CourierCard({
             }}
           >
             <span style={{ fontSize: 11, fontWeight: 600, color: theme.inkSoft }}>
-              Kode:
+              Code:
             </span>
             <span
               style={{
@@ -200,7 +200,7 @@ export function CourierCard({
               (isCopied ? (
                 <span style={{ fontSize: 11, color: "#10B981", fontWeight: 700, display: "flex", alignItems: "center", gap: 2 }}>
                   <Check size={12} />
-                  <span>Tersalin</span>
+                  <span>Copied</span>
                 </span>
               ) : (
                 <Copy size={12} color={theme.inkSoft} />
@@ -219,7 +219,7 @@ export function CourierCard({
               whiteSpace: "nowrap"
             }}
           >
-            {courier.hasPin ? "PIN Aktif" : "Belum Ada PIN"}
+            {courier.hasPin ? "PIN Active" : "No PIN Set"}
           </span>
         </div>
 
@@ -228,7 +228,7 @@ export function CourierCard({
           <button
             type="button"
             onClick={() => onRequestSetPin({ id: courier.id, name: courier.name, hasPin: courier.hasPin })}
-            title={courier.hasPin ? "Ganti PIN Kurir" : "Atur PIN Kurir"}
+            title={courier.hasPin ? "Change Courier PIN" : "Set Courier PIN"}
             style={{
               height: 24,
               padding: "0 8px",
@@ -247,13 +247,13 @@ export function CourierCard({
             }}
           >
             <KeyRound size={11} />
-            <span>{courier.hasPin ? "Ganti PIN" : "Atur PIN"}</span>
+            <span>{courier.hasPin ? "Change PIN" : "Set PIN"}</span>
           </button>
 
           <button
             type="button"
             onClick={() => onShareWhatsApp(courier)}
-            title={courier.phone ? `Chat WhatsApp (${courier.phone})` : "Kirim Kode via WhatsApp"}
+            title={courier.phone ? `WhatsApp Chat (${courier.phone})` : "Send Code via WhatsApp"}
             style={{
               background: "transparent",
               border: "none",
@@ -275,7 +275,7 @@ export function CourierCard({
           <button
             type="button"
             onClick={() => onRequestResetCode({ id: courier.id, name: courier.name })}
-            title="Reset Kode Aktivasi"
+            title="Reset Activation Code"
             style={{
               width: 24,
               height: 24,

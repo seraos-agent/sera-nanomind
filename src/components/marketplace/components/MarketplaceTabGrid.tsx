@@ -8,7 +8,7 @@ import { MarketplaceToolbar } from './MarketplaceToolbar';
 
 export function MarketplaceSkeletonGrid() {
   return (
-    <div className="products-grid" aria-busy="true" aria-label="Memuat daftar marketplace">
+    <div className="products-grid" aria-busy="true" aria-label="Loading marketplace listings">
       {Array.from({ length: 6 }).map((_, idx) => (
         <div
           key={idx}
@@ -180,17 +180,17 @@ export const MarketplaceTabBody = React.memo(function MarketplaceTabBody({
                 <Store size={32} strokeWidth={1.75} />
               </div>
               <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
-                Tidak ada toko atau merchant yang cocok
+                No matching stores or merchants
               </h3>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
-                Coba gunakan kata kunci nama toko, kota, atau kategori lain.
+                Try another store name, city, or category keyword.
               </p>
               <button
                 onClick={onClearFilters}
                 className="btn btn-secondary"
                 style={{ padding: '8px 16px', fontSize: '0.82rem' }}
               >
-                Lihat Semua Toko
+                View All Stores
               </button>
             </div>
           ) : (
@@ -222,17 +222,17 @@ export const MarketplaceTabBody = React.memo(function MarketplaceTabBody({
               <Search size={32} strokeWidth={1.75} />
             </div>
             <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
-              Tidak ada produk atau jasa yang cocok
+              No matching products or services
             </h3>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
-              Coba gunakan kata kunci lain atau bersihkan pencarian yang aktif.
+              Try using different keywords or clearing the active search.
             </p>
             <button
               onClick={onClearFilters}
               className="btn btn-secondary"
               style={{ padding: '8px 16px', fontSize: '0.82rem' }}
             >
-              Bersihkan Pencarian
+              Clear Search
             </button>
           </div>
         ) : (

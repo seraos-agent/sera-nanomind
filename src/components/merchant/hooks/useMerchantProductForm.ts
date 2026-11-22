@@ -62,7 +62,7 @@ export function useMerchantProductForm({
     setProdCostPrice("");
     setProdDiscountType("%");
     setProdDiscountValue("");
-    setProdStock(sType === "JASA" ? "60 Menit" : "20");
+    setProdStock(sType === "JASA" ? "60 Mins" : "20");
     setProdWeight(sType === "JASA" ? "" : "1000");
     setProdWeightUnit("g");
     setProdBarcode("");
@@ -161,13 +161,13 @@ export function useMerchantProductForm({
     if (isSaving) return;
 
     if (!store) {
-      setSaveToast({ message: "Data toko belum termuat. Silakan refresh halaman.", type: "error" });
+      setSaveToast({ message: "Store data is not loaded yet. Please refresh the page.", type: "error" });
       setTimeout(() => setSaveToast(null), 3000);
       return;
     }
 
     if (!prodName.trim()) {
-      setSaveToast({ message: "Nama produk wajib diisi!", type: "error" });
+      setSaveToast({ message: "Product name is required!", type: "error" });
       setTimeout(() => setSaveToast(null), 3000);
       return;
     }
@@ -182,7 +182,7 @@ export function useMerchantProductForm({
             (v.stock !== undefined && Number(v.stock) > 0))
       );
       if (unnamedFilledVariant) {
-        setSaveToast({ message: "Nama varian wajib diisi untuk setiap baris yang terisi!", type: "error" });
+        setSaveToast({ message: "Variant name is required for each filled row!", type: "error" });
         setTimeout(() => setSaveToast(null), 3000);
         return;
       }
@@ -196,19 +196,19 @@ export function useMerchantProductForm({
     if (!hasVariants) {
       const cleanPrice = parseInt(prodNormalPrice.replace(/\D/g, ""), 10) || 0;
       if (cleanPrice <= 0) {
-        setSaveToast({ message: "Harga produk wajib diisi dengan nominal yang valid!", type: "error" });
+        setSaveToast({ message: "Please enter a valid product price!", type: "error" });
         setTimeout(() => setSaveToast(null), 3000);
         return;
       }
     } else {
       if (cleanVariants.length === 0) {
-        setSaveToast({ message: "Harap isi minimal 1 varian dengan nama dan harga yang valid!", type: "error" });
+        setSaveToast({ message: "Please add at least 1 variant with a valid name and price!", type: "error" });
         setTimeout(() => setSaveToast(null), 3000);
         return;
       }
       const invalidPriceVariant = cleanVariants.find((v) => !v.price || Number(v.price) <= 0);
       if (invalidPriceVariant) {
-        setSaveToast({ message: `Harga untuk varian "${invalidPriceVariant.name}" wajib diisi!`, type: "error" });
+        setSaveToast({ message: `Price for variant "${invalidPriceVariant.name}" is required!`, type: "error" });
         setTimeout(() => setSaveToast(null), 3000);
         return;
       }
@@ -390,7 +390,7 @@ export function useMerchantProductForm({
         storeId: store.id,
         storeName: store.name,
         name: prodName,
-        description: prodDescription.trim() || `Produk unggulan dari ${store.name}.`,
+        description: prodDescription.trim() || `Featured product from ${store.name}.`,
         type: prodType,
         category: prodCategory,
         price: finalPrice,
@@ -403,7 +403,7 @@ export function useMerchantProductForm({
         weight: finalWeight,
         weightUnit: finalWeightUnit,
         barcode: prodBarcode.trim() || undefined,
-        duration: prodType === "SERVICE" ? `${prodStock || 60} Menit` : undefined,
+        duration: prodType === "SERVICE" ? `${prodStock || 60} Mins` : undefined,
         rating: 5.0,
         images: finalImages,
         status: itemStatus,
@@ -445,19 +445,19 @@ export function useMerchantProductForm({
 
     const msg =
       itemStatus === "DRAFT"
-        ? "Disimpan ke Draft (tambahkan foto untuk menerbitkan)"
+        ? "Saved as Draft (add photos to publish)"
         : editingProduct?.status === "DRAFT"
-          ? "Produk berhasil diterbitkan"
+          ? "Product published successfully"
           : editingProduct
-            ? "Perubahan disimpan"
-            : "Produk tersimpan";
+            ? "Changes saved"
+            : "Product saved";
     setSaveToast({ message: msg, type: "success" });
     setTimeout(() => setSaveToast(null), 2500);
   } catch (err) {
     console.warn("[useMerchantProductForm] Save product failed:", err);
     setIsSaving(false);
     setIsSuccess(false);
-    setSaveToast({ message: "Gagal menyimpan produk. Silakan coba lagi.", type: "error" });
+    setSaveToast({ message: "Failed to save product. Please try again.", type: "error" });
     setTimeout(() => setSaveToast(null), 3200);
   }
 };

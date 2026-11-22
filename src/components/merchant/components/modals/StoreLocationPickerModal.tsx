@@ -254,7 +254,7 @@ export function StoreLocationPickerModal({
         script.async = true;
         script.defer = true;
         script.onerror = () => {
-          if (isMounted) setMapError("Peta Google Maps tidak dapat dimuat.");
+          if (isMounted) setMapError("Google Maps could not be loaded.");
         };
         document.head.appendChild(script);
       }
@@ -313,7 +313,7 @@ export function StoreLocationPickerModal({
         // Initial geocode lookup
         reverseGeocode(currentPos.lat, currentPos.lng);
       } catch (err: any) {
-        setMapError(err?.message || "Gagal menginisialisasi peta.");
+        setMapError(err?.message || "Failed to initialize map.");
       }
     };
 
@@ -362,7 +362,7 @@ export function StoreLocationPickerModal({
           updatePinPosition(lat, lng, true);
           parseAddressComponents(results[0]);
         } else {
-          alert("Lokasi tidak ditemukan. Coba ketik nama jalan, kelurahan, atau kota yang lebih spesifik.");
+          alert("Location not found. Try entering a more specific street name, neighborhood, or city.");
         }
       }
     );
@@ -430,7 +430,7 @@ export function StoreLocationPickerModal({
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <MapPin size={18} color="#EF4444" />
             <span style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-              {title || (storeName ? `Titik Lokasi ${storeName}` : "Pilih Titik Lokasi")}
+              {title || (storeName ? `${storeName} Location Pin` : "Choose Location Pin")}
             </span>
           </div>
         </div>
@@ -491,7 +491,7 @@ export function StoreLocationPickerModal({
                   district: districtHint,
                   village: villageHint,
                   address: addressHint,
-                  fallback: cityHint || "Lokasi Terpilih"
+                  fallback: cityHint || "Selected Location"
                 })}
               </span>
               {coords && (
@@ -509,7 +509,7 @@ export function StoreLocationPickerModal({
                 textOverflow: "ellipsis"
               }}
             >
-              {addressHint || (coords ? "Menyesuaikan alamat dari titik peta..." : "Menemukan lokasi...")}
+              {addressHint || (coords ? "Resolving address from map pin..." : "Finding location...")}
             </div>
           </div>
 
@@ -541,7 +541,7 @@ export function StoreLocationPickerModal({
                 transition: "all 0.15s ease"
               }}
             >
-              Batal
+              Cancel
             </button>
 
             <button
@@ -569,7 +569,7 @@ export function StoreLocationPickerModal({
               }}
             >
               <Check size={15} />
-              <span>Simpan Lokasi</span>
+              <span>Save Location</span>
             </button>
           </div>
         </div>

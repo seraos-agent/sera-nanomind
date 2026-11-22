@@ -36,7 +36,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
           margin: '0 0 6px 0',
           letterSpacing: '-0.2px'
         }}>
-          Pesanan Berhasil Dibuat!
+          Order Placed Successfully!
         </h2>
 
         <p style={{
@@ -46,7 +46,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
           margin: 0,
           padding: '0 4px'
         }}>
-          Terima kasih <strong>{order.customer.name}</strong>. Pesanan Anda telah tercatat rapi di sistem toko.
+          Thank you <strong>{order.customer.name}</strong>. Your order has been recorded in the store system.
         </p>
 
         {/* Receipt Detail Box */}
@@ -63,19 +63,19 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
           gap: '10px'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ color: 'var(--text-muted, #64748B)' }}>ID Pesanan</span>
+            <span style={{ color: 'var(--text-muted, #64748B)' }}>Order ID</span>
             <strong style={{ color: 'var(--text-main, #0F172A)', fontFamily: 'monospace', fontSize: '0.82rem', letterSpacing: '0.3px' }}>
               {order.id}
             </strong>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ color: 'var(--text-muted, #64748B)' }}>Toko Tujuan</span>
+            <span style={{ color: 'var(--text-muted, #64748B)' }}>Destination Store</span>
             <strong style={{ color: 'var(--text-main, #0F172A)' }}>{order.storeName}</strong>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ color: 'var(--text-muted, #64748B)' }}>Pembayaran</span>
+            <span style={{ color: 'var(--text-muted, #64748B)' }}>Payment</span>
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -93,7 +93,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
 
           {order.customer.bookingDate && (
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ color: 'var(--text-muted, #64748B)' }}>Jadwal Layanan</span>
+              <span style={{ color: 'var(--text-muted, #64748B)' }}>Service Schedule</span>
               <strong style={{ color: 'var(--color-brand, #059669)' }}>{order.customer.bookingDate}</strong>
             </div>
           )}
@@ -108,7 +108,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
             fontSize: '0.92rem',
             fontWeight: 700
           }}>
-            <span style={{ color: 'var(--text-main, #0F172A)' }}>Total Transaksi</span>
+            <span style={{ color: 'var(--text-main, #0F172A)' }}>Order Total</span>
             <span style={{ color: 'var(--color-brand, #059669)', fontSize: '1rem', fontWeight: 800 }}>
               Rp {order.totalAmount.toLocaleString('id-ID')}
             </span>
@@ -136,7 +136,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
             onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.92')}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            Lihat Status Pesanan
+            View Order Status
           </button>
           <button
             type="button"
@@ -156,7 +156,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--bg-subtle, #F8FAFC)')}
             onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
           >
-            Lanjut Belanja
+            Continue Shopping
           </button>
         </div>
       </div>

@@ -58,7 +58,7 @@ export function PosReportSummaryStats({
           }}
         >
           <Wallet size={13} />
-          <span>Estimasi Laba Kotor ({periodLabel})</span>
+          <span>Estimated Gross Profit ({periodLabel})</span>
         </div>
         {hasCostData ? (
           <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
@@ -80,7 +80,7 @@ export function PosReportSummaryStats({
           </div>
         ) : (
           <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
-            Belum ada data HPP. Isi <strong>Harga Modal</strong> saat edit produk untuk melihat laba kotor.
+            No COGS data yet. Fill in <strong>Cost Price</strong> when editing products to view gross profit.
           </div>
         )}
       </div>
@@ -88,12 +88,12 @@ export function PosReportSummaryStats({
       {hasCostData && (
         <div style={{ textAlign: isMobile ? "left" : "right" }}>
           <div style={{ fontSize: 11, color: theme.inkSoft }}>
-            Total Modal (HPP):{" "}
+            Total COGS:{" "}
             <strong style={{ color: theme.ink }}>Rp {totalCogs.toLocaleString("id-ID")}</strong>
           </div>
           {isPartialCostData && (
             <div style={{ fontSize: 10, color: "#D97706", marginTop: 2 }}>
-              Sebagian item terjual belum diisi HPP-nya
+              Some sold items are missing a cost price
             </div>
           )}
         </div>
@@ -135,7 +135,7 @@ export function PosReportSummaryStats({
                 borderRadius: 12
               }}
             >
-              {activeTransactionsCount} Transaksi
+              {activeTransactionsCount} Transactions
             </div>
           </div>
 
@@ -145,7 +145,7 @@ export function PosReportSummaryStats({
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: theme.inkSoft, marginBottom: 2 }}>
                 <Banknote size={13} />
-                <span>Uang Tunai</span>
+                <span>Cash</span>
               </div>
               <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
                 Rp {totalCashInDrawer.toLocaleString("id-ID")}
@@ -184,7 +184,7 @@ export function PosReportSummaryStats({
         >
           <div style={{ display: "flex", alignItems: "center", gap: 6, color: theme.inkSoft, fontSize: 11 }}>
             <Banknote size={14} />
-            <span>Uang Tunai</span>
+            <span>Cash</span>
           </div>
           <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>
             Rp {totalCashInDrawer.toLocaleString("id-ID")}
@@ -204,7 +204,7 @@ export function PosReportSummaryStats({
         >
           <div style={{ display: "flex", alignItems: "center", gap: 6, color: theme.inkSoft, fontSize: 11 }}>
             <QrCode size={14} />
-            <span>QRIS & Bank</span>
+            <span>QRIS &amp; Bank</span>
           </div>
           <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>
             Rp {totalNonCash.toLocaleString("id-ID")}
@@ -224,13 +224,13 @@ export function PosReportSummaryStats({
         >
           <div style={{ display: "flex", alignItems: "center", gap: 6, color: theme.inkSoft, fontSize: 11 }}>
             <TrendingUp size={14} />
-            <span>Total Omset</span>
+            <span>Total Revenue</span>
           </div>
           <div style={{ fontSize: 16, fontWeight: 800, color: theme.ink }}>
             Rp {totalRevenue.toLocaleString("id-ID")}
           </div>
           <div style={{ fontSize: 10, color: theme.inkSoft }}>
-            {activeTransactionsCount} transaksi • {periodLabel}
+            {activeTransactionsCount} transactions • {periodLabel}
           </div>
         </div>
       </div>

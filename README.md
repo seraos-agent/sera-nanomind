@@ -2,7 +2,7 @@
 
 Built for the **#BuildHybridAI 2026** Google Firebase Hackathon.
 
-**SERA NanoMind** is an offline-first agentic commerce operating system uniting a conversational AI command deck (**ChatView**) with a live **Marketplace**, **Mitra Store** (merchant management), **Mitra Kasir** (Point-of-Sale terminal with shifts, table management, and kitchen tickets), and **Mitra Kurir** (store courier dispatch & COD settlement).
+**SERA NanoMind** is an offline-first agentic commerce operating system uniting a conversational AI command deck (**ChatView**) with a live **Marketplace**, **Merchant Store** (merchant management), **POS Cashier** (Point-of-Sale terminal with shifts, table management, and kitchen tickets), and **Courier Dispatch** (store courier dispatch & COD settlement).
 
 - **Live Web App:** [https://sera-nanomind.web.app](https://sera-nanomind.web.app)
 - **Android APK (`v1.0.0`):** [Download from GitHub Releases](https://github.com/seraos-agent/sera-nanomind/releases/tag/v1.0.0)
@@ -48,9 +48,9 @@ flowchart TD
 
 - **Chat Deck (`ChatView`):** Centralized conversational agent with live routing telemetry in **CognitiveProcessCard** (`On-Device Gemini Nano` vs `Cloud Fallback`).
 - **Marketplace:** Storefront browser synced in real time with merchant inventory changes.
-- **Mitra Store (`MerchantPage`):** Catalog, pricing, stock, order fulfillment, and operational setup.
-- **Mitra Kasir (`CashierPage`):** Offline-ready POS terminal tracking cash drawer opening balance, QRIS/Cash splits, and shift reporting.
-- **Mitra Kurir (`DriverPage`):** Delivery queue, COD collection tracking, and courier settlement.
+- **Merchant Store (`MerchantPage`):** Catalog, pricing, stock, order fulfillment, and operational setup.
+- **POS Cashier (`CashierPage`):** Offline-ready POS terminal tracking cash drawer opening balance, QRIS/Cash splits, and shift reporting.
+- **Courier Dispatch (`DriverPage`):** Delivery queue, COD collection tracking, and courier settlement.
 
 ---
 

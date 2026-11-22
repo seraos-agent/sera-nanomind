@@ -49,7 +49,7 @@ export function isPosOrder(order?: MerchantOrder | null): boolean {
 
 /**
  * Converts a cloud or local POS transaction object into a normalized MerchantOrder
- * for unified reconciliation in the Merchant Penjualan (Selesai) view.
+ * for unified reconciliation in the Merchant Sales (Completed) view.
  */
 export function mapPosTransactionToMerchantOrder(tx: any): MerchantOrder {
   const receiptNo = String(tx?.receiptNumber || tx?.id || `STR-${Date.now().toString().slice(-6)}`);
@@ -57,18 +57,20 @@ export function mapPosTransactionToMerchantOrder(tx: any): MerchantOrder {
   const itemsSummary =
     itemsList
       .map((it) => {
-        const name = it.name || it.product?.name || "Produk";
+        const name = it.name || it.product?.name || "Product";
         const variantName = it.variantName || it.variant?.name;
         const qty = Number(it.quantity || 1);
         const notes = it.notes ? ` [${it.notes}]` : "";
         return `${qty}x ${name}${variantName ? ` (${variantName})` : ""}${notes}`;
       })
-      .join(", ") || "Transaksi Kasir";
+      .join(", ") || "POS Transaction";
 
   const tableLabel = tx?.tableOrQueueNumber ? String(tx.tableOrQueueNumber).trim() : undefined;
   const rawCustomer = tx?.customerName ? String(tx.customerName).trim() : "";
   const customerName =
-    rawCustomer && !rawCustomer.startsWith("Kasir •") ? rawCustomer : "Pelanggan Kasir";
+    rawCustomer && !rawCustomer.startsWith("Kasir •") && !rawCustomer.startsWith("Cashier •")
+      ? rawCustomer
+      : "Walk-In Customer";
 
   const isVoided = tx?.status === "VOIDED";
   const paymentParts: PosPaymentPart[] = Array.isArray(tx?.payments) ? tx.payments : [];

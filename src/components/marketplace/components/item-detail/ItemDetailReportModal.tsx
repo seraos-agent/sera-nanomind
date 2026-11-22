@@ -8,11 +8,11 @@ interface ItemDetailReportModalProps {
 }
 
 const REPORT_REASONS = [
-  'Penipuan atau Barang Palsu',
-  'Harga atau Informasi Menyesatkan',
-  'Barang Terlarang atau Berbahaya',
-  'Spam atau Duplikasi Produk',
-  'Pelanggaran Hak Cipta',
+  'Fraud or Counterfeit Goods',
+  'Misleading Price or Information',
+  'Prohibited or Hazardous Items',
+  'Spam or Duplicate Product',
+  'Copyright Infringement',
 ];
 
 export const ItemDetailReportModal: React.FC<ItemDetailReportModalProps> = ({
@@ -56,7 +56,7 @@ export const ItemDetailReportModal: React.FC<ItemDetailReportModalProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '1.2rem' }}>🚩</span>
             <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
-              Laporkan Produk
+              Report Product
             </h3>
           </div>
           <button
@@ -75,7 +75,7 @@ export const ItemDetailReportModal: React.FC<ItemDetailReportModalProps> = ({
         </div>
 
         <p style={{ margin: '0 0 14px 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-          Bantu kami menjaga SERA Market tetap aman. Pilih alasan pelaporan untuk: <strong>{itemName}</strong>
+          Help us keep SERA Market safe. Select a report reason for: <strong>{itemName}</strong>
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
@@ -125,7 +125,7 @@ export const ItemDetailReportModal: React.FC<ItemDetailReportModalProps> = ({
               cursor: 'pointer',
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             onClick={() => onSubmit(reportReason)}
@@ -142,7 +142,7 @@ export const ItemDetailReportModal: React.FC<ItemDetailReportModalProps> = ({
               boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
             }}
           >
-            Kirim Laporan
+            Submit Report
           </button>
         </div>
       </div>

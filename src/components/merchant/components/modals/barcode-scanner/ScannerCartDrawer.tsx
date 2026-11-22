@@ -78,7 +78,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
         {/* Drag Handle */}
         <div
           onClick={onClose}
-          title="Tutup Keranjang"
+          title="Close Cart"
           style={{
             width: "100%",
             padding: "10px 0 6px",
@@ -113,7 +113,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
         >
           <div>
             <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-              Keranjang Kasir ({totalCount})
+              POS Cart ({totalCount})
             </h4>
           </div>
 
@@ -121,7 +121,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
             <button
               type="button"
               onClick={onClearCart}
-              title="Kosongkan Keranjang"
+              title="Clear Cart"
               style={{
                 background: "transparent",
                 border: "none",
@@ -153,7 +153,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
           {!cartItems || cartItems.length === 0 ? (
             <div style={{ textAlign: "center", padding: "36px 16px", color: theme.inkSoft }}>
               <ShoppingCart size={36} style={{ margin: "0 auto 8px", opacity: 0.4 }} />
-              <p style={{ margin: 0, fontSize: 13, fontWeight: 500 }}>Belum ada produk di keranjang</p>
+              <p style={{ margin: 0, fontSize: 13, fontWeight: 500 }}>No products in cart yet</p>
             </div>
           ) : (
             cartItems.map((item, idx) => {
@@ -194,7 +194,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
                       </div>
                       {item.variant && (
                         <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 1 }}>
-                          Varian: {item.variant.name}
+                          Variant: {item.variant.name}
                         </div>
                       )}
                       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 2 }}>
@@ -222,7 +222,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
                       <button
                         type="button"
                         onClick={() => onRemoveItem(idx)}
-                        title="Hapus barang"
+                        title="Remove item"
                         style={{
                           background: "transparent",
                           border: "none",
@@ -344,7 +344,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
         >
           {/* Discount Section */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 12, color: theme.inkSoft }}>Diskon Pesanan</span>
+            <span style={{ fontSize: 12, color: theme.inkSoft }}>Order Discount</span>
 
             {!showDiscountInput ? (
               <div
@@ -356,7 +356,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
                 onClick={() => {
                   if (onUpdateManualDiscount) setShowDiscountInput(true);
                 }}
-                title="Klik untuk ubah nominal diskon"
+                title="Click to edit discount amount"
               >
                 <span
                   style={{
@@ -404,7 +404,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
                     e.stopPropagation();
                     setShowDiscountInput(false);
                   }}
-                  title="Selesai"
+                  title="Done"
                   style={{
                     background: `${theme.accent}14`,
                     border: "none",
@@ -426,7 +426,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
                       if (onUpdateManualDiscount) onUpdateManualDiscount(0);
                       setShowDiscountInput(false);
                     }}
-                    title="Hapus diskon manual"
+                    title="Remove manual discount"
                     style={{
                       background: "#EF444414",
                       border: "none",
@@ -456,7 +456,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
             }}
           >
             <span style={{ fontSize: 13, color: theme.ink, fontWeight: 700 }}>
-              Total Tagihan ({totalCount} barang)
+              Total Due ({totalCount} items)
             </span>
             <span style={{ fontSize: 18, fontWeight: 800, color: theme.ink, letterSpacing: -0.3 }}>
               Rp {totalAmount.toLocaleString("id-ID")}
@@ -480,7 +480,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
                 cursor: "pointer",
               }}
             >
-              Lanjut Scan
+              Continue Scan
             </button>
 
             <button
@@ -503,7 +503,7 @@ export const ScannerCartDrawer: React.FC<ScannerCartDrawerProps> = ({
                 boxShadow: totalCount > 0 ? "0 2px 6px rgba(0, 0, 0, 0.12)" : "none",
               }}
             >
-              <span>Bayar Sekarang</span>
+              <span>Pay Now</span>
             </button>
           </div>
         </div>

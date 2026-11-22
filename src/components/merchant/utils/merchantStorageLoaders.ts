@@ -48,11 +48,11 @@ export function mapMarketplaceOrderToMerchant(co: any): MerchantOrder {
 
   return {
     id: co.id,
-    customerName: co.customer?.name || co.customerName || "Pelanggan Marketplace",
+    customerName: co.customer?.name || co.customerName || "Marketplace Buyer",
     customerPhone: co.customer?.phone || co.customerPhone || "-",
     itemsSummary: Array.isArray(co.items)
       ? co.items.map((i: any) => `${i.name} (${i.quantity}x)`).join(", ")
-      : co.itemsSummary || "Pesanan",
+      : co.itemsSummary || "Order",
     totalAmount: co.totalAmount || 0,
     paymentMethod: co.paymentMethod || "DANA",
     paymentStatus: co.paymentStatus === "PAID" ? "PAID" : "PENDING",
@@ -66,7 +66,10 @@ export function mapMarketplaceOrderToMerchant(co: any): MerchantOrder {
     status: mappedStatus,
     createdAt: formatOrderDateTime(co.createdAt),
     shippingMethod:
-      co.shippingMethod || (resolvedAddr === "Ambil di Toko" || resolvedAddr === "Ambil ke Toko" ? "PICKUP" : "REGULAR"),
+      co.shippingMethod ||
+      (resolvedAddr === "In-Store Pickup" || resolvedAddr === "Ambil di Toko" || resolvedAddr === "Ambil ke Toko"
+        ? "PICKUP"
+        : "REGULAR"),
     shippingAddress: resolvedAddr,
     destCoords: co.destCoords || co.customer?.destCoords,
     shippingCost: co.deliveryOrServiceFee || co.shippingCost || 0,

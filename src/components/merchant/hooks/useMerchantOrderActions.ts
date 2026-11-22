@@ -106,7 +106,7 @@ export function useMerchantOrderActions({
         );
         if (activeCouriers.length === 0 && !isDriverOnlineLocally) {
           alert(
-            `Kurir toko Anda (${store.linkedCouriers[0]?.name || "Kurir"}) sedang berstatus Offline. Pengantaran tidak dapat ditugaskan sampai kurir mengaktifkan status Online.`
+            `Your store courier (${store.linkedCouriers[0]?.name || "Courier"}) is currently Offline. Delivery cannot be assigned until the courier switches to Online.`
           );
           return;
         }
@@ -125,7 +125,7 @@ export function useMerchantOrderActions({
           (typeof window !== "undefined"
             ? localStorage.getItem("sera_customer_address") || ""
             : "") ||
-          "Alamat Pembeli";
+          "Buyer Address";
 
         let resolvedDestCoords = order.destCoords;
         if (!resolvedDestCoords && typeof window !== "undefined") {
@@ -149,7 +149,7 @@ export function useMerchantOrderActions({
           merchantName: store.name,
           customerName: order.customerName,
           customerPhone: order.customerPhone,
-          pickupAddress: store.address || `Toko ${store.name}`,
+          pickupAddress: store.address || `${store.name}`,
           destAddress: resolvedShippingAddress,
           destCoords: resolvedDestCoords,
           pickupCoords:
@@ -164,8 +164,8 @@ export function useMerchantOrderActions({
           paymentMethod: order.paymentMethod || "QRIS",
           notes:
             order.shippingMethod === "STORE_DELIVERY"
-              ? `[Kurir Toko] Pesanan ${order.id} dari ${store.name}`
-              : `[Mitra Kurir] Pesanan ${order.id} dari ${store.name}`
+              ? `[Store Courier] Order ${order.id} from ${store.name}`
+              : `[Courier Partner] Order ${order.id} from ${store.name}`
         };
 
         await fetch(`${getApiBaseUrl()}/api/market/rides/request`, {
@@ -177,7 +177,7 @@ export function useMerchantOrderActions({
         // 1. Advance order status to SHIPPED in merchant dashboard and backend
         await handleUpdateOrderStatus(order.id, "SHIPPED");
 
-        // 2. Update buyer's local orders immediately so CartDrawer moves to "Dikirim"
+        // 2. Update buyer's local orders immediately so CartDrawer moves to "Shipped"
         try {
           const rawCustomerOrders = localStorage.getItem("sera_customer_orders");
           if (rawCustomerOrders) {

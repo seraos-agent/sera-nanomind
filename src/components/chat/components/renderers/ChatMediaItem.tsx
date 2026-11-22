@@ -5,7 +5,7 @@ import { handleInAppImageDownload } from "../../../../utils/imageDownload";
 import { getCachedImage, fetchAndCacheImage, isUrlExpired, markUrlAsDead } from "../../../../utils/imageCache";
 
 /**
- * ChatMediaItem — Self-caching media element with automatic local persistence
+ * ChatMediaItem - Self-caching media element with automatic local persistence
  * and graceful minimalist 24-hour expiration fallback.
  */
 export function ChatMediaItem({
@@ -93,7 +93,7 @@ export function ChatMediaItem({
         }}
       >
         <ImageOff size={15} color={theme.inkSoft} style={{ opacity: 0.8 }} />
-        <span>Pratinjau gambar sementara telah kedaluwarsa (24 jam)</span>
+        <span>Temporary image preview has expired (24 hours)</span>
       </div>
     );
   }
@@ -171,7 +171,7 @@ export function ChatMediaItem({
           e.currentTarget.style.background = "rgba(0, 0, 0, 0.55)";
           e.currentTarget.style.transform = "scale(1)";
         }}
-        title="Download ke Galeri"
+        title="Download to Gallery"
       >
         {isDownloading ? (
           <Loader2 size={14} className="animate-spin" style={{ animation: "spin 0.8s linear infinite" }} />

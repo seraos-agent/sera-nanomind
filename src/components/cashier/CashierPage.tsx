@@ -76,8 +76,8 @@ interface CashierPageProps {
 }
 
 /**
- * CashierPage — Dedicated Mitra Kasir terminal view isolated from Owner Mode.
- * Pairs via KS-XXXX activation code and syncs shifts/transactions to the cloud POS API.
+ * CashierPage - Dedicated POS Cashier terminal view isolated from Owner Mode.
+ * Pairs via KS-XXXX activation code and syncs shifts/transactions to the local or cloud POS API.
  */
 export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: CashierPageProps) {
   const [session, setSession] = useState<CashierSession | null>(() =>
@@ -174,7 +174,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
   const handleSetManualDiscount = useCallback(
     (val: number) => {
       if (!canManualDiscount) {
-        showToast("Diskon manual dinonaktifkan oleh pemilik toko.");
+        showToast("Manual discounts are disabled by the store owner.");
         setManualDiscountNominal(0);
         return;
       }
@@ -186,7 +186,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
   const handleSetShowDiscountInput = useCallback(
     (show: boolean) => {
       if (show && !canManualDiscount) {
-        showToast("Diskon manual dinonaktifkan oleh pemilik toko.");
+        showToast("Manual discounts are disabled by the store owner.");
         return;
       }
       setShowDiscountInput(show);
@@ -246,17 +246,17 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
   const mapVerifyReasonToNotice = (reasonCode?: string): string => {
     switch (reasonCode) {
       case "STORE_NOT_FOUND":
-        return "Toko tidak ditemukan di server. Silakan masukkan kode aktivasi kasir baru.";
+        return "Store not found on server. Please enter a new cashier activation code.";
       case "REMOVED":
-        return "Akun kasir Anda telah dikeluarkan oleh pemilik toko.";
+        return "Your cashier account was removed by the store owner.";
       case "DISABLED":
-        return "Akun kasir Anda dinonaktifkan sementara oleh pemilik toko.";
+        return "Your cashier account was temporarily disabled by the store owner.";
       case "RESET":
-        return "Aktivasi kasir telah di-reset oleh toko. Silakan aktivasi ulang.";
+        return "Cashier activation was reset by the store. Please reactivate.";
       case "SESSION_TAKEN_OVER":
-        return "Kode kasir ini sedang diaktifkan di perangkat lain. Sesi di perangkat ini ditutup otomatis.";
+        return "This cashier code was activated on another device. This session has been closed.";
       default:
-        return "Sesi kasir tidak lagi valid. Silakan aktivasi ulang.";
+        return "Cashier session is no longer valid. Please reactivate.";
     }
   };
 
@@ -382,7 +382,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
         }
       }
     } catch {
-      showToast("Gagal menyinkronkan data kasir dari server.");
+      showToast("Failed to sync cashier data from server.");
     } finally {
       setIsSyncing(false);
       setHasHydrated(true);
@@ -616,7 +616,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       showToast(`+1 ${matched.name}`);
     },
     onBarcodeNotFound: (code) => {
-      showToast(`Produk barcode "${code}" tidak ditemukan`);
+      showToast(`Product barcode "${code}" not found`);
     }
   });
 
@@ -625,7 +625,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
     storeType: session?.store?.type,
     products,
     socket,
-    actorName: session?.cashier?.name || "Kasir",
+    actorName: session?.cashier?.name || "Cashier",
     cart,
     manualDiscountNominal,
     setCart,
@@ -709,13 +709,13 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        showToast(json.error || "Gagal membuka shift kasir.");
+        showToast(json.error || "Failed to open cashier shift.");
         return;
       }
       setActiveShift(json.data);
-      showToast("Shift kasir dibuka.");
+      showToast("Cashier shift opened.");
     } catch {
-      showToast("Gagal terhubung ke server.");
+      showToast("Failed to connect to server.");
     } finally {
       setIsSubmittingAction(false);
     }
@@ -732,14 +732,14 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        showToast(json.error || "Gagal mencatat kas.");
+        showToast(json.error || "Failed to record cash movement.");
         return;
       }
       setActiveShift(json.data);
       setIsCashMovementOpen(false);
-      showToast(type === "IN" ? "Kas masuk tercatat." : "Kas keluar tercatat.");
+      showToast(type === "IN" ? "Cash-in recorded." : "Cash-out recorded.");
     } catch {
-      showToast("Gagal terhubung ke server.");
+      showToast("Failed to connect to server.");
     } finally {
       setIsSubmittingAction(false);
     }
@@ -756,7 +756,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        showToast(json.error || "Gagal menutup shift.");
+        showToast(json.error || "Failed to close shift.");
         return;
       }
       const variance = Number(json.data?.shift?.cashVariance || 0);
@@ -765,11 +765,11 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       clearCart();
       showToast(
         variance === 0
-          ? "Shift ditutup. Kas laci cocok!"
-          : `Shift ditutup. Selisih kas: Rp ${variance.toLocaleString("id-ID")}`
+          ? "Shift closed. Cash drawer balanced!"
+          : `Shift closed. Drawer variance: Rp ${variance.toLocaleString("id-ID")}`
       );
     } catch {
-      showToast("Gagal terhubung ke server.");
+      showToast("Failed to connect to server.");
     } finally {
       setIsSubmittingAction(false);
     }
@@ -779,7 +779,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
     if (!session || !activeShift || cart.length === 0) return;
     const hasSplit = Array.isArray(splitPayments) && splitPayments.length > 1;
     if (!hasSplit && paymentMethod === "CASH" && !isCashSufficient) {
-      showToast("Nominal uang tunai belum mencukupi!");
+      showToast("Insufficient cash tendered!");
       return;
     }
 
@@ -821,7 +821,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        showToast(json.error || "Gagal menyimpan transaksi.");
+        showToast(json.error || "Failed to save transaction.");
         return;
       }
 
@@ -839,7 +839,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       clearCart();
       playBeep();
     } catch {
-      showToast("Gagal menyimpan transaksi ke server.");
+      showToast("Failed to save transaction to server.");
     } finally {
       setIsSubmittingAction(false);
     }
@@ -863,7 +863,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
         if (String(json.error || "").toLowerCase().includes("pin")) {
           setPendingVoidTx(tx);
         }
-        showToast(json.error || "Gagal membatalkan transaksi.");
+        showToast(json.error || "Failed to void transaction.");
         return;
       }
 
@@ -873,9 +873,9 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       setPendingVoidTx(null);
       void hydrateCashierState(session);
       playBeep();
-      showToast(`Transaksi ${tx.receiptNumber} dibatalkan & stok dikembalikan.`);
+      showToast(`Transaction ${tx.receiptNumber} voided & stock restored.`);
     } catch {
-      showToast("Gagal menghubungi server.");
+      showToast("Failed to connect to server.");
     } finally {
       setIsSubmittingAction(false);
     }
@@ -929,7 +929,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       }
       showToast(res.message);
     } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : "Gagal mencetak tiket dapur.");
+      showToast(err instanceof Error ? err.message : "Failed to print kitchen ticket.");
     }
   };
 
@@ -951,7 +951,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       const res = await printKitchenTicketHybrid(fullPayload);
       showToast(res.message);
     } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : "Gagal mencetak ulang tiket dapur.");
+      showToast(err instanceof Error ? err.message : "Failed to reprint kitchen ticket.");
     } finally {
       setKitchenReprintPayload(null);
     }
@@ -963,7 +963,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       supervisorPin
     });
     if (!res.ok) {
-      showToast(res.error || "PIN Supervisor tidak valid.");
+      showToast(res.error || "Invalid Supervisor PIN.");
       return false;
     }
     if (adaptiveMode.activeHeldBillId === bill.id) {
@@ -971,7 +971,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
       clearCart();
     }
     playBeep();
-    showToast(`Open bill ${bill.label} dibatalkan.`);
+    showToast(`Open bill ${bill.label} cancelled.`);
     return true;
   };
 
@@ -1026,7 +1026,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
             fontSize: 13
           }}
         >
-          Memulihkan sesi kasir...
+          Restoring cashier session...
         </div>
       );
     }
@@ -1141,10 +1141,10 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
                   <span>{session.cashier.name}</span>
                   {activeShift && (
                     <span style={{ color: "#10B981", fontWeight: 600 }}>
-                      • Shift Aktif
+                      • Shift Active
                     </span>
                   )}
-                  {isSyncing && <span>• Sinkron...</span>}
+                  {isSyncing && <span>• Syncing...</span>}
                 </div>
               )}
             </div>
@@ -1165,13 +1165,13 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
                     whiteSpace: "nowrap"
                   }}
                 >
-                  {isSyncing ? "Sinkron..." : "Shift Aktif"}
+                  {isSyncing ? "Syncing..." : "Shift Active"}
                 </span>
               )}
               <button
                 type="button"
                 onClick={handleDisconnect}
-                title="Keluar Terminal Kasir"
+                title="Disconnect Cashier Terminal"
                 style={{
                   padding: "6px 8px",
                   borderRadius: 8,
@@ -1211,7 +1211,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
                 minWidth: 0
               }}
             >
-              Kasir: <strong style={{ color: theme.ink }}>{session.cashier.name}</strong>
+              Cashier: <strong style={{ color: theme.ink }}>{session.cashier.name}</strong>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
@@ -1233,7 +1233,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
                 }}
               >
                 <Wallet size={13} />
-                <span>Kas</span>
+                <span>Cash</span>
               </button>
               <button
                 type="button"
@@ -1253,7 +1253,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
                 }}
               >
                 <PowerOff size={13} />
-                <span>Tutup Shift</span>
+                <span>Close Shift</span>
               </button>
             </div>
           </div>
@@ -1281,7 +1281,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
                   }}
                 >
                   <Wallet size={14} />
-                  <span>Kas</span>
+                  <span>Cash</span>
                 </button>
                 <button
                   type="button"
@@ -1301,14 +1301,14 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
                   }}
                 >
                   <PowerOff size={14} />
-                  <span>Tutup Shift</span>
+                  <span>Close Shift</span>
                 </button>
               </>
             )}
             <button
               type="button"
               onClick={handleDisconnect}
-              title="Keluar Terminal Kasir"
+              title="Disconnect Cashier Terminal"
               style={{
                 padding: "6px 8px",
                 borderRadius: 8,
@@ -1338,7 +1338,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
             color: theme.inkSoft
           }}
         >
-          Memuat sesi kasir...
+          Loading cashier session...
         </div>
       ) : !activeShift ? (
         <OpenShiftView
@@ -1388,7 +1388,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
             onOpenScanner={() => setIsScannerOpen(true)}
             onOpenReport={() => {
               if (!session.cashier.permissions.canViewDailyReport) {
-                showToast("Akses laporan kasir dibatasi oleh pemilik toko.");
+                showToast("Cashier report access is restricted by the store owner.");
                 return;
               }
               setIsReportModalOpen(true);
@@ -1426,7 +1426,7 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
             }}
             allowManualDiscount={canManualDiscount}
             taxAmount={taxAmount}
-            taxLabel={`Pajak (${session.posConfig.taxPercent}%)`}
+            taxLabel={`Tax (${session.posConfig.taxPercent}%)`}
             serviceChargeAmount={serviceChargeAmount}
             serviceChargeLabel={`Service (${session.posConfig.serviceChargePercent}%)`}
             onUpdateItemNote={adaptiveMode.isFoodStore ? updateItemNote : undefined}
@@ -1617,13 +1617,13 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
         isOpen={Boolean(pendingVoidTx || billToCancelPin)}
         theme={theme}
         isSubmitting={isSubmittingAction}
-        title={billToCancelPin ? `Otorisasi Batal Bill ${billToCancelPin.label}` : undefined}
+        title={billToCancelPin ? `Authorize Cancel Bill ${billToCancelPin.label}` : undefined}
         description={
           billToCancelPin
-            ? `Membatalkan open bill meja terisi tanpa pembayaran membutuhkan PIN Supervisor dari pemilik toko.`
+            ? `Cancelling an occupied unpaid open table bill requires the Supervisor PIN from the store owner.`
             : undefined
         }
-        confirmLabel={billToCancelPin ? "Otorisasi & Batalkan Bill" : undefined}
+        confirmLabel={billToCancelPin ? "Authorize & Cancel Bill" : undefined}
         onClose={() => {
           setPendingVoidTx(null);
           setBillToCancelPin(null);

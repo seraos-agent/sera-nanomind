@@ -233,7 +233,7 @@ export function MerchantProfileView({
     } else {
       onSaveProfile(e);
     }
-    triggerFeedback("Metode pembayaran berhasil disimpan!");
+    triggerFeedback("Payment methods saved!");
     setViewMode("hub");
   };
 
@@ -322,7 +322,7 @@ export function MerchantProfileView({
       {/* 2. SUBPAGE: PROFILE & IDENTITY */}
       {viewMode === "profile" && (
         <SubPageLayout
-          title="Profil & Identitas"
+          title="Profile & Identity"
           theme={theme}
           isMobileView={isMobileView}
           onBack={() => setViewMode("hub")}
@@ -346,7 +346,7 @@ export function MerchantProfileView({
             onOpenWaModal={() => onVerifyWhatsapp?.(editWhatsapp)}
             editDescription={editDescription}
             setEditDescription={setEditDescription}
-            onSubmit={(e) => handleSaveSubForm(e, `Profil ${getStoreEntityLabel(editType, true)} berhasil disimpan!`)}
+            onSubmit={(e) => handleSaveSubForm(e, `${getStoreEntityLabel(editType)} profile saved!`)}
             onResetStore={isLocalTestingEnv && isRegistered && onResetStore ? () => setIsResetModalOpen(true) : undefined}
           />
         </SubPageLayout>
@@ -355,7 +355,7 @@ export function MerchantProfileView({
       {/* 3. SUBPAGE: CONTACT & LOCATION */}
       {viewMode === "location" && (
         <SubPageLayout
-          title="Kontak & Lokasi"
+          title="Contact & Location"
           theme={theme}
           isMobileView={isMobileView}
           onBack={() => setViewMode("hub")}
@@ -377,7 +377,7 @@ export function MerchantProfileView({
             setEditDistrict={setEditDistrict}
             editVillage={editVillage}
             setEditVillage={setEditVillage}
-            onSubmit={(e) => handleSaveSubForm(e, "Kontak & lokasi berhasil disimpan!")}
+            onSubmit={(e) => handleSaveSubForm(e, "Contact & location saved!")}
           />
         </SubPageLayout>
       )}
@@ -385,7 +385,7 @@ export function MerchantProfileView({
       {/* 4. SUBPAGE: OPERATING SCHEDULE */}
       {viewMode === "schedule" && (
         <SubPageLayout
-          title="Jadwal Operasional"
+          title="Operating Hours"
           theme={theme}
           isMobileView={isMobileView}
           onBack={() => setViewMode("hub")}
@@ -404,7 +404,7 @@ export function MerchantProfileView({
             setEditCloseTime={setEditCloseTime}
             editDailyCustomHours={editDailyCustomHours}
             setEditDailyCustomHours={setEditDailyCustomHours}
-            onSubmit={(e) => handleSaveSubForm(e, "Jadwal operasional berhasil disimpan!")}
+            onSubmit={(e) => handleSaveSubForm(e, "Operating hours saved!")}
           />
         </SubPageLayout>
       )}
@@ -412,7 +412,7 @@ export function MerchantProfileView({
       {/* 5. SUBPAGE: PAYMENT METHODS */}
       {viewMode === "payments" && (
         <SubPageLayout
-          title="Metode Pembayaran"
+          title="Payment Methods"
           theme={theme}
           isMobileView={isMobileView}
           onBack={() => setViewMode("hub")}
@@ -442,7 +442,7 @@ export function MerchantProfileView({
       {/* 6. SUBPAGE: POS & CASHIER STAFF SETTINGS */}
       {viewMode === "pos" && (
         <SubPageLayout
-          title="Pengaturan POS & Kasir"
+          title="POS & Cashier Settings"
           theme={theme}
           isMobileView={isMobileView}
           onBack={() => setViewMode("hub")}

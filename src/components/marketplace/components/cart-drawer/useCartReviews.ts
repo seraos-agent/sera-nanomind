@@ -38,7 +38,7 @@ export function useCartReviews(showToast: (msg: string) => void) {
     if (!files || files.length === 0) return;
     const file = files[0];
     if (file.size > 5 * 1024 * 1024) {
-      showToast('Ukuran foto maksimal 5 MB.');
+      showToast('Maximum photo size is 5 MB.');
       return;
     }
     const reader = new FileReader();
@@ -59,17 +59,17 @@ export function useCartReviews(showToast: (msg: string) => void) {
     onReviewSubmitted?: () => void
   ) => {
     if (!reviewComment.trim()) {
-      showToast('Silakan tulis ulasan atau penilaian Anda.');
+      showToast('Please write your review or rating comment.');
       return;
     }
     if (reviewComment.trim().length > 220) {
-      showToast('Ulasan maksimal 220 karakter.');
+      showToast('Review maximum length is 220 characters.');
       return;
     }
 
     const author =
       (order.customer?.name || localStorage.getItem('sera_customer_name') || '').trim() ||
-      'Pembeli';
+      'Buyer';
 
     const itemId = item.itemId || item.id;
     const reviewKey = `${order.id}_${itemId}`;
@@ -93,7 +93,7 @@ export function useCartReviews(showToast: (msg: string) => void) {
       });
 
       if (!res.ok) {
-        throw new Error('Gagal mengirim ulasan ke server');
+        throw new Error('Failed to submit review to server');
       }
 
       const nextReviewed = {
@@ -109,11 +109,11 @@ export function useCartReviews(showToast: (msg: string) => void) {
       setReviewedItems(nextReviewed);
       localStorage.setItem('sera_reviewed_items', JSON.stringify(nextReviewed));
 
-      showToast('✓ Ulasan berhasil dipublikasikan!');
+      showToast('✓ Review published successfully!');
       handleCancelReview();
       if (onReviewSubmitted) onReviewSubmitted();
     } catch (err: any) {
-      showToast(`Gagal: ${err.message}`);
+      showToast(`Failed: ${err.message}`);
     } finally {
       setIsSubmittingReview(false);
     }

@@ -71,14 +71,14 @@ export const ProductCategoryTabs: React.FC<ProductCategoryTabsProps> = ({
           <Plus size={16} color={theme.ink} style={{ flexShrink: 0 }} />
           <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
             {storeType === "JASA"
-              ? "Layanan Baru"
+              ? "New Service"
               : storeType === "FOOD"
-                ? "Menu Baru"
-                : "Produk Baru"}
+                ? "New Menu"
+                : "New Product"}
           </span>
         </button>
 
-        {/* Tombol Kanan: Tambah Kategori */}
+        {/* Right Button: Add Category */}
         <button
           type="button"
           onClick={onToggleAddCategory}
@@ -118,7 +118,7 @@ export const ProductCategoryTabs: React.FC<ProductCategoryTabsProps> = ({
         >
           <FolderPlus size={16} color={theme.ink} style={{ flexShrink: 0 }} />
           <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-            {isAddingCategory ? "Tutup Form" : "Kategori"}
+            {isAddingCategory ? "Close Form" : "Category"}
           </span>
         </button>
       </div>
@@ -160,11 +160,11 @@ export const ProductCategoryTabs: React.FC<ProductCategoryTabsProps> = ({
             transition: "all 0.15s ease"
           }}
         >
-          <span>Semua</span>
+          <span>All</span>
           <span style={{ fontSize: 10, opacity: 0.8 }}>({totalProducts})</span>
         </button>
 
-        {/* Tab 2: Draft (Produk Belum Lengkap / Tanpa Foto) */}
+        {/* Tab 2: Drafts */}
         <button
           type="button"
           onClick={() => onSelectTab("DRAFT")}
@@ -195,7 +195,7 @@ export const ProductCategoryTabs: React.FC<ProductCategoryTabsProps> = ({
           <span style={{ fontSize: 10, opacity: 0.85 }}>({totalDrafts})</span>
         </button>
 
-        {/* Tab 3: Kategori */}
+        {/* Tab 3: Categories */}
         <button
           type="button"
           onClick={() => onSelectTab("KATEGORI")}
@@ -218,7 +218,7 @@ export const ProductCategoryTabs: React.FC<ProductCategoryTabsProps> = ({
             transition: "all 0.15s ease"
           }}
         >
-          <span>Kategori</span>
+          <span>Categories</span>
           <span style={{ fontSize: 10, opacity: 0.8 }}>({totalCategories})</span>
         </button>
       </div>

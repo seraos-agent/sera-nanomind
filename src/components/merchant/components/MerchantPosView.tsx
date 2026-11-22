@@ -217,7 +217,7 @@ export function MerchantPosView({
       showToast(`+1 ${matched.name}`);
     },
     onBarcodeNotFound: (code) => {
-      showToast(`Produk barcode "${code}" tidak ditemukan`);
+      showToast(`Product barcode "${code}" not found`);
     }
   });
 
@@ -414,7 +414,7 @@ export function MerchantPosView({
   const handleFinalizeTransaction = (splitPayments?: PosPaymentPart[]) => {
     if (cart.length === 0) return;
     if (!splitPayments && paymentMethod === "CASH" && !isCashSufficient) {
-      showToast("Nominal uang tunai belum mencukupi!");
+      showToast("Insufficient cash tendered!");
       return;
     }
 
@@ -474,7 +474,7 @@ export function MerchantPosView({
       }
       showToast(res.message);
     } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : "Gagal mencetak tiket dapur.");
+      showToast(err instanceof Error ? err.message : "Failed to print kitchen ticket.");
     }
   };
 
@@ -496,7 +496,7 @@ export function MerchantPosView({
       const res = await printKitchenTicketHybrid(fullPayload);
       showToast(res.message);
     } catch (err: unknown) {
-      showToast(err instanceof Error ? err.message : "Gagal mencetak ulang tiket dapur.");
+      showToast(err instanceof Error ? err.message : "Failed to reprint kitchen ticket.");
     } finally {
       setKitchenReprintPayload(null);
     }
@@ -620,7 +620,7 @@ export function MerchantPosView({
             onSetManualDiscountNominal={setManualDiscountNominal}
             onSetShowDiscountInput={setShowDiscountInput}
             taxAmount={taxAmount}
-            taxLabel={`Pajak (${posConfig.taxPercent}%)`}
+            taxLabel={`Tax (${posConfig.taxPercent}%)`}
             serviceChargeAmount={serviceChargeAmount}
             serviceChargeLabel={`Service (${posConfig.serviceChargePercent}%)`}
             onUpdateQuantity={updateQuantity}
@@ -698,7 +698,7 @@ export function MerchantPosView({
           onSetManualDiscountNominal={setManualDiscountNominal}
           onSetShowDiscountInput={setShowDiscountInput}
           taxAmount={taxAmount}
-          taxLabel={`Pajak (${posConfig.taxPercent}%)`}
+          taxLabel={`Tax (${posConfig.taxPercent}%)`}
           serviceChargeAmount={serviceChargeAmount}
           serviceChargeLabel={`Service (${posConfig.serviceChargePercent}%)`}
           onUpdateQuantity={updateQuantity}
@@ -864,7 +864,7 @@ export function MerchantPosView({
                   clearCart();
                 }
                 playBeep();
-                showToast(`Open bill ${billToCancel.label} dibatalkan.`);
+                showToast(`Open bill ${billToCancel.label} cancelled.`);
                 setBillToCancel(null);
               }}
             />

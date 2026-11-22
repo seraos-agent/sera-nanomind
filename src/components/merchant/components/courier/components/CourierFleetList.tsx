@@ -41,12 +41,12 @@ export function CourierFleetList({
         boxShadow: "0 1px 3px rgba(0,0,0,0.02)"
       }}
     >
-      {/* Header Kurir Toko */}
+      {/* Store Couriers Header */}
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        {/* Baris 1: Judul di kiri, Button Tambah di kanan */}
+        {/* Row 1: Title on left, Add button on right */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Kurir Toko
+            Store Couriers
           </div>
 
           <button
@@ -66,14 +66,14 @@ export function CourierFleetList({
               transition: "opacity 0.15s ease"
             }}
           >
-            Tambah
+            Add
           </button>
         </div>
 
-        {/* Baris 2: Sub teks di kiri, Keterangan jumlah kurir di kanan */}
+        {/* Row 2: Subtitle on left, Courier count pill on right */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <div style={{ fontSize: 12.5, color: theme.inkSoft }}>
-            Staf pengantar pesanan langsung ke pembeli
+            Staff delivering orders directly to buyers
           </div>
 
           <span
@@ -89,7 +89,7 @@ export function CourierFleetList({
               flexShrink: 0
             }}
           >
-            {linkedCouriers.length} Kurir
+            {linkedCouriers.length} Couriers
           </span>
         </div>
       </div>
@@ -125,7 +125,7 @@ export function CourierFleetList({
             <Truck size={20} />
           </div>
           <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink, margin: "0 0 4px 0" }}>
-            Belum Ada Kurir Terdaftar
+            No Registered Couriers Yet
           </div>
           <div
             style={{
@@ -136,7 +136,7 @@ export function CourierFleetList({
               maxWidth: 320
             }}
           >
-            Daftarkan staf toko untuk membuatkan PIN Aktivasi unik yang dapat dimasukkan di aplikasi kurir.
+            Register store staff to generate a unique Activation PIN for the courier app.
           </div>
           <button
             type="button"
@@ -158,7 +158,7 @@ export function CourierFleetList({
             }}
           >
             <Plus size={14} />
-            <span>Tambah Kurir Pertama</span>
+            <span>Add First Courier</span>
           </button>
         </div>
       ) : (

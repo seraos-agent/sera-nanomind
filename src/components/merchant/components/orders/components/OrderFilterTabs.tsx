@@ -55,7 +55,7 @@ export const OrderFilterTabs: React.FC<OrderFilterTabsProps> = ({
         onClick={() => setFilter("ACTIVE")}
         style={getTabStyle("ACTIVE")}
       >
-        Pesanan ({activeCount})
+        Orders ({activeCount})
       </button>
 
       <button
@@ -63,7 +63,7 @@ export const OrderFilterTabs: React.FC<OrderFilterTabsProps> = ({
         onClick={() => setFilter("COURIER")}
         style={getTabStyle("COURIER")}
       >
-        Dikirim ({shippedCount})
+        Shipped ({shippedCount})
       </button>
 
       <button
@@ -71,7 +71,7 @@ export const OrderFilterTabs: React.FC<OrderFilterTabsProps> = ({
         onClick={() => setFilter("COMPLETED")}
         style={getTabStyle("COMPLETED")}
       >
-        Selesai
+        Completed
       </button>
 
       <button
@@ -79,7 +79,7 @@ export const OrderFilterTabs: React.FC<OrderFilterTabsProps> = ({
         onClick={() => setFilter("REVIEWS")}
         style={getTabStyle("REVIEWS")}
       >
-        Ulasan
+        Reviews
       </button>
     </div>
   );

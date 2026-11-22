@@ -8,11 +8,11 @@ interface StoreReportModalProps {
 }
 
 const STORE_REPORT_REASONS = [
-  'Penipuan atau Indikasi Fake Store',
-  'Pesanan Tidak Dikirim / Respon Menipu',
-  'Menjual Produk Terlarang / Berbahaya',
-  'Spam atau Penipuan Identitas',
-  'Penyalahgunaan Akun',
+  'Fraud or Fake Store Indication',
+  'Orders Not Shipped / Deceptive Responses',
+  'Selling Prohibited / Hazardous Products',
+  'Spam or Identity Impersonation',
+  'Account Misuse',
 ];
 
 export const StoreReportModal: React.FC<StoreReportModalProps> = ({
@@ -57,7 +57,7 @@ export const StoreReportModal: React.FC<StoreReportModalProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '1.2rem' }}>🚩</span>
             <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
-              Laporkan Toko
+              Report Store
             </h3>
           </div>
           <button
@@ -76,7 +76,7 @@ export const StoreReportModal: React.FC<StoreReportModalProps> = ({
         </div>
 
         <p style={{ margin: '0 0 14px 0', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-          Bantu kami menjaga ekosistem SERA tetap terpercaya. Pilih alasan pelaporan untuk toko{' '}
+          Help us keep the SERA ecosystem trustworthy. Select a report reason for store{' '}
           <strong>{storeName}</strong>:
         </p>
 
@@ -127,7 +127,7 @@ export const StoreReportModal: React.FC<StoreReportModalProps> = ({
               cursor: 'pointer',
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             onClick={() => onSubmit(reportReason)}
@@ -144,7 +144,7 @@ export const StoreReportModal: React.FC<StoreReportModalProps> = ({
               boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
             }}
           >
-            Kirim Laporan
+            Submit Report
           </button>
         </div>
       </div>

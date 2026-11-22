@@ -19,7 +19,7 @@ export class MerchantErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, errorMessage: error?.message || "Terjadi kendala memuat data toko." };
+    return { hasError: true, errorMessage: error?.message || "Failed to load store data." };
   }
 
   componentDidCatch(error: Error, info: any) {
@@ -70,10 +70,10 @@ export class MerchantErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
           >
             <div style={{ fontSize: 36 }}>🏪</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>
-              Pemulihan Mitra Store
+              Merchant Store Recovery
             </div>
             <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.5 }}>
-              Memori penyimpanan lokal browser sempat melebihi batas karena foto pesanan sebelumnya. Tekan tombol di bawah untuk membersihkan memori dan membuka toko.
+              Browser local storage ran out of space due to cached order photos. Click below to clear order cache and reopen your store.
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%", marginTop: 6 }}>
               <button
@@ -91,7 +91,7 @@ export class MerchantErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
                   cursor: "pointer"
                 }}
               >
-                Bersihkan Cache &amp; Buka Toko
+                Clear Cache &amp; Reopen Store
               </button>
               <button
                 type="button"
@@ -108,7 +108,7 @@ export class MerchantErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
                   cursor: "pointer"
                 }}
               >
-                Kembali ke Beranda
+                Back to Home
               </button>
             </div>
           </div>

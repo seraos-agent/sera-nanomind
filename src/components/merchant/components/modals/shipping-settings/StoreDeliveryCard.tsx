@@ -71,14 +71,14 @@ export function StoreDeliveryCard({
           }}
         >
           <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Dikirim oleh {entity}
+            Delivered by {entity}
           </div>
 
           <ShippingToggleSwitch checked={storeDelivery} theme={theme} />
         </div>
 
         <p style={{ margin: 0, fontSize: 13, color: theme.inkSoft, lineHeight: 1.45 }}>
-          Pesanan diantar langsung ke alamat pembeli oleh kurir {entityLower}.
+          Orders are delivered directly to the buyer's address by a {entityLower} courier.
         </p>
       </div>
 
@@ -104,7 +104,7 @@ export function StoreDeliveryCard({
                 marginBottom: 8,
               }}
             >
-              Radius Maksimal Pengantaran
+              Max Delivery Radius
             </label>
             <div
               style={{
@@ -156,13 +156,13 @@ export function StoreDeliveryCard({
                   flexShrink: 0,
                 }}
               >
-                KM dari toko
+                KM from store
               </div>
             </div>
             <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 6, lineHeight: 1.4 }}>
               {parsedRadius === 0
-                ? 'Tanpa batas radius (melayani seluruh area pengantaran)'
-                : `Hanya melayani pembeli dalam radius maksimal ${parsedRadius} km dari toko`}
+                ? 'Unlimited radius (serves all delivery areas)'
+                : `Serves buyers within a maximum ${parsedRadius} km radius from the store`}
             </div>
           </div>
 
@@ -177,7 +177,7 @@ export function StoreDeliveryCard({
                 marginBottom: 8,
               }}
             >
-              Model Perhitungan Ongkos Kirim
+              Shipping Fee Calculation Model
             </label>
             <div
               style={{
@@ -209,7 +209,7 @@ export function StoreDeliveryCard({
                   userSelect: 'none',
                 }}
               >
-                Tarif Tetap
+                Flat Rate
               </button>
               <button
                 type="button"
@@ -229,7 +229,7 @@ export function StoreDeliveryCard({
                   userSelect: 'none',
                 }}
               >
-                Berdasarkan Jarak
+                Distance-Based
               </button>
             </div>
 
@@ -290,8 +290,8 @@ export function StoreDeliveryCard({
                 </div>
                 <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 6, lineHeight: 1.4 }}>
                   {parsedFee === 0
-                    ? 'Gratis ongkir untuk pembeli'
-                    : `Ongkir tetap Rp ${parsedFee.toLocaleString('id-ID')} untuk setiap pesanan`}
+                    ? 'Free shipping for buyers'
+                    : `Flat shipping fee Rp ${parsedFee.toLocaleString('id-ID')} per order`}
                 </div>
               </div>
             ) : (
@@ -307,7 +307,7 @@ export function StoreDeliveryCard({
                       marginBottom: 8,
                     }}
                   >
-                    Tarif Dasar (KM Pertama)
+                    Base Rate (First KM)
                   </label>
                   <div
                     style={{
@@ -375,7 +375,7 @@ export function StoreDeliveryCard({
                       marginBottom: 8,
                     }}
                   >
-                    Tarif Tambahan Tiap +1 KM
+                    Additional Rate per +1 KM
                   </label>
                   <div
                     style={{
@@ -433,7 +433,7 @@ export function StoreDeliveryCard({
                 </div>
 
                 <div style={{ fontSize: 12, color: theme.inkSoft, lineHeight: 1.4 }}>
-                  {`Contoh: Jarak 3 km = Rp ${parsedFee.toLocaleString('id-ID')} + 2x Rp ${parsedFeePerKm.toLocaleString('id-ID')} = Rp ${(parsedFee + 2 * parsedFeePerKm).toLocaleString('id-ID')}`}
+                  {`Example: 3 km distance = Rp ${parsedFee.toLocaleString('id-ID')} + 2x Rp ${parsedFeePerKm.toLocaleString('id-ID')} = Rp ${(parsedFee + 2 * parsedFeePerKm).toLocaleString('id-ID')}`}
                 </div>
               </div>
             )}

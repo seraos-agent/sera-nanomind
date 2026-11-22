@@ -54,12 +54,12 @@ export function DeleteAccountModal({
         }}
       >
         <div>
-          <div style={{ fontSize: 18, fontWeight: 700, color: theme.ink }}>Hapus Akun?</div>
-          <div style={{ fontSize: 12.5, color: '#ef4444', fontWeight: 600, marginTop: 2 }}>Tindakan Permanen</div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: theme.ink }}>Delete Account?</div>
+          <div style={{ fontSize: 12.5, color: '#ef4444', fontWeight: 600, marginTop: 2 }}>Permanent Action</div>
         </div>
 
         <p style={{ fontSize: 13.5, lineHeight: 1.55, color: theme.inkSoft, margin: 0 }}>
-          Apakah Anda yakin ingin menghapus akun ini? Seluruh data profil, sesi percakapan, cache lokal, dan preferensi AI Anda akan dihapus secara permanen dan tidak dapat dipulihkan.
+          Are you sure you want to delete this account? All profile data, conversation sessions, local cache, and AI preferences will be permanently deleted and cannot be recovered.
         </p>
 
         <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
@@ -80,7 +80,7 @@ export function DeleteAccountModal({
               opacity: isDeleting ? 0.6 : 1,
             }}
           >
-            Batal
+            Cancel
           </button>
 
           <button
@@ -107,10 +107,10 @@ export function DeleteAccountModal({
             {isDeleting ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
-                <span>Menghapus...</span>
+                <span>Deleting...</span>
               </>
             ) : (
-              <span>Hapus akun</span>
+              <span>Delete account</span>
             )}
           </button>
         </div>

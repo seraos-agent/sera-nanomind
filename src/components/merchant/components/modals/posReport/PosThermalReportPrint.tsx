@@ -30,46 +30,46 @@ export function PosThermalReportPrint({
         }}
       >
         <div style={{ textAlign: "center", fontWeight: "bold", fontSize: 13 }}>
-          {store?.name || "MITRA SERA"}
+          {store?.name || "SERA MERCHANT"}
         </div>
         <div style={{ textAlign: "center", fontSize: 10 }}>
-          LAPORAN REKAP KASIR
+          POS SALES &amp; SHIFT SUMMARY
         </div>
         <div style={{ textAlign: "center", fontSize: 9 }}>
-          {periodLabel || `${new Date().toLocaleDateString("id-ID")} • ${new Date().toLocaleTimeString("id-ID")}`}
+          {periodLabel || `${new Date().toLocaleDateString("en-US")} • ${new Date().toLocaleTimeString("en-US")}`}
         </div>
         <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10 }}>
-          <span>Uang Tunai:</span>
+          <span>Cash:</span>
           <span>Rp {totalCashInDrawer.toLocaleString("id-ID")}</span>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10 }}>
-          <span>Non-Tunai:</span>
+          <span>Non-Cash:</span>
           <span>Rp {totalNonCash.toLocaleString("id-ID")}</span>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: "bold", marginTop: 4 }}>
-          <span>TOTAL OMSET:</span>
+          <span>TOTAL REVENUE:</span>
           <span>Rp {totalRevenue.toLocaleString("id-ID")}</span>
         </div>
         {totalCogs !== undefined && totalCogs > 0 && grossProfit !== undefined && (
           <>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10 }}>
-              <span>Total Modal (HPP):</span>
+              <span>Total COGS:</span>
               <span>Rp {totalCogs.toLocaleString("id-ID")}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, fontWeight: "bold" }}>
-              <span>Laba Kotor:</span>
+              <span>Gross Profit:</span>
               <span>Rp {grossProfit.toLocaleString("id-ID")}</span>
             </div>
           </>
         )}
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9 }}>
-          <span>Total Transaksi:</span>
+          <span>Total Transactions:</span>
           <span>{activeTransactionsCount}</span>
         </div>
         <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
         <div style={{ textAlign: "center", fontSize: 9 }}>
-          Dicetak dari SERA POS
+          Printed from SERA POS
         </div>
       </div>
     </>

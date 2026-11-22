@@ -23,9 +23,9 @@ interface CheckoutPaymentSectionProps {
 }
 
 const PAYMENT_OPTIONS = [
-  { key: 'QRIS' as const, title: 'QRIS Instan', sub: 'Semua Bank & E-Wallet', available: true },
-  { key: 'TRANSFER' as const, title: 'Transfer Bank / E-Wallet', sub: 'BCA, Mandiri, DANA, OVO, dll', available: true },
-  { key: 'COD' as const, title: 'Bayar di Tempat', sub: 'Segera hadir', available: false },
+  { key: 'QRIS' as const, title: 'Instant QRIS', sub: 'All Banks & E-Wallets', available: true },
+  { key: 'TRANSFER' as const, title: 'Bank / E-Wallet Transfer', sub: 'BCA, Mandiri, DANA, OVO, etc.', available: true },
+  { key: 'COD' as const, title: 'Cash on Delivery', sub: 'Coming soon', available: false },
 ];
 
 export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
@@ -52,7 +52,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
     <>
       <div>
         <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '8px' }}>
-          Metode pembayaran
+          Payment method
         </label>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
           {PAYMENT_OPTIONS.map((pm, idx) => {
@@ -120,7 +120,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  QRIS Resmi Toko
+                  Official Store QRIS
                 </div>
                 <div style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '1px' }}>
                   {storeName}
@@ -135,7 +135,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-main)'
               }}>
-                Semua Aplikasi Pembayaran
+                All Payment Apps
               </span>
             </div>
 
@@ -151,7 +151,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
             }}>
               <img
                 src={storeQrisUrl}
-                alt="QRIS Toko"
+                alt="Store QRIS"
                 style={{
                   width: '175px',
                   height: '175px',
@@ -160,7 +160,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
                 }}
               />
               <div style={{ fontSize: '0.72rem', color: '#64748B', marginTop: '6px', fontWeight: 500, textAlign: 'center' }}>
-                Pindai dengan BCA, Livin, GoPay, OVO, ShopeePay, DANA, dll.
+                Scan with BCA, Livin, GoPay, OVO, ShopeePay, DANA, etc.
               </div>
             </div>
 
@@ -185,7 +185,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
                 }}
               >
                 <Download size={13} />
-                <span>Unduh QR</span>
+                <span>Download QR</span>
               </button>
 
               <button
@@ -208,7 +208,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
                 }}
               >
                 {copiedField === 'qris-amt' ? <Check size={13} color="#10B981" /> : <Copy size={13} />}
-                <span>{copiedField === 'qris-amt' ? 'Tersalin!' : `Salin Rp ${totalAmount.toLocaleString('id-ID')}`}</span>
+                <span>{copiedField === 'qris-amt' ? 'Copied!' : `Copy Rp ${totalAmount.toLocaleString('id-ID')}`}</span>
               </button>
             </div>
           </div>
@@ -216,10 +216,10 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div>
               <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                Tujuan Transfer Bank / E-Wallet
+                Bank / E-Wallet Transfer Destination
               </div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-main)', marginTop: '2px' }}>
-                Kirim pembayaran sesuai total tagihan ke rekening / akun resmi toko:
+                Send payment matching the total due to the store's official account:
               </div>
             </div>
 
@@ -264,14 +264,14 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
                   }}
                 >
                   {copiedField === 'tf-amt' ? <Check size={12} color="#10B981" /> : <Copy size={12} />}
-                  <span>{copiedField === 'tf-amt' ? 'Tersalin' : `Rp ${totalAmount.toLocaleString('id-ID')}`}</span>
+                  <span>{copiedField === 'tf-amt' ? 'Copied' : `Rp ${totalAmount.toLocaleString('id-ID')}`}</span>
                 </button>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                 <div>
                   <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                    Nomor Rekening / Akun E-Wallet
+                    Account Number / E-Wallet Account
                   </div>
                   <div style={{ fontSize: '1.05rem', fontWeight: 800, fontFamily: 'monospace', color: 'var(--text-main)', letterSpacing: '0.5px', marginTop: '1px' }}>
                     {storeAccountNumber}
@@ -296,12 +296,12 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
                   }}
                 >
                   {copiedField === 'tf-acc' ? <Check size={13} color="#10B981" /> : <Copy size={13} />}
-                  <span>{copiedField === 'tf-acc' ? 'Tersalin!' : 'Salin Nomor'}</span>
+                  <span>{copiedField === 'tf-acc' ? 'Copied!' : 'Copy Number'}</span>
                 </button>
               </div>
 
               <div style={{ borderTop: '1px dashed var(--border-color)', paddingTop: '6px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                Atas Nama: <strong style={{ color: 'var(--text-main)' }}>{storeAccountHolder}</strong>
+                Account Holder: <strong style={{ color: 'var(--text-main)' }}>{storeAccountHolder}</strong>
               </div>
             </div>
           </div>
@@ -310,12 +310,12 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
         <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
             <label style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)' }}>
-              Bukti Pembayaran <span style={{ color: '#EF4444' }}>*Wajib</span>
+              Payment Proof <span style={{ color: '#EF4444' }}>*Required</span>
             </label>
             {paymentProof && (
               <span style={{ fontSize: '0.72rem', color: '#10B981', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                 <CheckCircle2 size={12} color="#10B981" />
-                <span>Terlampir</span>
+                <span>Attached</span>
               </span>
             )}
           </div>
@@ -350,7 +350,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
               }}
             >
               <Upload size={16} color="var(--text-muted)" />
-              <span>{isUploadingProof ? 'Memuat gambar...' : 'Unggah Foto / Screenshot Bukti Transfer'}</span>
+              <span>{isUploadingProof ? 'Loading image...' : 'Upload Transfer Proof Photo / Screenshot'}</span>
             </button>
           ) : (
             <div style={{
@@ -364,7 +364,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
             }}>
               <img
                 src={paymentProof}
-                alt="Bukti Transfer"
+                alt="Transfer Proof"
                 style={{
                   width: '46px',
                   height: '46px',
@@ -375,10 +375,10 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
               />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  Bukti Transfer Terlampir
+                  Transfer Proof Attached
                 </div>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                  Foto siap dikirim ke toko
+                  Photo ready to send to the store
                 </div>
               </div>
               <button
@@ -395,7 +395,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
                   cursor: 'pointer'
                 }}
               >
-                Ganti
+                Change
               </button>
             </div>
           )}
@@ -418,9 +418,9 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
           <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>Rp {subtotal.toLocaleString('id-ID')}</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>Biaya pengiriman</span>
+          <span>Delivery fee</span>
           <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
-            {deliveryOrServiceFee > 0 ? `Rp ${deliveryOrServiceFee.toLocaleString('id-ID')}` : 'Gratis'}
+            {deliveryOrServiceFee > 0 ? `Rp ${deliveryOrServiceFee.toLocaleString('id-ID')}` : 'Free'}
           </span>
         </div>
         <div style={{
@@ -433,7 +433,7 @@ export const CheckoutPaymentSection: React.FC<CheckoutPaymentSectionProps> = ({
           borderTop: '1px solid var(--border-color)',
           fontSize: '0.92rem'
         }}>
-          <span>Total pembayaran</span>
+          <span>Total payment</span>
           <span>Rp {totalAmount.toLocaleString('id-ID')}</span>
         </div>
       </div>

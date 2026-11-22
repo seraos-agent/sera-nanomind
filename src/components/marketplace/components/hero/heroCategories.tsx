@@ -96,47 +96,47 @@ const ArmchairIcon: React.FC = () => (
 );
 
 export const ALL_CATEGORIES: CategoryItemDef[] = [
-  { id: 'pertanian', name: 'Pertanian', label: 'Pertanian', icon: <SproutIcon />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'kuliner', name: 'Kuliner & Makanan', label: 'Kuliner', icon: <MealFoodIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'kopi', name: 'Kuliner & Minuman', label: 'Kopi', icon: <BakeryCoffeeIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'sepatu', name: 'Jasa Kebersihan & Perawatan', label: 'Cuci Sepatu', icon: <WashingMachineIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'ac', name: 'Jasa Servis & Elektronik', label: 'Servis AC', icon: <ToolsWrenchIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'barber', name: 'Perawatan & Kecantikan', label: 'Barber', icon: <ScissorsIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'logistik', name: 'Pengiriman & Logistik', label: 'Kurir Toko', icon: <PackageIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'all', name: '__ALL__', label: 'Lihat Semua', isDots: true, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'pertanian', name: 'Agriculture', label: 'Agriculture', icon: <SproutIcon />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'kuliner', name: 'Food & Culinary', label: 'Culinary', icon: <MealFoodIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'kopi', name: 'Food & Beverages', label: 'Coffee', icon: <BakeryCoffeeIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'sepatu', name: 'Cleaning & Care Services', label: 'Shoe Care', icon: <WashingMachineIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'ac', name: 'Repair & Electronics Services', label: 'AC Repair', icon: <ToolsWrenchIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'barber', name: 'Grooming & Beauty', label: 'Barber', icon: <ScissorsIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'logistik', name: 'Delivery & Logistics', label: 'Store Courier', icon: <PackageIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'all', name: '__ALL__', label: 'View All', isDots: true, bg: '#EFF6FF', color: '#2563EB' },
 ];
 
 export const STORE_CATEGORIES: CategoryItemDef[] = [
-  { id: 'sembako', name: 'Sembako', label: 'Sembako', icon: <StoreIcon />, bg: '#F1F5F9', color: '#0F172A' },
-  { id: 'sayur_buah', name: 'Sayur & Buah', label: 'Sayur & Buah', icon: <AppleIcon />, bg: '#FEF2F2', color: '#DC2626' },
+  { id: 'sembako', name: 'Groceries', label: 'Groceries', icon: <StoreIcon />, bg: '#F1F5F9', color: '#0F172A' },
+  { id: 'sayur_buah', name: 'Produce & Fruit', label: 'Produce', icon: <AppleIcon />, bg: '#FEF2F2', color: '#DC2626' },
   { id: 'petshop', name: 'Petshop', label: 'Petshop', icon: <PawPrintIcon />, bg: '#FFF7ED', color: '#EA580C' },
-  { id: 'bangunan', name: 'Bangunan', label: 'Bangunan', icon: <HardHatIcon />, bg: '#FFFBEB', color: '#D97706' },
-  { id: 'kecantikan', name: 'Kecantikan', label: 'Kecantikan', icon: <LipstickIcon />, bg: '#FFF1F2', color: '#E11D48', isSoon: true },
-  { id: 'rumah', name: 'Rumah Tangga', label: 'Perabot', icon: <ArmchairIcon />, bg: '#F0FDFA', color: '#0D9488' },
-  { id: 'pertanian', name: 'Pertanian', label: 'Pertanian', icon: <SproutIcon />, bg: '#F0FDF4', color: '#16A34A' },
-  { id: 'all_store', name: '__ALL__', label: 'Semua', isDots: true, bg: '#F1F5F9', color: '#0F172A' },
+  { id: 'bangunan', name: 'Hardware', label: 'Hardware', icon: <HardHatIcon />, bg: '#FFFBEB', color: '#D97706' },
+  { id: 'kecantikan', name: 'Beauty', label: 'Beauty', icon: <LipstickIcon />, bg: '#FFF1F2', color: '#E11D48', isSoon: true },
+  { id: 'rumah', name: 'Home & Living', label: 'Home Goods', icon: <ArmchairIcon />, bg: '#F0FDFA', color: '#0D9488' },
+  { id: 'pertanian', name: 'Agriculture', label: 'Agriculture', icon: <SproutIcon />, bg: '#F0FDF4', color: '#16A34A' },
+  { id: 'all_store', name: '__ALL__', label: 'All', isDots: true, bg: '#F1F5F9', color: '#0F172A' },
 ];
 
 export const FOOD_CATEGORIES: CategoryItemDef[] = [
   { id: 'all_food', name: '__ALL__', label: 'All', icon: <AllFoodIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
-  { id: 'makanan', name: 'Makanan', label: 'Makanan', icon: <MealFoodIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
-  { id: 'minuman', name: 'Minuman', label: 'Minuman', icon: <DrinkFoodIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
-  { id: 'cemilan', name: 'Cemilan', label: 'Cemilan', icon: <SnackFoodIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
+  { id: 'makanan', name: 'Meals', label: 'Meals', icon: <MealFoodIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
+  { id: 'minuman', name: 'Drinks', label: 'Drinks', icon: <DrinkFoodIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
+  { id: 'cemilan', name: 'Snacks', label: 'Snacks', icon: <SnackFoodIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
   { id: 'bakery_coffee', name: 'Bakery & Coffee', label: 'Bakery & Coffee', icon: <BakeryCoffeeIcon size={21} />, bg: '#F1F5F9', color: '#0F172A' },
 ];
 
 export const SERVICE_CATEGORIES: CategoryItemDef[] = [
   { id: 'cleaning', name: 'Cleaning', label: 'Cleaning', icon: <SparklesCleanIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'elektronik', name: 'Elektronik', label: 'Elektronik', icon: <ToolsWrenchIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'tukang', name: 'Tukang', label: 'Tukang', icon: <HammerIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'pijat', name: 'Pijat', label: 'Pijat', icon: <SpaMassageIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'elektronik', name: 'Electronics', label: 'Electronics', icon: <ToolsWrenchIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'tukang', name: 'Handyman', label: 'Handyman', icon: <HammerIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'pijat', name: 'Massage', label: 'Massage', icon: <SpaMassageIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
   { id: 'travel', name: 'Travel', label: 'Travel', icon: <ShuttleVanIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'penginapan', name: 'Penginapan', label: 'Penginapan', icon: <HotelVillaIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'penginapan', name: 'Lodging', label: 'Lodging', icon: <HotelVillaIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
   { id: 'laundry', name: 'Laundry', label: 'Laundry', icon: <WashingMachineIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
   { id: 'hampers', name: 'Hampers', label: 'Hampers', icon: <GiftBoxIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'listrik', name: 'Listrik', label: 'Listrik', icon: <ZapBoltIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'listrik', name: 'Electrical', label: 'Electrical', icon: <ZapBoltIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
   { id: 'laptop', name: 'Laptop', label: 'Laptop', icon: <LaptopIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
   { id: 'barber', name: 'Barber', label: 'Barber', icon: <ScissorsIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'cucimobil', name: 'Cuci Mobil', label: 'Cuci Mobil', icon: <CarWashIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
-  { id: 'all_services', name: '__ALL__', label: 'Semua', isDots: true, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'cucimobil', name: 'Car Wash', label: 'Car Wash', icon: <CarWashIcon size={21} />, bg: '#EFF6FF', color: '#2563EB' },
+  { id: 'all_services', name: '__ALL__', label: 'All', isDots: true, bg: '#EFF6FF', color: '#2563EB' },
 ];

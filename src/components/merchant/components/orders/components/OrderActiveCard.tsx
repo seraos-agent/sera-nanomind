@@ -85,7 +85,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
             <button
               type="button"
               onClick={() => setShowProofModal(true)}
-              title="Lihat Bukti Transfer Pembayaran"
+              title="View Payment Proof"
               style={{
                 padding: "2px 7px",
                 borderRadius: 5,
@@ -101,7 +101,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
               }}
             >
               <Eye size={11} />
-              <span>Bukti Bayar</span>
+              <span>Payment Proof</span>
             </button>
           )}
           <span
@@ -129,17 +129,17 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
             }}
           >
             {order.shippingMethod === "PICKUP"
-              ? `Ambil di ${store?.type === "FOOD" ? "Resto" : "Toko"}`
+              ? `${store?.type === "FOOD" ? "Restaurant" : "Store"} Pickup`
               : order.shippingMethod === "STORE_DELIVERY"
-                ? `Kurir ${store?.type === "FOOD" ? "Resto" : "Toko"}`
+                ? `${store?.type === "FOOD" ? "Restaurant" : "Store"} Courier`
                 : order.shippingMethod === "REGULAR"
-                  ? "Ekspedisi"
-                  : "Kurir SERA"}
+                  ? "Standard Shipping"
+                  : "SERA Courier"}
           </span>
         </div>
       </div>
 
-      {/* Rincian Produk, Nama Pembeli (+ Icon WA), Alamat & Catatan */}
+      {/* Product Details, Buyer Name (+ WA Icon), Address & Notes */}
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         <div
           style={{
@@ -160,11 +160,11 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
                   .replace(/^0/, "62")
                   .replace(/[^0-9]/g, "");
                 const text = encodeURIComponent(
-                  `Halo Kak ${order.customerName}, kami dari ${store?.name || "Toko"} mengonfirmasi pesanan ${order.id}.`
+                  `Hi ${order.customerName}, we are reaching out from ${store?.name || "the store"} regarding order ${order.id}.`
                 );
                 window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
               }}
-              title={`Chat WhatsApp ${order.customerName}`}
+              title={`WhatsApp Chat ${order.customerName}`}
               style={{
                 padding: "4px 6px",
                 borderRadius: 6,
@@ -202,7 +202,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
               lineHeight: 1.4
             }}
           >
-            <span style={{ color: theme.inkSoft, fontWeight: 600 }}>Catatan: </span>
+            <span style={{ color: theme.inkSoft, fontWeight: 600 }}>Note: </span>
             <span>"{order.customerNote}"</span>
           </div>
         )}
@@ -249,7 +249,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
       >
         <div>
           <div style={{ fontSize: 10, color: theme.inkSoft, textTransform: "uppercase" }}>
-            Total Pembayaran
+            Total Payment
           </div>
           <div
             style={{
@@ -284,7 +284,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
               }}
             >
               <Clock size={13} />
-              <span>Proses Pesanan</span>
+              <span>Process Order</span>
             </button>
           )}
 
@@ -309,7 +309,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
                 }}
               >
                 <Store size={13} />
-                <span>Siap Diambil Pembeli</span>
+                <span>Ready for Pickup</span>
               </button>
             ) : order.courierStatus === "SEARCHING" ? (
               <div
@@ -329,8 +329,8 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
                 <Bike size={13} />
                 <span>
                   {order.shippingMethod === "STORE_DELIVERY"
-                    ? "Menugaskan Kurir Toko..."
-                    : "Mencari Mitra Kurir..."}
+                    ? "Assigning Store Courier..."
+                    : "Finding Courier Partner..."}
                 </span>
               </div>
             ) : order.courierStatus === "ACCEPTED" || order.courierStatus === "PICKING_UP" ? (
@@ -350,7 +350,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
               >
                 <CheckCircle2 size={13} />
                 <span>
-                  Kurir Menuju Toko {order.courierName ? `(${order.courierName})` : ""}
+                  Courier Heading to Store {order.courierName ? `(${order.courierName})` : ""}
                 </span>
               </div>
             ) : order.courierStatus === "ON_THE_WAY" ? (
@@ -369,7 +369,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
                 }}
               >
                 <Truck size={13} />
-                <span>Kurir Mengantar ke Pembeli</span>
+                <span>Courier Delivering to Buyer</span>
               </div>
             ) : (
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -405,16 +405,16 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
                   }}
                 >
                   {isDispatching ? (
-                    <span>Memanggil Kurir...</span>
+                    <span>Dispatching Courier...</span>
                   ) : order.shippingMethod === "STORE_DELIVERY" ? (
                     <>
                       <Truck size={13} />
-                      <span>Kirim via Kurir {store?.type === "FOOD" ? "Resto" : "Toko"}</span>
+                      <span>Send via {store?.type === "FOOD" ? "Restaurant" : "Store"} Courier</span>
                     </>
                   ) : (
                     <>
                       <Bike size={13} />
-                      <span>Panggil Mitra Kurir</span>
+                      <span>Request Courier Partner</span>
                     </>
                   )}
                 </button>
@@ -426,7 +426,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
                       e.stopPropagation();
                       onUpdateOrderStatus(order.id, "SHIPPED");
                     }}
-                    title="Tandai pesanan sudah dikirim secara manual"
+                    title="Mark order as manually shipped"
                     style={{
                       padding: "7px 10px",
                       borderRadius: 8,
@@ -490,7 +490,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
               }}
             >
               <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                Bukti Pembayaran • {order.id}
+                Payment Proof • {order.id}
               </div>
               <button
                 type="button"
@@ -510,7 +510,7 @@ export const OrderActiveCard: React.FC<OrderActiveCardProps> = ({
             <div style={{ padding: 16, display: "flex", justifyContent: "center", background: theme.surface2 }}>
               <img
                 src={order.paymentProofUrl}
-                alt={`Bukti Transfer ${order.id}`}
+                alt={`Payment Proof ${order.id}`}
                 style={{
                   maxWidth: "100%",
                   maxHeight: "65vh",

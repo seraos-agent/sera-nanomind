@@ -62,7 +62,7 @@ export function DeliveryFloatingMapCard({
                 border: `1px solid ${borderCol}`
               }}
             >
-              Titik #{activeStop.stopNumber}
+              Stop #{activeStop.stopNumber}
             </span>
             <span style={{ fontSize: 12, fontWeight: 600, color: textSoft, display: "inline-flex", alignItems: "center", gap: 4 }}>
               <SolidMapPinIcon size={13} color="#EF4444" />
@@ -81,7 +81,7 @@ export function DeliveryFloatingMapCard({
               border: `1px solid ${borderCol}`
             }}
           >
-            {activeStop.isCod ? `COD Rp ${activeStop.codAmount.toLocaleString("id-ID")}` : "Lunas"}
+            {activeStop.isCod ? `COD Rp ${activeStop.codAmount.toLocaleString("id-ID")}` : "Paid"}
           </span>
         </div>
 
@@ -95,7 +95,7 @@ export function DeliveryFloatingMapCard({
           </div>
         </div>
 
-        {/* Action buttons row (WA & Selesai) */}
+        {/* Action buttons row */}
         <div style={{ display: "grid", gridTemplateColumns: "42px 1fr", gap: 8 }}>
           <button
             type="button"
@@ -135,7 +135,7 @@ export function DeliveryFloatingMapCard({
               boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
             }}
           >
-            <span>Selesai</span>
+            <span>Complete</span>
           </button>
         </div>
       </div>
@@ -161,7 +161,7 @@ export function DeliveryFloatingMapCard({
         }}
       >
         <div style={{ fontSize: 14, fontWeight: 700, color: textInk, marginBottom: 6 }}>
-          Semua Antaran Hari Ini Selesai
+          All Deliveries Completed Today
         </div>
         <button
           type="button"
@@ -180,7 +180,7 @@ export function DeliveryFloatingMapCard({
             cursor: "pointer"
           }}
         >
-          Lihat Daftar & Riwayat Selesai
+          View Completed List & History
         </button>
       </div>
     );

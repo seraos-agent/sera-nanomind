@@ -41,11 +41,11 @@ export function StoreCourierPairingGate({
     const cleanCode = storeCode.trim().toUpperCase();
     const cleanPin = pinCode.trim();
     if (!cleanCode) {
-      setErrorMsg("Silakan masukkan Kode Aktivasi Kurir.");
+      setErrorMsg("Please enter a Courier Activation Code.");
       return;
     }
     if (!/^\d{4,6}$/.test(cleanPin)) {
-      setErrorMsg("Silakan masukkan PIN Kurir (4–6 digit angka).");
+      setErrorMsg("Please enter your Courier PIN (4-6 digits).");
       return;
     }
 
@@ -76,10 +76,10 @@ export function StoreCourierPairingGate({
           sessionId: json.data.sessionId || json.data.courier?.activeSessionId
         });
       } else {
-        setErrorMsg(json.error || "Kode Kurir atau PIN tidak valid.");
+        setErrorMsg(json.error || "Invalid Courier Code or PIN.");
       }
     } catch {
-      setErrorMsg("Gagal menghubungi server. Periksa koneksi internet Anda.");
+      setErrorMsg("Failed to reach server. Please check your internet connection.");
     } finally {
       setIsSubmitting(false);
     }
@@ -109,7 +109,7 @@ export function StoreCourierPairingGate({
         <button
           type="button"
           onClick={onBack}
-          title="Kembali ke Dashboard Utama"
+          title="Back to Main Dashboard"
           style={{
             background: "transparent",
             border: "none",
@@ -123,7 +123,7 @@ export function StoreCourierPairingGate({
           <CloseIcon size={20} />
         </button>
         <span style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-          Aktivasi Kurir Toko
+          Store Courier Activation
         </span>
       </div>
 
@@ -172,10 +172,10 @@ export function StoreCourierPairingGate({
 
             <div>
               <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: theme.ink }}>
-                Aktivasi Kurir Toko Anda
+                Activate Store Courier
               </h2>
               <p style={{ margin: "6px 0 0", fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.45 }}>
-                Masukkan <b>Kode Aktivasi Kurir</b> (contoh: <code>KR-8F4K2M</code>) dan <b>PIN pribadi (4–6 digit)</b> dari pemilik toko untuk masuk ke antrean pengantaran Anda.
+                Enter the <b>Courier Activation Code</b> (example: <code>KR-8F4K2M</code>) and your <b>personal PIN (4-6 digits)</b> from the store owner to join the delivery queue.
               </p>
             </div>
           </div>
@@ -213,7 +213,7 @@ export function StoreCourierPairingGate({
                   textAlign: "center"
                 }}
               >
-                KODE AKTIVASI KURIR
+                COURIER ACTIVATION CODE
               </label>
               <input
                 type="text"
@@ -222,7 +222,7 @@ export function StoreCourierPairingGate({
                   setStoreCode(e.target.value.toUpperCase());
                   setErrorMsg("");
                 }}
-                placeholder="CONTOH: KR-8F4K2M"
+                placeholder="EXAMPLE: KR-8F4K2M"
                 maxLength={14}
                 autoFocus
                 style={{
@@ -254,7 +254,7 @@ export function StoreCourierPairingGate({
                   textAlign: "center"
                 }}
               >
-                PIN KURIR (4–6 DIGIT ANGKA)
+                COURIER PIN (4-6 DIGITS)
               </label>
               <input
                 type="password"
@@ -266,7 +266,7 @@ export function StoreCourierPairingGate({
                   setPinCode(e.target.value.replace(/\D/g, "").slice(0, 6));
                   setErrorMsg("");
                 }}
-                placeholder="Masukkan 4–6 digit PIN"
+                placeholder="Enter 4-6 digit PIN"
                 style={{
                   width: "100%",
                   padding: "14px 16px",
@@ -335,7 +335,7 @@ export function StoreCourierPairingGate({
               }}
             >
               <ShieldCheck size={16} />
-              <span>{isSubmitting ? "Mengaktifkan..." : "Aktifkan & Mulai Bekerja"}</span>
+              <span>{isSubmitting ? "Activating..." : "Activate & Start Delivering"}</span>
             </button>
           </form>
 
@@ -353,7 +353,7 @@ export function StoreCourierPairingGate({
           >
             <Info size={16} color={theme.inkSoft} style={{ marginTop: 2, flexShrink: 0 }} />
             <div style={{ fontSize: 11.5, color: theme.inkSoft, lineHeight: 1.45 }}>
-              Belum punya kode? Minta pengelola toko mendaftarkan Anda di menu <b>"Kurir Toko"</b> pada dashboard merchant SERA untuk mendapatkan Kode Aktivasi Kurir unik Anda.
+              Do not have a code yet? Ask the store manager to register you under <b>"Store Courier Fleet"</b> inside the SERA Merchant Store dashboard to get your unique Courier Activation Code.
             </div>
           </div>
         </div>

@@ -153,7 +153,7 @@ export const ItemDetailGallery: React.FC<ItemDetailGalleryProps> = ({
             >
               <img
                 src={img}
-                alt={`${name} - foto ${idx + 1}`}
+                alt={`${name} - photo ${idx + 1}`}
                 draggable={false}
                 style={{
                   width: '100%',
@@ -215,7 +215,7 @@ export const ItemDetailGallery: React.FC<ItemDetailGalleryProps> = ({
               pointerEvents: 'none',
             }}
           >
-            <span>Sisa {stock} stok</span>
+            <span>{stock} in stock</span>
           </div>
         )}
       </div>

@@ -393,7 +393,7 @@ export function EmailLoginGateway({ theme, onAuthenticated }: EmailLoginGatewayP
               </button>
             </div>
 
-            {/* 6 Digit Input Boxes — responsive grid flush with button width */}
+            {/* 6 Digit Input Boxes - responsive grid flush with button width */}
             <div
               style={{
                 display: 'grid',

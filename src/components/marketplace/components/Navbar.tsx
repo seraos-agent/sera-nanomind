@@ -77,9 +77,9 @@ const WrenchIcon: React.FC<{ size?: number }> = ({ size = 20 }) => (
 );
 
 const NAV_TABS = [
-  { key: 'STORE' as MarketplaceFilterTab, label: 'Belanja', icon: ShoppingBagIcon },
+  { key: 'STORE' as MarketplaceFilterTab, label: 'Shop', icon: ShoppingBagIcon },
   { key: 'FOOD' as MarketplaceFilterTab, label: 'Food', icon: FoodPlateIcon },
-  { key: 'SERVICE' as MarketplaceFilterTab, label: 'Jasa', icon: WrenchIcon },
+  { key: 'SERVICE' as MarketplaceFilterTab, label: 'Services', icon: WrenchIcon },
 ];
 
 const ArrowLeftIcon: React.FC<{ size?: number }> = ({ size = 20 }) => (
@@ -117,8 +117,8 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(({
               <button
                 type="button"
                 onClick={onBack}
-                title="Kembali"
-                aria-label="Kembali"
+                title="Back"
+                aria-label="Back"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -150,7 +150,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Cari toko atau produk..."
+                placeholder="Search stores or products..."
                 className="marketplace-search-input"
               />
               <span className="marketplace-search-icon">
@@ -178,13 +178,13 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(({
               )}
             </div>
 
-            {/* Right Action Icons: Keranjang (kiri) & Profil (kanan) */}
+            {/* Right Action Icons: Cart & Profile */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-              {/* Keranjang Icon */}
+              {/* Cart Icon */}
               <button
                 onClick={onOpenCart}
-                title="Keranjang Belanja"
-                aria-label="Keranjang Belanja"
+                title="Shopping Cart"
+                aria-label="Shopping Cart"
                 style={{
                   position: 'relative',
                   background: 'transparent',
@@ -227,11 +227,11 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(({
                 )}
               </button>
 
-              {/* User Profile Icon (Lingkaran Avatar Elegan) */}
+              {/* User Profile Icon */}
               <button
                 onClick={onOpenProfile}
-                title="Akun & Pendaftaran Pengguna"
-                aria-label="Akun Pengguna"
+                title="Account & User Registration"
+                aria-label="User Account"
                 style={{
                   position: 'relative',
                   background: 'var(--bg-subtle)',

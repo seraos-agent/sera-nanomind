@@ -47,7 +47,7 @@ export const ProductCategoryDetail: React.FC<ProductCategoryDetailProps> = ({
           <button
             type="button"
             onClick={onBack}
-            title="Kembali ke Daftar Kategori"
+            title="Back to Categories"
             style={{
               width: 32,
               height: 32,
@@ -80,13 +80,13 @@ export const ProductCategoryDetail: React.FC<ProductCategoryDetailProps> = ({
                 borderRadius: 12
               }}
             >
-              {categoryProducts.length} Produk
+              {categoryProducts.length} Products
             </span>
           </div>
         </div>
       </div>
 
-      {/* Daftar Produk di Kategori Ini */}
+      {/* Product List in This Category */}
       {categoryProducts.length === 0 ? (
         <div
           style={{
@@ -104,10 +104,10 @@ export const ProductCategoryDetail: React.FC<ProductCategoryDetailProps> = ({
         >
           <div style={{ fontSize: 32 }}>📦</div>
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-            Belum ada produk di kategori "{categoryName}"
+            No products in category "{categoryName}" yet
           </div>
           <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-            Tambahkan produk baru ke dalam kategori ini agar pembeli dapat menemukannya.
+            Add a new product to this category so customers can find it easily.
           </p>
           <button
             type="button"
@@ -124,7 +124,7 @@ export const ProductCategoryDetail: React.FC<ProductCategoryDetailProps> = ({
               cursor: "pointer"
             }}
           >
-            + Tambah Produk Sekarang
+            + Add Product Now
           </button>
         </div>
       ) : (

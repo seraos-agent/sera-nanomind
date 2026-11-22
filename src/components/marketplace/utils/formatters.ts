@@ -146,48 +146,48 @@ export function formatShortCity(location?: string, fallback = 'Solo'): string {
 }
 
 /**
- * Formats numbers into clean compact counts (e.g. 850, 1.2rb, 15.4rb, 1.2jt)
+ * Formats numbers into clean compact counts (e.g. 850, 1.2K, 15.4K, 1.2M)
  */
 export function formatCompactCount(count?: number, fallback = '120'): string {
   if (count === undefined || count === null) return fallback;
   if (count <= 0) return '0';
   if (count >= 1000000) {
-    return (count / 1000000).toFixed(1).replace('.0', '') + 'jt';
+    return (count / 1000000).toFixed(1).replace('.0', '') + 'M';
   }
   if (count >= 1000) {
-    return (count / 1000).toFixed(1).replace('.0', '') + 'rb';
+    return (count / 1000).toFixed(1).replace('.0', '') + 'K';
   }
   return count.toString();
 }
 
 /**
- * Formats sold / order count:
- * - If count < 1000: "154 terjual" (tanpa tanda '+')
- * - If count >= 1000: "1rb+ terjual", "1.2rb+ terjual", etc.
+ * Formats sold / booking count:
+ * - If count < 1000: "154 sold"
+ * - If count >= 1000: "1K+ sold", "1.2K+ sold", etc.
  */
 export function formatSoldCount(count?: number, isService = false): string {
-  const label = isService ? 'dipesan' : 'terjual';
+  const label = isService ? 'booked' : 'sold';
   if (count === undefined || count === null || count <= 0) return `0 ${label}`;
   if (count >= 1000000) {
     const val = (count / 1000000).toFixed(1).replace('.0', '');
-    return `${val}jt+ ${label}`;
+    return `${val}M+ ${label}`;
   }
   if (count >= 1000) {
     const val = (count / 1000).toFixed(1).replace('.0', '');
-    return `${val}rb+ ${label}`;
+    return `${val}K+ ${label}`;
   }
   return `${count} ${label}`;
 }
 
 /**
- * Formats a timestamp into an elegant date string (e.g. "19 Okt 2026, 14:30")
+ * Formats a timestamp into a clean date string (e.g. "Oct 19, 2026, 14:30")
  */
 export function formatOrderDate(timestamp?: number): string {
-  if (!timestamp) return 'Hari ini';
+  if (!timestamp) return 'Today';
   const date = new Date(timestamp);
-  if (isNaN(date.getTime())) return 'Hari ini';
+  if (isNaN(date.getTime())) return 'Today';
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const day = date.getDate();
   const month = months[date.getMonth()];
   const year = date.getFullYear();

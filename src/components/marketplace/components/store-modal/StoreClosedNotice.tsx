@@ -26,7 +26,7 @@ export const StoreClosedNotice: React.FC<StoreClosedNoticeProps> = ({ isOpen, st
       }}
     >
       <span>
-        <strong>Toko Sedang Tutup.</strong> Anda tetap dapat melihat produk atau melakukan pemesanan (akan diproses saat toko buka).
+        <strong>Store Currently Closed.</strong> You can still browse products or place an order (it will be processed when the store opens).
       </span>
     </div>
   );

@@ -129,7 +129,7 @@ export function useMarketplaceCart(onToast?: (message: string) => void) {
       }
     });
 
-    if (onToast) onToast('✓ Masuk keranjang');
+    if (onToast) onToast('✓ Added to cart');
   }, [onToast]);
 
   const updateQuantity = useCallback((index: number, newQty: number) => {
@@ -164,7 +164,7 @@ export function useMarketplaceCart(onToast?: (message: string) => void) {
     });
 
     if (onToast) {
-      onToast('✓ Pesanan selesai! Silakan berikan ulasan produk di tab Selesai.');
+      onToast('✓ Order completed! Feel free to leave a product review in the Completed tab.');
     }
   }, [onToast]);
 

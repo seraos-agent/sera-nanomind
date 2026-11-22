@@ -94,7 +94,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
             }}
           >
             <Camera size={24} strokeWidth={1.7} />
-            <span style={{ fontSize: 10.5, fontWeight: 600 }}>Belum ada foto</span>
+            <span style={{ fontSize: 10.5, fontWeight: 600 }}>No photo yet</span>
           </div>
         )}
 
@@ -156,9 +156,9 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
         >
           {p.type === "GOODS"
             ? isOutOfStock
-              ? "Habis"
-              : `Stok: ${p.stock ?? 0}`
-            : p.duration || "Siap Booking"}
+              ? "Out of Stock"
+              : `Stock: ${p.stock ?? 0}`
+            : p.duration || "Ready to Book"}
         </div>
 
         {/* Variant count badge in bottom-right (opposite stock badge) */}
@@ -180,7 +180,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
               userSelect: "none"
             }}
           >
-            {p.variants.length} Varian
+            {p.variants.length} Variants
           </div>
         )}
       </div>
@@ -300,7 +300,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({
             }}
           >
             <Trash2 size={11} />
-            <span>Hapus</span>
+            <span>Delete</span>
           </button>
         </div>
       </div>

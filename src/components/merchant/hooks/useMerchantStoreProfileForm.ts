@@ -288,7 +288,7 @@ export function useMerchantStoreProfileForm({
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("Ukuran gambar QRIS terlalu besar. Maksimal 5 MB.");
+        alert("QRIS image size is too large. Maximum 5 MB.");
         e.target.value = "";
         return;
       }
@@ -460,13 +460,13 @@ export function useMerchantStoreProfileForm({
     const cleanAddress = editAddress.trim();
 
     if (!cleanName || cleanName.length < 3) {
-      throw new Error("Nama toko wajib diisi (minimal 3 karakter).");
+      throw new Error("Store name is required (minimum 3 characters).");
     }
     if (!cleanWhatsapp || cleanWhatsapp.length < 9) {
-      throw new Error("Nomor WhatsApp toko wajib diisi dengan benar.");
+      throw new Error("Valid store WhatsApp number is required.");
     }
     if (!cleanCity || !cleanAddress) {
-      throw new Error("Alamat dan kota toko wajib diisi.");
+      throw new Error("Store address and city are required.");
     }
 
     const finalBanner = await uploadStoreDataUrlIfNeeded(
@@ -497,8 +497,8 @@ export function useMerchantStoreProfileForm({
       id: storeId,
       ownerId: userEmail || undefined,
       name: cleanName,
-      tagline: "Mitra Resmi SERA",
-      description: editDescription.trim() || `Pusat produk dan layanan terpercaya dari ${cleanName}.`,
+      tagline: "Official SERA Merchant",
+      description: editDescription.trim() || `Trusted products and services from ${cleanName}.`,
       logoUrl: finalLogo,
       bannerUrl: finalBanner,
       type: editType,

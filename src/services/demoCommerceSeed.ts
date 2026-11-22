@@ -51,7 +51,7 @@ export const DEMO_STORE: MerchantStore = {
   logoUrl: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=300',
   bannerUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1000',
   type: 'FOOD',
-  category: 'Kopi & Aneka Minuman',
+  category: 'Coffee & Artisan Bakery',
   rating: 4.9,
   totalProducts: 8,
   address: 'Jl. Ijen Boulevard No. 24, Klojen',
@@ -62,7 +62,7 @@ export const DEMO_STORE: MerchantStore = {
   longitude: 112.6248,
   isOpen: true,
   isOpenManualOverride: true,
-  operatingHours: 'Setiap Hari (24 Jam)',
+  operatingHours: 'Every Day (24 Hours)',
   openTime: '07:00',
   closeTime: '22:00',
   openDays: ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU', 'MINGGU'],
@@ -347,7 +347,7 @@ export const DEMO_CUSTOMER_ORDERS = [
     customer: {
       name: 'Dimas Pratama',
       phone: '081900112233',
-      address: 'Ambil di Toko',
+      address: 'In-Store Pickup',
       notes: 'Pickup at counter in 10 mins.',
     },
     paymentMethod: 'QRIS',
@@ -423,7 +423,7 @@ export const DEMO_MERCHANT_ORDERS: MerchantOrder[] = [
     status: 'COMPLETED',
     createdAt: '22/11/26 • 04:15',
     shippingMethod: 'PICKUP',
-    shippingAddress: 'Ambil di Toko',
+    shippingAddress: 'In-Store Pickup',
     shippingCost: 0,
     orderSource: 'ONLINE',
   },
@@ -492,7 +492,7 @@ export const DEMO_POS_TRANSACTIONS = [
     shiftId: 'shift-nanomind-1',
     cashierId: 'cashier-nanomind-1',
     cashierName: 'Salsa Kirana',
-    tableOrQueueNumber: 'Meja 2',
+    tableOrQueueNumber: 'Table 2',
     customerName: 'Andi Wijaya',
     paymentMethod: 'CASH',
     subtotal: 68000,
@@ -540,7 +540,7 @@ export const DEMO_POS_TRANSACTIONS = [
     shiftId: 'shift-nanomind-1',
     cashierId: 'cashier-nanomind-1',
     cashierName: 'Salsa Kirana',
-    tableOrQueueNumber: 'Meja 5',
+    tableOrQueueNumber: 'Table 5',
     customerName: 'Rina Lestari',
     paymentMethod: 'CASH',
     subtotal: 26000,
@@ -560,12 +560,12 @@ export const DEMO_POS_TRANSACTIONS = [
 
 export const DEMO_DRIVER_PROFILE: DriverProfile = {
   id: 'drv-nanomind-1',
-  name: 'Raka Aditya (Kurir Mitra)',
+  name: 'Raka Aditya (Store Courier)',
   phone: '081299887766',
   serviceType: 'MOTOR',
   vehicleType: 'MOTOR',
   acceptedCategories: ['GOODS', 'FOOD', 'SEND'],
-  vehicleBrand: 'Sepeda Motor Toko',
+  vehicleBrand: 'Store Delivery Motorcycle',
   plateNumber: 'N 4421 AB',
   rating: 4.95,
   totalTrips: 142,
@@ -649,7 +649,7 @@ export const DEFAULT_COMMERCE_CONNECTORS = [
   },
   {
     id: 'mitra_store',
-    name: 'Mitra Store',
+    name: 'Merchant Store',
     category: 'commerce',
     description: 'Merchant dashboard for inventory, pricing, orders, and store schedule.',
     riskSummary: 'Proposes product and stock mutations via approval cards.',
@@ -660,7 +660,7 @@ export const DEFAULT_COMMERCE_CONNECTORS = [
   },
   {
     id: 'mitra_kasir',
-    name: 'Mitra Kasir',
+    name: 'POS Cashier',
     category: 'commerce',
     description: 'Point-of-Sale terminal with shift ledger, table bills, and offline receipts.',
     riskSummary: 'Reads shift cash drawer and creates POS orders on approval.',
@@ -671,7 +671,7 @@ export const DEFAULT_COMMERCE_CONNECTORS = [
   },
   {
     id: 'mitra_kurir',
-    name: 'Mitra Kurir',
+    name: 'Courier Dispatch',
     category: 'commerce',
     description: 'Store courier delivery queue, COD settlement, and route tracking.',
     riskSummary: 'Reads active delivery stops and COD collection status.',
@@ -698,11 +698,11 @@ export function ensureDemoCommerceSeeded(): void {
   if (!localStorage.getItem('sera_customer_name')) {
     localStorage.setItem('sera_customer_name', 'Kopi NanoMind Founder');
   }
-  if (!localStorage.getItem('sera_active_connectors')) {
+  if (!localStorage.getItem('sera_active_connectors') || localStorage.getItem('sera_nanomind_seeded_v2') !== 'true') {
     localStorage.setItem('sera_active_connectors', JSON.stringify(DEFAULT_COMMERCE_CONNECTORS));
   }
 
-  if (localStorage.getItem('sera_nanomind_seeded_v1') === 'true') {
+  if (localStorage.getItem('sera_nanomind_seeded_v2') === 'true') {
     return;
   }
 
@@ -718,7 +718,7 @@ export function ensureDemoCommerceSeeded(): void {
     localStorage.setItem('sera_driver_profile', JSON.stringify(DEMO_DRIVER_PROFILE));
     localStorage.setItem('sera_nanomind_triggers', JSON.stringify(DEMO_TRIGGERS));
     localStorage.setItem('sera_nanomind_agreements', JSON.stringify(DEMO_AGREEMENTS));
-    localStorage.setItem('sera_nanomind_seeded_v1', 'true');
+    localStorage.setItem('sera_nanomind_seeded_v2', 'true');
   } catch (err) {
     console.warn('[DemoCommerceSeed] Failed to persist initial seed:', err);
   }

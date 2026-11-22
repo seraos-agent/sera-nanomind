@@ -16,7 +16,7 @@ export const OrderItemsList: React.FC<OrderItemsListProps> = ({
 }) => {
   const items = parseOrderItems(itemsSummary);
   if (items.length === 0) {
-    return <div style={{ fontSize, color: inkColor, lineHeight: 1.4 }}>Pesanan Toko</div>;
+    return <div style={{ fontSize, color: inkColor, lineHeight: 1.4 }}>Store Order</div>;
   }
   if (items.length === 1) {
     return <div style={{ fontSize, color: inkColor, lineHeight: 1.4 }}>{items[0]}</div>;

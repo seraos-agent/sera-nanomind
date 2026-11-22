@@ -64,7 +64,7 @@ export function DeliveryCompleteModal({ stop, onClose, onConfirm, theme }: Deliv
         </div>
 
         <h3 style={{ fontSize: 16, fontWeight: 700, color: textInk, margin: "0 0 8px 0" }}>
-          Selesaikan Antaran #{stop.stopNumber}?
+          Complete Delivery #{stop.stopNumber}?
         </h3>
 
         <div
@@ -84,8 +84,8 @@ export function DeliveryCompleteModal({ stop, onClose, onConfirm, theme }: Deliv
 
         <p style={{ fontSize: 12.5, color: textSoft, margin: "0 0 16px 0", lineHeight: 1.45 }}>
           {stop.isCod
-            ? `Pastikan Anda telah menerima uang tunai COD sebesar Rp ${stop.codAmount.toLocaleString("id-ID")} dari pemesan.`
-            : "Pastikan paket telah diserahkan dengan baik kepada pemesan."}
+            ? `Please ensure you have collected Rp ${stop.codAmount.toLocaleString("id-ID")} COD cash from the customer.`
+            : "Please ensure the package has been safely handed over to the customer."}
         </p>
 
         <div style={{ display: "flex", gap: 10 }}>
@@ -104,7 +104,7 @@ export function DeliveryCompleteModal({ stop, onClose, onConfirm, theme }: Deliv
               cursor: "pointer"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -122,7 +122,7 @@ export function DeliveryCompleteModal({ stop, onClose, onConfirm, theme }: Deliv
               boxShadow: "0 2px 6px rgba(15, 23, 42, 0.2)"
             }}
           >
-            Ya, Selesai
+            Yes, Complete
           </button>
         </div>
       </div>

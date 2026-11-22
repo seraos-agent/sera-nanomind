@@ -15,7 +15,7 @@ export function DeliveryOrderItemsList({
 }: DeliveryOrderItemsListProps) {
   const items = parseOrderItems(itemsSummary);
   if (items.length === 0) {
-    return <div style={{ fontSize, color: inkColor, lineHeight: 1.4, fontWeight: 600 }}>Pesanan Toko</div>;
+    return <div style={{ fontSize, color: inkColor, lineHeight: 1.4, fontWeight: 600 }}>Store Order</div>;
   }
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 3.5 }}>

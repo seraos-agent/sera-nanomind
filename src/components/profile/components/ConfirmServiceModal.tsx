@@ -54,7 +54,7 @@ export function ConfirmServiceModal({
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: 17, fontWeight: 700, color: theme.ink }}>Konfirmasi Layanan</div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: theme.ink }}>Confirm Service</div>
           <button
             onClick={onClose}
             style={{ background: 'none', border: 'none', color: theme.inkSoft, cursor: 'pointer' }}
@@ -75,11 +75,11 @@ export function ConfirmServiceModal({
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-            <span style={{ color: theme.inkSoft }}>Paket:</span>
+            <span style={{ color: theme.inkSoft }}>Plan:</span>
             <span style={{ fontWeight: 600, color: theme.ink }}>{balanceModal.itemName}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-            <span style={{ color: theme.inkSoft }}>Nominal:</span>
+            <span style={{ color: theme.inkSoft }}>Amount:</span>
             <span style={{ fontWeight: 800, color: theme.status, fontSize: 15 }}>
               Rp {balanceModal.requiredAmount.toLocaleString('id-ID')}
             </span>
@@ -106,7 +106,7 @@ export function ConfirmServiceModal({
                 cursor: 'pointer',
               }}
             >
-              Aktifkan Langsung via Simulator Dev
+              Activate Directly via Dev Simulator
             </button>
           )}
 
@@ -129,7 +129,7 @@ export function ConfirmServiceModal({
                 cursor: 'pointer',
               }}
             >
-              Isi Ulang Langsung via Simulator Dev
+              Top Up Directly via Dev Simulator
             </button>
           )}
 
@@ -147,7 +147,7 @@ export function ConfirmServiceModal({
               cursor: 'pointer',
             }}
           >
-            Batal / Kembali
+            Cancel / Back
           </button>
         </div>
       </div>

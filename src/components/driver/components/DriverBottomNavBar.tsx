@@ -50,7 +50,7 @@ export function DriverBottomNavBar({
         }}
       >
         <span style={{ fontSize: 13, fontWeight: currentView === "orders" ? 700 : 500 }}>
-          Daftar Paket
+          Packages
         </span>
       </button>
 
@@ -76,7 +76,7 @@ export function DriverBottomNavBar({
       >
         <MapPin size={16} />
         <span style={{ fontSize: 13, fontWeight: currentView === "map" ? 700 : 500 }}>
-          Peta
+          Map
         </span>
       </button>
     </div>

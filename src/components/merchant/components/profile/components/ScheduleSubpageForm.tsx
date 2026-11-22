@@ -99,37 +99,37 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
       >
         <div>
           <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Hari Operasional
+            Operating Days
           </div>
           <div style={{ fontSize: 12.5, color: theme.inkSoft, marginTop: 2 }}>
-            Tentukan hari toko Anda aktif dan melayani pesanan
+            Set the days your store is open and accepting orders
           </div>
         </div>
 
-        {/* Dropdown Pola Hari Buka */}
+        {/* Open Days Pattern Dropdown */}
         <CustomSelectField
-          label="Pilihan Hari Buka"
+          label="Open Days Schedule"
           value={schedulePresetMode}
           options={[
             {
               value: "EVERYDAY",
-              label: "Setiap Hari (Senin – Minggu)",
-              subtitle: "Toko buka setiap hari penuh tanpa libur"
+              label: "Every Day (Mon - Sun)",
+              subtitle: "Store operates all week with no days off"
             },
             {
               value: "MON_TO_SAT",
-              label: "Senin – Sabtu",
-              subtitle: "Buka 6 hari dalam seminggu (Minggu libur)"
+              label: "Monday - Saturday",
+              subtitle: "Open 6 days a week (closed on Sunday)"
             },
             {
               value: "WEEKDAYS",
-              label: "Senin – Jumat",
-              subtitle: "Hari kerja reguler (Sabtu & Minggu libur)"
+              label: "Monday - Friday",
+              subtitle: "Regular weekdays (closed on weekends)"
             },
             {
               value: "CUSTOM",
-              label: "Kustom / Hari Tertentu",
-              subtitle: "Pilih kombinasi hari buka secara manual"
+              label: "Custom / Specific Days",
+              subtitle: "Manually select your active opening days"
             }
           ]}
           onChange={handleSchedulePresetChange}
@@ -165,9 +165,9 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
               <Check size={16} color="#10B981" />
             </div>
             <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.4 }}>
-              {schedulePresetMode === "EVERYDAY" && `${entity} beroperasi penuh setiap hari dari Senin hingga Minggu.`}
-              {schedulePresetMode === "MON_TO_SAT" && `${entity} aktif Senin hingga Sabtu, hari Minggu otomatis libur.`}
-              {schedulePresetMode === "WEEKDAYS" && `${entity} aktif pada hari kerja, akhir pekan (Sabtu & Minggu) libur.`}
+              {schedulePresetMode === "EVERYDAY" && `${entity} operates all week from Monday through Sunday.`}
+              {schedulePresetMode === "MON_TO_SAT" && `${entity} is active Monday through Saturday, closed on Sunday.`}
+              {schedulePresetMode === "WEEKDAYS" && `${entity} is active on weekdays, closed on Saturday & Sunday.`}
             </div>
           </div>
         )}
@@ -176,7 +176,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
         {schedulePresetMode === "CUSTOM" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
             <div style={{ fontSize: 12.5, fontWeight: 600, color: theme.inkSoft }}>
-              Pilih Hari Aktif {entity}:
+              Select Active Days ({entity}):
             </div>
             <div
               style={{
@@ -238,7 +238,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
         )}
       </div>
 
-      {/* 2. KARTU JAM OPERASIONAL & 24 JAM */}
+      {/* 2. OPERATING HOURS & 24-HOUR CARD */}
       <div
         style={{
           background: theme.surface,
@@ -263,12 +263,12 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, paddingRight: 16 }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-              Buka 24 Jam Non-Stop
+              Open 24 Hours Non-Stop
             </div>
             <div style={{ fontSize: 12.5, color: theme.inkSoft, lineHeight: 1.35 }}>
               {editIs24Hours
-                ? `${entity} aktif menerima pesanan sepanjang hari 24 jam`
-                : `${entity} buka sesuai jam operasional harian di bawah`}
+                ? `${entity} actively accepts orders 24 hours a day`
+                : `${entity} opens according to the daily operating hours below`}
             </div>
           </div>
 
@@ -307,7 +307,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
             {/* Quick Hour Presets */}
             <div>
               <div style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft, marginBottom: 8 }}>
-                Pilihan Jam Cepat:
+                Quick Hour Presets:
               </div>
               <div
                 style={{
@@ -317,10 +317,10 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
                 }}
               >
                 {[
-                  { open: "08:00", close: "21:00", label: "08:00 – 21:00" },
-                  { open: "09:00", close: "22:00", label: "09:00 – 22:00" },
-                  { open: "07:00", close: "20:00", label: "07:00 – 20:00" },
-                  { open: "10:00", close: "22:00", label: "10:00 – 22:00" }
+                  { open: "08:00", close: "21:00", label: "08:00 - 21:00" },
+                  { open: "09:00", close: "22:00", label: "09:00 - 22:00" },
+                  { open: "07:00", close: "20:00", label: "07:00 - 20:00" },
+                  { open: "10:00", close: "22:00", label: "10:00 - 22:00" }
                 ].map((preset) => {
                   const isMatch = editOpenTime === preset.open && editCloseTime === preset.close;
                   return (
@@ -351,7 +351,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
               </div>
             </div>
 
-            {/* Jam Buka & Jam Tutup Input Cards */}
+            {/* Opening & Closing Time Input Cards */}
             <div
               style={{
                 display: "grid",
@@ -360,7 +360,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
                 alignItems: "stretch"
               }}
             >
-              {/* Jam Buka Card */}
+              {/* Opening Time Card */}
               <div
                 style={{
                   background: theme.surface2,
@@ -373,7 +373,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
                 }}
               >
                 <div style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft }}>
-                  Jam Buka
+                  Opening Time
                 </div>
                 <input
                   type="text"
@@ -398,7 +398,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
                 />
               </div>
 
-              {/* Jam Tutup Card */}
+              {/* Closing Time Card */}
               <div
                 style={{
                   background: theme.surface2,
@@ -411,7 +411,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
                 }}
               >
                 <div style={{ fontSize: 12, fontWeight: 600, color: theme.inkSoft }}>
-                  Jam Tutup
+                  Closing Time
                 </div>
                 <input
                   type="text"
@@ -459,10 +459,10 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
               >
                 <div style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, paddingRight: 12 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-                    Atur Jam Berbeda per Hari
+                    Set Different Hours per Day
                   </div>
                   <div style={{ fontSize: 12, color: theme.inkSoft, lineHeight: 1.35 }}>
-                    Atur jika ada hari yang buka setengah hari (misal Minggu) atau berbeda jam
+                    Configure days with shorter hours (e.g. Sunday) or custom schedules
                   </div>
                 </div>
 
@@ -560,7 +560,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
                               boxSizing: "border-box"
                             }}
                           />
-                          <span style={{ fontSize: 12, color: theme.inkSoft, fontWeight: 500 }}>s/d</span>
+                          <span style={{ fontSize: 12, color: theme.inkSoft, fontWeight: 500 }}>to</span>
                           <input
                             type="text"
                             value={dayHours.closeTime}
@@ -609,7 +609,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
         )}
       </div>
 
-      {/* 3. KARTU PREVIEW JADWAL */}
+      {/* 3. SCHEDULE PREVIEW CARD */}
       <div
         style={{
           background: theme.surface,
@@ -637,7 +637,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
-            Format Jadwal yang Tampil di Marketplace:
+            Schedule Displayed on Marketplace:
           </div>
           <div
             style={{
@@ -686,7 +686,7 @@ export const ScheduleSubpageForm: React.FC<ScheduleSubpageFormProps> = ({
           (e.currentTarget as HTMLElement).style.opacity = "1";
         }}
       >
-        <span>Simpan Jadwal Operasional</span>
+        <span>Save Operating Hours</span>
       </button>
     </form>
   );

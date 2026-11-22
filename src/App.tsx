@@ -590,7 +590,7 @@ function InnerApp() {
             borderRadius: 24, fontSize: 13, fontWeight: 600, zIndex: 10000,
             boxShadow: '0 4px 16px rgba(0,0,0,0.3)', pointerEvents: 'none', fontFamily: 'Inter, sans-serif'
           }}>
-            Tekan sekali lagi untuk keluar
+            Press back again to exit
           </div>
         )}
       </div>

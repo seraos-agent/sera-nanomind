@@ -16,8 +16,8 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
     perKmRate: 2000,
     freeDeliveryThreshold: 50000,
     maxDistanceKm: 5,
-    estimatedMinutes: "30-45 Menit",
-    notes: "Pengantaran langsung oleh armada resmi toko untuk area sekitar."
+    estimatedMinutes: "30-45 Mins",
+    notes: "Direct delivery by the store's official fleet for surrounding areas."
   });
 
   const [linkedCouriers, setLinkedCouriers] = useState<StoreLinkedCourier[]>([]);
@@ -59,7 +59,7 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
         flatRate: store.courierConfig.flatRate || 5000,
         perKmRate: store.courierConfig.perKmRate || 2000,
         maxDistanceKm: store.courierConfig.maxDistanceKm || 5,
-        estimatedMinutes: store.courierConfig.estimatedMinutes || "30-45 Menit"
+        estimatedMinutes: store.courierConfig.estimatedMinutes || "30-45 Mins"
       });
     }
 
@@ -116,10 +116,10 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
         setTimeout(() => setSaveSuccess(false), 3000);
         if (onRefreshStore) await onRefreshStore();
       } else {
-        setErrorMessage(json.error || "Gagal menyimpan pengaturan.");
+        setErrorMessage(json.error || "Failed to save settings.");
       }
     } catch {
-      setErrorMessage("Koneksi terganggu. Silakan periksa jaringan.");
+      setErrorMessage("Connection error. Please check your network.");
     } finally {
       setIsSaving(false);
     }
@@ -154,12 +154,12 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
 
         if (onRefreshStore) await onRefreshStore();
         setCourierToDelete(null);
-        showToast(`Kurir "${courierName}" berhasil dikeluarkan dari toko.`);
+        showToast(`Courier "${courierName}" removed from store.`);
       } else {
-        showToast(json.error || "Gagal mengeluarkan kurir.", "error");
+        showToast(json.error || "Failed to remove courier.", "error");
       }
     } catch {
-      showToast("Koneksi terganggu saat mengeluarkan kurir.", "error");
+      showToast("Connection error while removing courier.", "error");
     } finally {
       setIsDeletingCourier(false);
     }
@@ -169,12 +169,12 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
     e.preventDefault();
     if (!store?.id) return;
     if (!newCourierName.trim()) {
-      showToast("Silakan masukkan nama kurir.", "error");
+      showToast("Please enter a courier name.", "error");
       return;
     }
     const cleanPin = newCourierPin.trim();
     if (!/^\d{4,6}$/.test(cleanPin)) {
-      showToast("PIN Kurir wajib diisi (4–6 digit angka).", "error");
+      showToast("Courier PIN is required (4-6 digits).", "error");
       return;
     }
 
@@ -202,12 +202,12 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
         setNewCourierVehicle("MOTOR");
         setNewCourierPin("");
         if (onRefreshStore) await onRefreshStore();
-        showToast(`Kurir "${json.data.name}" berhasil didaftarkan.`);
+        showToast(`Courier "${json.data.name}" registered successfully.`);
       } else {
-        showToast(json.error || "Gagal mendaftarkan kurir.", "error");
+        showToast(json.error || "Failed to register courier.", "error");
       }
     } catch {
-      showToast("Koneksi bermasalah saat mendaftarkan kurir.", "error");
+      showToast("Connection error while registering courier.", "error");
     } finally {
       setIsAddingCourier(false);
     }
@@ -229,12 +229,12 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
         );
         if (onRefreshStore) await onRefreshStore();
         setCourierToReset(null);
-        showToast(`Kode baru untuk "${courierName}" berhasil dibuat.`);
+        showToast(`New activation code generated for "${courierName}".`);
       } else {
-        showToast(json.error || "Gagal mereset kode aktivasi.", "error");
+        showToast(json.error || "Failed to reset activation code.", "error");
       }
     } catch {
-      showToast("Koneksi bermasalah saat mereset kode kurir.", "error");
+      showToast("Connection error while resetting courier code.", "error");
     } finally {
       setIsResettingCode(false);
     }
@@ -244,7 +244,7 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
     if (!store?.id || !courierToSetPin) return;
     const cleanPin = pin.trim();
     if (!/^\d{4,6}$/.test(cleanPin)) {
-      showToast("PIN wajib 4–6 digit angka.", "error");
+      showToast("PIN must be 4-6 numeric digits.", "error");
       return;
     }
 
@@ -263,12 +263,12 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
         );
         if (onRefreshStore) await onRefreshStore();
         setCourierToSetPin(null);
-        showToast(`PIN untuk kurir "${courierName}" berhasil disimpan.`);
+        showToast(`PIN for courier "${courierName}" saved.`);
       } else {
-        showToast(json.error || "Gagal menyimpan PIN kurir.", "error");
+        showToast(json.error || "Failed to save courier PIN.", "error");
       }
     } catch {
-      showToast("Koneksi bermasalah saat menyimpan PIN kurir.", "error");
+      showToast("Connection issue while saving courier PIN.", "error");
     } finally {
       setIsUpdatingPin(false);
     }
@@ -276,12 +276,12 @@ export function useMerchantCouriers({ store, onRefreshStore }: UseMerchantCourie
 
   const handleShareCourierWhatsApp = useCallback((courier: StoreLinkedCourier) => {
     const code = courier.activationCode || config.pairingCode;
-    const msg = `Halo ${courier.name}! Ini Kode Aktivasi Mitra Driver untuk *${store?.name || "Toko"}*:
+    const msg = `Hello ${courier.name}! Here is your Courier Dispatch Activation Code for *${store?.name || "Store"}*:
 
-👉 *Kode Aktivasi: ${code}*
-🛵 *Armada Ditugaskan:* ${courier.vehicleType === "PICKUP" ? "Pickup" : courier.vehicleType === "MOBIL" ? "Mobil" : "Motor"}
+*Activation Code: ${code}*
+*Assigned Vehicle:* ${courier.vehicleType === "PICKUP" ? "Pickup Truck" : courier.vehicleType === "MOBIL" ? "Car" : "Motorcycle"}
 
-Silakan buka aplikasi SERA -> Mitra Driver, masukkan Kode Aktivasi di atas dan *PIN pribadi (4–6 digit)* yang diberikan pemilik toko secara terpisah. Terima kasih!`;
+Open SERA -> Courier Dispatch, enter the Activation Code above along with the *personal PIN (4-6 digits)* provided separately by the store owner. Thank you!`;
 
     let cleanPhone = courier.phone ? courier.phone.replace(/[^0-9]/g, "") : "";
     if (cleanPhone.startsWith("0")) {

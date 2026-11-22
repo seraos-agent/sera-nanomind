@@ -105,7 +105,7 @@ export function NotificationSubView({
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
           <h2 style={{ fontSize: 17, fontWeight: 700, color: theme.ink, margin: 0 }}>
-            Izin Notifikasi Sistem
+            System Notification Permission
           </h2>
 
           <div style={{ flexShrink: 0 }}>
@@ -122,7 +122,7 @@ export function NotificationSubView({
                   alignItems: 'center',
                 }}
               >
-                Izin Aktif
+                Permission Active
               </span>
             ) : (
               <button
@@ -142,14 +142,14 @@ export function NotificationSubView({
                   transition: 'opacity 0.15s ease',
                 }}
               >
-                {isRequesting ? 'Meminta...' : 'Aktifkan'}
+                {isRequesting ? 'Requesting...' : 'Enable'}
               </button>
             )}
           </div>
         </div>
 
         <p style={{ fontSize: 13.5, lineHeight: 1.55, color: theme.inkSoft, margin: 0, width: '100%' }}>
-          Izinkan notifikasi status bar dan layar kunci agar Anda tetap menerima info pesanan saat aplikasi berada di latar belakang.
+          Allow status bar and lock screen notifications so you keep receiving order alerts while the app is in the background.
         </p>
       </div>
 
@@ -167,10 +167,10 @@ export function NotificationSubView({
       >
         <div>
           <h2 style={{ fontSize: 17, fontWeight: 700, color: theme.ink, margin: 0 }}>
-            Suara & Getar
+            Sound & Vibration
           </h2>
           <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 4 }}>
-            Atur bunyi nada dering sintetis dan getaran perangkat saat ada aktivitas baru.
+            Configure synthetic chime audio and device vibration for new activity alerts.
           </div>
         </div>
 
@@ -178,13 +178,13 @@ export function NotificationSubView({
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
             <div style={{ fontSize: 15, fontWeight: 600, color: theme.ink }}>
-              Nada Dering (Chime)
+              Notification Chime
             </div>
             <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-              Bunyikan nada melodis sintetis saat ada pesanan atau tugas pengantaran masuk.
+              Play a synthetic chime tone when a new order or delivery task arrives.
             </div>
           </div>
-          {renderToggle(prefs.sound, () => handleToggle('sound'), 'Aktifkan Nada Dering')}
+          {renderToggle(prefs.sound, () => handleToggle('sound'), 'Enable Notification Chime')}
         </div>
 
         <div style={{ height: 1, background: theme.border }} />
@@ -193,13 +193,13 @@ export function NotificationSubView({
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
             <div style={{ fontSize: 15, fontWeight: 600, color: theme.ink }}>
-              Getaran Haptik
+              Haptic Vibration
             </div>
             <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-              Getarkan perangkat saat notifikasi pesanan masuk.
+              Vibrate the device when incoming order notifications arrive.
             </div>
           </div>
-          {renderToggle(prefs.vibration, () => handleToggle('vibration'), 'Aktifkan Getaran')}
+          {renderToggle(prefs.vibration, () => handleToggle('vibration'), 'Enable Vibration')}
         </div>
       </div>
 
@@ -217,10 +217,10 @@ export function NotificationSubView({
       >
         <div>
           <h2 style={{ fontSize: 17, fontWeight: 700, color: theme.ink, margin: 0 }}>
-            Kategori Notifikasi
+            Notification Categories
           </h2>
           <div style={{ fontSize: 13, color: theme.inkSoft, marginTop: 4 }}>
-            Pilih pemberitahuan yang ingin Anda terima sesuai peran operasional.
+            Choose which alerts you want to receive based on your operational role.
           </div>
         </div>
 
@@ -228,16 +228,16 @@ export function NotificationSubView({
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
             <div style={{ fontSize: 15, fontWeight: 600, color: theme.ink }}>
-              Pesanan Toko (Merchant)
+              Store Orders (Merchant)
             </div>
             <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-              Pemberitahuan seketika ketika ada pesanan baru yang dibuat pelanggan untuk toko Anda.
+              Instant alerts whenever a customer places a new order for your store.
             </div>
           </div>
           {renderToggle(
             prefs.merchantOrders,
             () => handleToggle('merchantOrders'),
-            'Aktifkan Notifikasi Pesanan Toko'
+            'Enable Store Order Notifications'
           )}
         </div>
 
@@ -247,16 +247,16 @@ export function NotificationSubView({
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
             <div style={{ fontSize: 15, fontWeight: 600, color: theme.ink }}>
-              Tugas Pengantaran (Kurir)
+              Delivery Tasks (Courier)
             </div>
             <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-              Pemberitahuan saat ada paket atau pesanan siap antar yang ditugaskan ke kurir.
+              Alerts when a package or ready-to-deliver order is assigned to a courier.
             </div>
           </div>
           {renderToggle(
             prefs.courierDeliveries,
             () => handleToggle('courierDeliveries'),
-            'Aktifkan Notifikasi Tugas Kurir'
+            'Enable Courier Task Notifications'
           )}
         </div>
 
@@ -266,16 +266,16 @@ export function NotificationSubView({
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
             <div style={{ fontSize: 15, fontWeight: 600, color: theme.ink }}>
-              Status Pesanan (Pembeli)
+              Order Status (Buyer)
             </div>
             <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.5 }}>
-              Pembaruan langsung ketika pesanan belanja Anda diproses, diantar, atau telah tiba di lokasi.
+              Live updates when your shopping order is prepared, out for delivery, or has arrived.
             </div>
           </div>
           {renderToggle(
             prefs.buyerOrders,
             () => handleToggle('buyerOrders'),
-            'Aktifkan Notifikasi Status Pembeli'
+            'Enable Buyer Status Notifications'
           )}
         </div>
       </div>

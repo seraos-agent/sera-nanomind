@@ -37,7 +37,7 @@ const PAYMENT_OPTIONS: Array<{
   label: string;
   icon: React.ComponentType<{ size?: number }>;
 }> = [
-  { id: "CASH", label: "Tunai", icon: Banknote },
+  { id: "CASH", label: "Cash", icon: Banknote },
   { id: "QRIS", label: "QRIS", icon: QrCode },
   { id: "TRANSFER", label: "Transfer", icon: CreditCard }
 ];
@@ -213,7 +213,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              title="Kembali"
+              title="Back"
               style={{
                 width: 32,
                 height: 32,
@@ -231,10 +231,10 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
             </button>
             <div>
               <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: theme.ink }}>
-                Pembayaran Kasir
+                POS Payment
               </h3>
               <span style={{ fontSize: 11, color: theme.inkSoft }}>
-                Total: Rp {finalTotal.toLocaleString("id-ID")} ({totalItemCount} item)
+                Total: Rp {finalTotal.toLocaleString("id-ID")} ({totalItemCount} items)
               </span>
             </div>
           </div>
@@ -258,7 +258,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
             }}
           >
             <ArrowLeftRight size={13} />
-            <span>{isSplitMode ? "1 Metode" : "Split Bayar"}</span>
+            <span>{isSplitMode ? "Single Method" : "Split Pay"}</span>
           </button>
         </div>
 
@@ -302,14 +302,14 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                 <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <div>
                     <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: theme.ink, marginBottom: 6 }}>
-                      Uang Diterima dari Pembeli
+                      Cash Received from Buyer
                     </label>
                     <input
                       type="text"
                       inputMode="numeric"
                       value={formatNumberWithDots(cashTendered)}
                       onChange={(e) => onSetCashTendered(e.target.value.replace(/\D/g, ""))}
-                      placeholder="Contoh: 100.000"
+                      placeholder="Example: 100.000"
                       style={{
                         width: "100%",
                         padding: "10px 14px",
@@ -345,13 +345,13 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                             cursor: "pointer"
                           }}
                         >
-                          {idx === 0 ? "Uang Pas" : `Rp ${val.toLocaleString("id-ID")}`}
+                          {idx === 0 ? "Exact Cash" : `Rp ${val.toLocaleString("id-ID")}`}
                         </button>
                       );
                     })}
                   </div>
 
-                  {/* Kembalian Box */}
+                  {/* Change Box */}
                   <div
                     style={{
                       padding: "12px 16px",
@@ -364,7 +364,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                     }}
                   >
                     <span style={{ fontSize: 13, fontWeight: 500, color: theme.inkSoft }}>
-                      {isCashSufficient ? "Kembalian" : "Uang Kurang"}
+                      {isCashSufficient ? "Change" : "Remaining Balance"}
                     </span>
                     <span
                       style={{
@@ -396,12 +396,12 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                         store?.qrisImageUrl ||
                         `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SERA-PAY-${finalTotal}`
                       }
-                      alt="QRIS Toko"
+                      alt="Store QRIS"
                       style={{ width: 180, height: 180, display: "block" }}
                     />
                   </div>
                   <div style={{ fontSize: 12, color: theme.inkSoft, lineHeight: 1.4 }}>
-                    Minta pembeli scan kode QRIS di atas melalui BCA, DANA, GoPay, OVO, atau Livin Mandiri.
+                    Ask the buyer to scan the QRIS code above using their mobile banking or e-wallet app.
                   </div>
                 </div>
               )}
@@ -420,16 +420,16 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                       gap: 4
                     }}
                   >
-                    <div style={{ fontSize: 11, color: theme.inkSoft }}>Nomor Rekening / E-Wallet Toko:</div>
+                    <div style={{ fontSize: 11, color: theme.inkSoft }}>Store Bank Account / E-Wallet:</div>
                     <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
                       {store?.bankName || "DANA"}: {store?.bankAccount || store?.danaPhone || "081234567890"}
                     </div>
                     <div style={{ fontSize: 12, color: theme.inkSoft }}>
-                      a.n {store?.bankHolder || store?.danaName || store?.name}
+                      Account Name: {store?.bankHolder || store?.danaName || store?.name}
                     </div>
                   </div>
                   <div style={{ fontSize: 12, color: theme.inkSoft }}>
-                    Pastikan dana telah masuk ke mutasi rekening sebelum menyelesaikan transaksi.
+                    Verify that funds have arrived in your account before completing this transaction.
                   </div>
                 </div>
               )}
@@ -439,7 +439,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: theme.ink }}>
-                  Kombinasi 2 Metode Pembayaran
+                  Combine 2 Payment Methods
                 </span>
                 <button
                   type="button"
@@ -473,7 +473,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontSize: 11.5, fontWeight: 700, color: theme.inkSoft }}>
-                    Pembayaran 1
+                    Payment 1
                   </span>
                   <div style={{ display: "flex", gap: 4 }}>
                     {PAYMENT_OPTIONS.map((pm) => {
@@ -505,7 +505,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                   inputMode="numeric"
                   value={formatNumberWithDots(splitAmount1Raw)}
                   onChange={(e) => handleSplitAmount1Change(e.target.value.replace(/\D/g, ""))}
-                  placeholder="Nominal metode 1"
+                  placeholder="Method 1 amount"
                   style={{
                     width: "100%",
                     padding: "9px 12px",
@@ -535,7 +535,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontSize: 11.5, fontWeight: 700, color: theme.inkSoft }}>
-                    Pembayaran 2 (Sisa)
+                    Payment 2 (Remaining)
                   </span>
                   <div style={{ display: "flex", gap: 4 }}>
                     {PAYMENT_OPTIONS.map((pm) => {
@@ -567,7 +567,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                   inputMode="numeric"
                   value={formatNumberWithDots(splitAmount2Raw)}
                   onChange={(e) => setSplitAmount2Raw(e.target.value.replace(/\D/g, ""))}
-                  placeholder="Nominal metode 2"
+                  placeholder="Method 2 amount"
                   style={{
                     width: "100%",
                     padding: "9px 12px",
@@ -602,8 +602,8 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                     }}
                   >
                     {showSplitPayDetails
-                      ? "Sembunyikan QRIS / Rekening Toko"
-                      : "Lihat QRIS / Info Rekening Toko"}
+                      ? "Hide Store QRIS / Account Info"
+                      : "Show Store QRIS / Account Info"}
                   </button>
                   {showSplitPayDetails && (
                     <div
@@ -626,15 +626,14 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                             store?.qrisImageUrl ||
                             `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=SERA-PAY-${finalTotal}`
                           }
-                          alt="QRIS Toko"
+                          alt="Store QRIS"
                           style={{ width: 136, height: 136, borderRadius: 8, background: "#fff", padding: 6 }}
                         />
                       )}
                       {hasTransferInSplit && (
                         <div style={{ fontSize: 11.5, color: theme.ink }}>
                           <strong>{store?.bankName || "DANA"}:</strong>{" "}
-                          {store?.bankAccount || store?.danaPhone || "081234567890"} (a.n{" "}
-                          {store?.bankHolder || store?.danaName || store?.name})
+                          {store?.bankAccount || store?.danaPhone || "081234567890"} ({store?.bankHolder || store?.danaName || store?.name})
                         </div>
                       )}
                     </div>
@@ -657,7 +656,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: theme.inkSoft }}>
-                  <span>Total Dibayar (2 Metode)</span>
+                  <span>Total Paid (2 Methods)</span>
                   <span style={{ fontWeight: 700, color: theme.ink }}>
                     Rp {splitTotalPaid.toLocaleString("id-ID")}
                   </span>
@@ -665,12 +664,12 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontSize: 12.5, fontWeight: 600, color: theme.inkSoft }}>
                     {splitShortfall > 0
-                      ? "Uang Kurang"
+                      ? "Shortfall"
                       : splitNonCashOverpaid
-                        ? "Nominal Berlebih"
+                        ? "Excess Amount"
                         : splitChange > 0
-                          ? "Kembalian Tunai"
-                          : "Status Pembayaran"}
+                          ? "Cash Change"
+                          : "Payment Status"}
                   </span>
                   <span
                     style={{
@@ -687,17 +686,17 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
                     {splitShortfall > 0
                       ? `Rp ${splitShortfall.toLocaleString("id-ID")}`
                       : splitNonCashOverpaid
-                        ? "Sesuaikan Total Non-Tunai"
+                        ? "Adjust Non-Cash Total"
                         : splitChange > 0
                           ? `Rp ${splitChange.toLocaleString("id-ID")}`
-                          : "Lunas Pas"}
+                          : "Paid in Full"}
                   </span>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Selesaikan Transaksi Button */}
+          {/* Complete Transaction Button */}
           <button
             type="button"
             disabled={!canSubmit}
@@ -731,7 +730,7 @@ export const PosPaymentModal: React.FC<PosPaymentModalProps> = ({
             }}
           >
             <CheckCircle2 size={17} />
-            <span>Selesaikan Transaksi</span>
+            <span>Complete Transaction</span>
           </button>
         </div>
       </div>

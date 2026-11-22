@@ -27,7 +27,7 @@ interface UseProfileDataParams {
 function toAddressData(profile?: UserProfileDTO | null, fallbackName?: string, fallbackPhone?: string): AddressData {
   if (profile?.defaultAddress) {
     return {
-      label: profile.defaultAddress.label || 'Rumah',
+      label: profile.defaultAddress.label === 'Rumah' ? 'Home' : (profile.defaultAddress.label || 'Home'),
       recipientName: profile.defaultAddress.recipientName || '',
       phone: profile.defaultAddress.phone || '',
       streetAddress: profile.defaultAddress.streetAddress || '',
@@ -39,7 +39,7 @@ function toAddressData(profile?: UserProfileDTO | null, fallbackName?: string, f
     };
   }
   return {
-    label: 'Rumah',
+    label: 'Home',
     recipientName: fallbackName || '',
     phone: fallbackPhone || '',
     streetAddress: '',
@@ -145,7 +145,7 @@ export function useProfileData({
       }
     } catch {}
     return {
-      label: 'Rumah',
+      label: 'Home',
       recipientName: localStorage.getItem('sera_customer_name') || localStorage.getItem('sera_user_name') || '',
       phone: localStorage.getItem('sera_user_phone') || localStorage.getItem('sera_customer_phone') || '',
       streetAddress: localStorage.getItem('sera_customer_address') || '',
@@ -214,17 +214,17 @@ export function useProfileData({
   const handleSaveAddress = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!onUpdateProfile) {
-      showFeedback('error', 'Layanan penyimpanan profil belum siap.');
+      showFeedback('error', 'Profile storage service is not ready yet.');
       return;
     }
 
     setIsSaving(true);
     try {
       await onUpdateProfile({ defaultAddress: addressForm });
-      showFeedback('success', 'Alamat pengiriman berhasil disimpan secara permanen!');
+      showFeedback('success', 'Delivery address saved permanently!');
       setViewMode('main');
     } catch (err: any) {
-      showFeedback('error', err?.message || 'Gagal menyimpan alamat pengiriman.');
+      showFeedback('error', err?.message || 'Failed to save delivery address.');
     } finally {
       setIsSaving(false);
     }
@@ -241,7 +241,7 @@ export function useProfileData({
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      showFeedback('error', 'Format file tidak didukung. Harap pilih gambar (JPG, PNG, WebP).', 3000);
+      showFeedback('error', 'Unsupported file format. Please select an image (JPG, PNG, WebP).', 3000);
       e.target.value = '';
       return;
     }
@@ -278,7 +278,7 @@ export function useProfileData({
       });
       const data = await uploadRes.json();
       if (!uploadRes.ok || !data?.success || !data?.url || String(data.url).startsWith('blob:')) {
-        throw new Error(data?.error || 'Gagal mengunggah foto profil ke server.');
+        throw new Error(data?.error || 'Failed to upload profile photo to server.');
       }
 
       if (onUpdateProfile) {
@@ -291,11 +291,11 @@ export function useProfileData({
         setAvatarUrl(data.url);
       }
 
-      showFeedback('success', 'Foto profil berhasil disimpan!', 2500);
+      showFeedback('success', 'Profile photo saved successfully!', 2500);
     } catch (err: any) {
       console.error('[useProfileData] Failed to update avatar image:', err);
       setAvatarUrl(prevAvatar);
-      showFeedback('error', err?.message || 'Gagal mengunggah dan menyimpan foto profil.', 3500);
+      showFeedback('error', err?.message || 'Failed to upload and save profile photo.', 3500);
     } finally {
       setIsSaving(false);
       e.target.value = '';
@@ -310,10 +310,10 @@ export function useProfileData({
     setIsSaving(true);
     try {
       await onUpdateProfile({ avatarUrl: null, avatarFileKey: null });
-      showFeedback('info', 'Foto profil dihapus, kembali ke inisial.', 2500);
+      showFeedback('info', 'Profile photo removed, reverted to initials.', 2500);
     } catch (err: any) {
       setAvatarUrl(prevAvatar);
-      showFeedback('error', err?.message || 'Gagal menghapus foto profil.');
+      showFeedback('error', err?.message || 'Failed to remove profile photo.');
     } finally {
       setIsSaving(false);
     }
@@ -341,7 +341,7 @@ export function useProfileData({
         await onUpdateProfile({ trainAiOptIn: nextVal });
       } catch (err: any) {
         setTrainAiOptIn(prevVal);
-        showFeedback('error', err?.message || 'Gagal menyimpan preferensi privasi.');
+        showFeedback('error', err?.message || 'Failed to save privacy preference.');
         return;
       }
     } else if (typeof window !== 'undefined') {
@@ -351,8 +351,8 @@ export function useProfileData({
     showFeedback(
       'success',
       nextVal
-        ? 'Preferensi disimpan: Kontribusi peningkatan model AI diaktifkan.'
-        : 'Preferensi disimpan: Obrolan Anda tidak digunakan untuk pelatihan model.',
+        ? 'Preference saved: AI model improvement contribution enabled.'
+        : 'Preference saved: Your chats are not used for model training.',
       3200
     );
   };
@@ -362,7 +362,7 @@ export function useProfileData({
     try {
       await onUpdateProfile({ notificationPrefs: nextPrefs });
     } catch (err: any) {
-      showFeedback('error', err?.message || 'Gagal menyinkronkan preferensi notifikasi.');
+      showFeedback('error', err?.message || 'Failed to sync notification preferences.');
     }
   };
 
@@ -370,7 +370,7 @@ export function useProfileData({
     if (typeof window !== 'undefined') {
       localStorage.removeItem('sera_chat_messages');
       localStorage.removeItem('sera_active_session_cache');
-      showFeedback('success', 'Cache percakapan lokal berhasil dibersihkan.', 3200);
+      showFeedback('success', 'Local conversation cache cleared successfully.', 3200);
     }
   };
 
@@ -391,12 +391,12 @@ export function useProfileData({
         localStorage.removeItem('sera_active_session_cache');
       }
       setShowDeleteModal(false);
-      showFeedback('success', 'Akun dan seluruh data profil telah dihapus secara permanen.', 2500);
+      showFeedback('success', 'Account and all profile data have been permanently deleted.', 2500);
       setTimeout(() => {
         onDisconnect();
       }, 900);
     } catch (err: any) {
-      showFeedback('error', err?.message || 'Gagal menghapus akun di server.', 4500);
+      showFeedback('error', err?.message || 'Failed to delete account on server.', 4500);
     } finally {
       setIsDeleting(false);
     }
@@ -525,17 +525,17 @@ export function useProfileData({
 
     const handleSubscribeSuccess = (data: { tier: string; message?: string }) => {
       setIsProcessing(false);
-      showFeedback('success', data.message || `Paket ${data.tier} berhasil diaktifkan!`, 5000);
+      showFeedback('success', data.message || `${data.tier} plan activated successfully!`, 5000);
     };
 
     const handleTopupSuccess = (data: { amountUsdc?: number; message?: string }) => {
       setIsProcessing(false);
-      showFeedback('success', data.message || `Pengisian kredit komputasi berhasil diproses!`, 5000);
+      showFeedback('success', data.message || `Compute credit top-up processed successfully!`, 5000);
     };
 
     const handleBillingError = (data: { message?: string }) => {
       setIsProcessing(false);
-      showFeedback('error', data.message || 'Operasi layanan gagal.', 6000);
+      showFeedback('error', data.message || 'Service operation failed.', 6000);
     };
 
     socket.on('billing:update', handleBillingUpdate);
@@ -555,7 +555,7 @@ export function useProfileData({
 
   const handleSubscribePass = (tier: 'STARTER' | 'ENTERPRISE') => {
     const cost = tier === 'ENTERPRISE' ? 450000 : 75000;
-    const tierTitle = tier === 'ENTERPRISE' ? 'Enterprise Pass (Rp 450.000/bln)' : 'Starter Pass (Rp 75.000/bln)';
+    const tierTitle = tier === 'ENTERPRISE' ? 'Enterprise Pass (Rp 450,000/mo)' : 'Starter Pass (Rp 75,000/mo)';
 
     setBalanceModal({
       isOpen: true,
@@ -570,7 +570,7 @@ export function useProfileData({
       setBalanceModal({
         isOpen: true,
         requiredAmount: 75000,
-        itemName: 'Starter Pass (Rp 75.000/bln)',
+        itemName: 'Starter Pass (Rp 75,000/mo)',
         tierKey: 'STARTER',
       });
       return;
@@ -579,7 +579,7 @@ export function useProfileData({
     setBalanceModal({
       isOpen: true,
       requiredAmount: amountRp,
-      itemName: `Isi Ulang Kredit Rp ${amountRp.toLocaleString('id-ID')}`,
+      itemName: `Credit Top-Up Rp ${amountRp.toLocaleString('id-ID')}`,
     });
   };
 
@@ -626,7 +626,7 @@ export function useProfileData({
   const handleSaveProfile = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!onUpdateProfile) {
-      showFeedback('error', 'Layanan penyimpanan profil belum siap.');
+      showFeedback('error', 'Profile storage service is not ready yet.');
       return;
     }
 
@@ -637,10 +637,10 @@ export function useProfileData({
         nickname: nicknameValue.trim(),
         phone: phoneValue.trim(),
       });
-      showFeedback('success', 'Profil berhasil diperbarui secara permanen!');
+      showFeedback('success', 'Profile updated permanently!');
       setViewMode('main');
     } catch (err: any) {
-      showFeedback('error', err?.message || 'Gagal menyimpan perubahan profil.');
+      showFeedback('error', err?.message || 'Failed to save profile changes.');
     } finally {
       setIsSaving(false);
     }

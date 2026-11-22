@@ -22,7 +22,7 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      setMessage('✅ Pendaftaran berhasil! Selamat datang di SERA Market.');
+      setMessage('✅ Registration successful! Welcome to SERA Market.');
       if (onSuccess) {
         onSuccess({ email, phone });
       }
@@ -78,17 +78,17 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
                 fontFamily: 'var(--font-heading)',
                 margin: 0
               }}>
-                Daftar Akun Pengguna
+                Create User Account
               </h3>
               <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', margin: '2px 0 0' }}>
-                Akses pesanan, riwayat & promo SERA
+                Access your SERA orders, history & promos
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            aria-label="Tutup"
+            aria-label="Close"
             style={{
               width: '32px',
               height: '32px',
@@ -136,14 +136,14 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
                   color: 'var(--text-main)',
                   marginBottom: '5px'
                 }}>
-                  Alamat Email <span style={{ color: 'var(--color-brand)' }}>*</span>
+                  Email Address <span style={{ color: 'var(--color-brand)' }}>*</span>
                 </label>
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="nama@email.com"
+                  placeholder="name@email.com"
                   style={{
                     width: '100%',
                     padding: '10px 12px',
@@ -160,7 +160,7 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
                 />
               </div>
 
-              {/* Field 2: No WhatsApp */}
+              {/* Field 2: WhatsApp Number */}
               <div>
                 <label style={{
                   display: 'block',
@@ -169,7 +169,7 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
                   color: 'var(--text-main)',
                   marginBottom: '5px'
                 }}>
-                  Nomor WhatsApp <span style={{ color: 'var(--color-brand)' }}>*</span>
+                  WhatsApp Number <span style={{ color: 'var(--color-brand)' }}>*</span>
                 </label>
                 <input
                   type="tel"
@@ -193,7 +193,7 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
                   onBlur={(e) => (e.target.style.borderColor = 'var(--border-color)')}
                 />
                 <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>
-                  Digunakan untuk verifikasi instan & notifikasi pesanan.
+                  Used for instant verification & order notifications.
                 </span>
               </div>
 
@@ -212,7 +212,7 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
                   cursor: isSubmitting ? 'not-allowed' : 'pointer'
                 }}
               >
-                {isSubmitting ? 'Memproses...' : 'Lanjut Daftar / Masuk'}
+                {isSubmitting ? 'Processing...' : 'Continue to Sign Up / Sign In'}
               </button>
 
               <div style={{
@@ -222,7 +222,7 @@ export const UserAuthModal: React.FC<UserAuthModalProps> = ({
                 lineHeight: 1.5,
                 marginTop: '4px'
               }}>
-                🔒 Terhubung aman dengan <strong>SERA Cognitive Agent OS</strong>.
+                🔒 Securely connected to <strong>SERA Cognitive Agent OS</strong>.
               </div>
             </div>
           )}

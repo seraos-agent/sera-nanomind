@@ -45,20 +45,20 @@ export function AddressSubView({
         }}
       >
         <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-          Alamat Pengiriman Utama
+          Primary Delivery Address
         </div>
         <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.45 }}>
-          Otomatis terisi saat memesan barang & kurir di SERA Marketplace
+          Auto-filled when ordering goods & courier delivery in SERA Marketplace
         </div>
       </div>
 
-      {/* Label Alamat (Pill Options) */}
+      {/* Address Label (Pill Options) */}
       <div>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Label alamat
+          Address label
         </label>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {['Rumah', 'Kantor', 'Apartemen', 'Toko'].map((tag) => (
+          {['Home', 'Office', 'Apartment', 'Store'].map((tag) => (
             <button
               key={tag}
               type="button"
@@ -81,16 +81,16 @@ export function AddressSubView({
         </div>
       </div>
 
-      {/* Nama Penerima */}
+      {/* Recipient Name */}
       <div>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Nama penerima
+          Recipient name
         </label>
         <input
           type="text"
           value={addressForm.recipientName}
           onChange={(e) => setAddressForm((prev) => ({ ...prev, recipientName: e.target.value }))}
-          placeholder="Contoh: Om Jiban"
+          placeholder="Example: John Doe"
           style={{
             width: '100%',
             padding: '13px 16px',
@@ -106,17 +106,17 @@ export function AddressSubView({
         />
       </div>
 
-      {/* Nomor WhatsApp Penerima */}
+      {/* Recipient WhatsApp Number */}
       <div>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Nomor WhatsApp penerima
+          Recipient WhatsApp number
         </label>
         <input
           type="tel"
           inputMode="numeric"
           value={addressForm.phone}
           onChange={(e) => setAddressForm((prev) => ({ ...prev, phone: e.target.value.replace(/\D/g, '') }))}
-          placeholder="Contoh: 081234567890"
+          placeholder="Example: 081234567890"
           style={{
             width: '100%',
             padding: '13px 16px',
@@ -145,7 +145,7 @@ export function AddressSubView({
         }}
       >
         <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink }}>
-          Titik Lokasi di Peta
+          Map Pin Location
         </div>
 
         {addressForm.lat !== undefined && addressForm.lng !== undefined ? (
@@ -165,7 +165,7 @@ export function AddressSubView({
           </div>
         ) : (
           <div style={{ fontSize: 13, color: theme.inkSoft, lineHeight: 1.45 }}>
-            Tentukan titik agar pengantaran kurir akurat dan alamat terisi otomatis.
+            Set a map pin for accurate courier delivery and automatic address lookup.
           </div>
         )}
 
@@ -196,20 +196,20 @@ export function AddressSubView({
             }
           }}
         >
-          {addressForm.lat !== undefined && addressForm.lng !== undefined ? 'Ubah titik di peta' : 'Pilih titik di peta'}
+          {addressForm.lat !== undefined && addressForm.lng !== undefined ? 'Change pin on map' : 'Pick pin on map'}
         </button>
       </div>
 
-      {/* Alamat Lengkap */}
+      {/* Full Address */}
       <div>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Alamat lengkap
+          Full address
         </label>
         <textarea
           rows={3}
           value={addressForm.streetAddress}
           onChange={(e) => setAddressForm((prev) => ({ ...prev, streetAddress: e.target.value }))}
-          placeholder="Nama jalan, nomor rumah/gedung, RT/RW, kelurahan, kecamatan"
+          placeholder="Street name, house/building number, neighborhood, district"
           style={{
             width: '100%',
             padding: '13px 16px',
@@ -227,16 +227,16 @@ export function AddressSubView({
         />
       </div>
 
-      {/* Kota / Kabupaten */}
+      {/* City / Regency */}
       <div>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Kota / Kabupaten
+          City / Regency
         </label>
         <input
           type="text"
           value={addressForm.city}
           onChange={(e) => setAddressForm((prev) => ({ ...prev, city: e.target.value }))}
-          placeholder="Contoh: Jakarta Selatan"
+          placeholder="Example: South Jakarta"
           style={{
             width: '100%',
             padding: '13px 16px',
@@ -252,16 +252,16 @@ export function AddressSubView({
         />
       </div>
 
-      {/* Catatan Patokan untuk Kurir */}
+      {/* Landmark Notes for Courier */}
       <div>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Catatan patokan untuk kurir (opsional)
+          Landmark notes for courier (optional)
         </label>
         <input
           type="text"
           value={addressForm.notes}
           onChange={(e) => setAddressForm((prev) => ({ ...prev, notes: e.target.value }))}
-          placeholder="Contoh: Pagar hitam depan pos satpam"
+          placeholder="Example: Black gate across from security post"
           style={{
             width: '100%',
             padding: '13px 16px',
@@ -296,7 +296,7 @@ export function AddressSubView({
             transition: 'opacity 0.15s ease',
           }}
         >
-          {isSaving ? 'Menyimpan...' : 'Simpan alamat'}
+          {isSaving ? 'Saving...' : 'Save address'}
         </button>
       </div>
     </form>

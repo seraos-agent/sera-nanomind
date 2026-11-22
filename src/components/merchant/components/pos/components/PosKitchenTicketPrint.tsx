@@ -22,10 +22,10 @@ export const PosKitchenTicketPrint: React.FC<PosKitchenTicketPrintProps> = ({ pa
       : `DINE-IN: ${payload.tableLabel || "Table"}`;
   const totalPortions = payload.items.reduce((sum, it) => sum + it.quantity, 0);
   const ticketTitle = payload.isAdditionalOrder
-    ? "TAMBAHAN DAPUR / BAR"
+    ? "KITCHEN / BAR ADD-ON"
     : payload.isReprint
-      ? "CETAK ULANG DAPUR"
-      : "TIKET DAPUR / BARISTA";
+      ? "KITCHEN REPRINT"
+      : "KITCHEN / BARISTA TICKET";
 
   return (
     <div id="sera-thermal-kitchen-ticket" style={{ display: "none" }}>
@@ -33,7 +33,7 @@ export const PosKitchenTicketPrint: React.FC<PosKitchenTicketPrintProps> = ({ pa
         {ticketTitle}
       </div>
       <div style={{ textAlign: "center", fontSize: 10 }}>
-        {payload.store?.name || "RESTO SERA"}
+        {payload.store?.name || "SERA RESTAURANT"}
       </div>
       <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
       <div style={{ textAlign: "center", fontWeight: "bold", fontSize: 14, padding: "2px 0" }}>
@@ -41,12 +41,12 @@ export const PosKitchenTicketPrint: React.FC<PosKitchenTicketPrintProps> = ({ pa
       </div>
       {payload.isAdditionalOrder && (
         <div style={{ textAlign: "center", fontWeight: "bold", fontSize: 10 }}>
-          &gt;&gt;&gt; PESANAN TAMBAHAN &lt;&lt;&lt;
+          &gt;&gt;&gt; ADDITIONAL ITEMS &lt;&lt;&lt;
         </div>
       )}
       <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10 }}>
-        <span>Jam: {timeStr}</span>
+        <span>Time: {timeStr}</span>
         {payload.actorName && <span>Staff: {payload.actorName}</span>}
       </div>
       {payload.receiptOrBillNumber && (
@@ -62,7 +62,7 @@ export const PosKitchenTicketPrint: React.FC<PosKitchenTicketPrintProps> = ({ pa
             </div>
             {item.notes && item.notes.trim() && (
               <div style={{ fontSize: 10, paddingLeft: 14 }}>
-                Catatan: {item.notes.trim()}
+                Note: {item.notes.trim()}
               </div>
             )}
           </div>
@@ -70,12 +70,12 @@ export const PosKitchenTicketPrint: React.FC<PosKitchenTicketPrintProps> = ({ pa
       </div>
       <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
       <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold", fontSize: 11 }}>
-        <span>Total Porsi:</span>
-        <span>{totalPortions} item</span>
+        <span>Total Portions:</span>
+        <span>{totalPortions} items</span>
       </div>
       <div style={{ borderTop: "1px dashed #000", margin: "4px 0" }} />
       <div style={{ textAlign: "center", fontSize: 9 }}>
-        Segera diproses oleh dapur
+        Prepare in kitchen promptly
       </div>
     </div>
   );

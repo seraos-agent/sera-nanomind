@@ -35,7 +35,7 @@ export const ItemDetailLightbox: React.FC<ItemDetailLightboxProps> = ({ photoUrl
       >
         <button
           onClick={onClose}
-          aria-label="Tutup Foto"
+          aria-label="Close Photo"
           style={{
             position: 'absolute',
             top: '-46px',
@@ -58,7 +58,7 @@ export const ItemDetailLightbox: React.FC<ItemDetailLightboxProps> = ({ photoUrl
         </button>
         <img
           src={photoUrl}
-          alt="Preview Foto Ulasan Pembeli"
+          alt="Buyer Review Photo Preview"
           style={{
             maxWidth: '100%',
             maxHeight: '82vh',

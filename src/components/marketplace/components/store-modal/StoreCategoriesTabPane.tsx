@@ -17,7 +17,7 @@ export const StoreCategoriesTabPane: React.FC<StoreCategoriesTabPaneProps> = ({
     <div style={{ padding: '16px 16px 40px' }}>
       <StoreClosedNotice isOpen={isOpen} style={{ marginBottom: '12px' }} />
       <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-sub)', marginBottom: '10px' }}>
-        Pilih Kategori Produk Toko
+        Select Store Product Category
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {categories.map((c) => (
@@ -43,12 +43,12 @@ export const StoreCategoriesTabPane: React.FC<StoreCategoriesTabPaneProps> = ({
                   {c.name}
                 </div>
                 <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                  {c.count} Produk
+                  {c.count} Products
                 </div>
               </div>
             </div>
             <span style={{ color: 'var(--color-brand)', fontWeight: 700, fontSize: '0.85rem' }}>
-              Lihat ›
+              View ›
             </span>
           </div>
         ))}

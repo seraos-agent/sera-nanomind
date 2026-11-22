@@ -295,7 +295,7 @@ export function ProfilePage({
       <StoreLocationPickerModal
         isOpen={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}
-        title="Tentukan Titik Alamat Pengiriman"
+        title="Set Delivery Address Pin"
         initialLat={addressForm.lat}
         initialLng={addressForm.lng}
         initialAddress={addressForm.streetAddress}

@@ -6,11 +6,11 @@ import { formatRelativeTime } from './types';
 
 export function useItemReviews(item: MarketplaceItem, _isService: boolean) {
   const [realReviews, setRealReviews] = useState<ReviewItem[]>([]);
-  const [selectedRatingFilter, setSelectedRatingFilter] = useState('Semua');
+  const [selectedRatingFilter, setSelectedRatingFilter] = useState('All');
 
   useEffect(() => {
     let cancelled = false;
-    setSelectedRatingFilter('Semua');
+    setSelectedRatingFilter('All');
 
     const fetchProductReviews = async () => {
       try {
@@ -25,7 +25,7 @@ export function useItemReviews(item: MarketplaceItem, _isService: boolean) {
         if (Array.isArray(json.data)) {
           const mapped: ReviewItem[] = json.data.map((r: any) => ({
             id: r.id,
-            author: r.customerName || 'Pelanggan',
+            author: r.customerName || 'Customer',
             rating: r.rating || 5,
             date: formatRelativeTime(r.createdAt),
             avatarBg: '#EFF6FF',
@@ -57,7 +57,7 @@ export function useItemReviews(item: MarketplaceItem, _isService: boolean) {
   }, [allReviews]);
 
   const filteredReviews = useMemo(() => {
-    if (selectedRatingFilter === 'Dengan Foto') {
+    if (selectedRatingFilter === 'With Photos') {
       return allReviews.filter((r) => r.photos && r.photos.length > 0);
     }
     if (selectedRatingFilter === '★ 5') {

@@ -80,10 +80,10 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
             <Bike size={22} />
           </div>
           <div style={{ fontSize: 13.5, fontWeight: 700, color: theme.ink }}>
-            Tidak Ada Pengantaran Aktif
+            No Active Deliveries
           </div>
           <div style={{ fontSize: 12, maxWidth: 360, lineHeight: 1.4 }}>
-            Pesanan yang sedang dikirim via kurir akan tampil di sini menunggu kurir menyelesaikan pengantaran.
+            Orders currently out for delivery will appear here while waiting for the courier to complete drop-off.
           </div>
         </div>
       ) : couriersList.length === 0 ? (
@@ -121,7 +121,7 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
                         color: isDelivered ? "#10B981" : "#3B82F6"
                       }}
                     >
-                      {isDelivered ? "Paket Tiba di Tujuan" : "Sedang Diantar Kurir"}
+                      {isDelivered ? "Package Arrived" : "Out for Delivery"}
                     </span>
                     <span
                       style={{
@@ -169,7 +169,7 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
                     disabled={!isDelivered}
                     onClick={() => {
                       if (!isDelivered) return;
-                      onReconcileCourier("mitra", "Mitra Kurir", 0, [order]);
+                      onReconcileCourier("mitra", "Courier Partner", 0, [order]);
                     }}
                     style={{
                       padding: "7px 14px",
@@ -190,12 +190,12 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
                     {isDelivered ? (
                       <>
                         <Check size={13} strokeWidth={2.5} color="#FFFFFF" />
-                        <span>Selesaikan Pesanan</span>
+                        <span>Complete Order</span>
                       </>
                     ) : (
                       <>
                         <Clock size={13} />
-                        <span>Menunggu Kurir Selesai...</span>
+                        <span>Waiting for Courier...</span>
                       </>
                     )}
                   </button>
@@ -273,7 +273,7 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
                         {courier.name}
                       </div>
                       <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 1 }}>
-                        {courierOrdersList.length} pesanan dikirim
+                        {courierOrdersList.length} active deliveries
                       </div>
                     </div>
                   </div>
@@ -295,11 +295,11 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
                       fontWeight: 700
                     }}
                   >
-                    {courierOrdersList.length > 0 ? "Dikirim" : "Siap"}
+                    {courierOrdersList.length > 0 ? "In Transit" : "Ready"}
                   </span>
                 </div>
 
-                {/* Rincian Pesanan Dibawa */}
+                {/* Courier Carry Manifest */}
                 {courierOrdersList.length === 0 ? (
                   <div
                     style={{
@@ -312,7 +312,7 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
                       color: theme.inkSoft
                     }}
                   >
-                    Tidak ada pengantaran aktif.
+                    No active deliveries.
                   </div>
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -477,13 +477,13 @@ export const OrderCourierManifest: React.FC<OrderCourierManifestProps> = ({
                         <>
                           <Check size={14} strokeWidth={2.5} color="#FFFFFF" />
                           <span>
-                            {codTotal > 0 ? "Terima Kas & Selesaikan" : "Selesaikan Pesanan"}
+                            {codTotal > 0 ? "Confirm Cash & Complete" : "Complete Order"}
                           </span>
                         </>
                       ) : (
                         <>
                           <Clock size={14} />
-                          <span>Menunggu Kurir Selesai...</span>
+                          <span>Waiting for Courier...</span>
                         </>
                       )}
                     </button>

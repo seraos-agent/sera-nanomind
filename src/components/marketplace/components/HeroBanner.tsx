@@ -202,7 +202,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                     className="category-menu-item"
                     onClick={() => {
                       if (cat.isSoon) {
-                        triggerToast(`Kategori ${cat.label} akan segera hadir!`);
+                        triggerToast(`${cat.label} category coming soon!`);
                         return;
                       }
                       if (isAllItem) {
@@ -211,7 +211,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                         onSelectCategory(isSelected ? null : cat.name);
                       }
                     }}
-                    title={cat.isSoon ? `${cat.label} (Segera Hadir)` : cat.label}
+                    title={cat.isSoon ? `${cat.label} (Coming Soon)` : cat.label}
                     aria-label={cat.label}
                     style={{
                       display: 'flex',

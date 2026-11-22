@@ -35,10 +35,10 @@ export function CourierConfigForm({
     >
       <div style={{ marginBottom: 18 }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0, color: theme.ink }}>
-          Pengaturan Tarif Ongkir
+          Delivery Fee Settings
         </h3>
         <p style={{ fontSize: 12.5, color: theme.inkSoft, margin: "3px 0 0 0", lineHeight: 1.45 }}>
-          Aturan tarif pengantaran armada toko saat pembeli memilih opsi <b>Kurir Toko</b>.
+          Pricing rules for your store fleet when buyers select <b>Store Courier</b>.
         </p>
       </div>
 
@@ -51,7 +51,7 @@ export function CourierConfigForm({
         {/* Pricing Model Selector */}
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-            Metode Perhitungan Tarif
+            Pricing Calculation Method
           </label>
           <div
             style={{
@@ -80,7 +80,7 @@ export function CourierConfigForm({
                 transition: "all 0.15s ease"
               }}
             >
-              Tarif Flat
+              Flat Rate
             </button>
             <button
               type="button"
@@ -107,7 +107,7 @@ export function CourierConfigForm({
         {/* Flat Rate / Base Rate Input */}
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-            {config.pricingType === "FLAT" ? "Biaya Ongkir Flat" : "Tarif Dasar (Rp)"}
+            {config.pricingType === "FLAT" ? "Flat Delivery Fee" : "Base Rate (Rp)"}
           </label>
           <div
             style={{
@@ -153,7 +153,7 @@ export function CourierConfigForm({
             />
           </div>
           <span style={{ fontSize: 12, color: theme.inkSoft, marginTop: 6, display: "block", lineHeight: 1.4 }}>
-            Contoh: Rp 5.000 se-area sekitar toko.
+            Example: Rp 5.000 flat across nearby neighborhoods.
           </span>
         </div>
 
@@ -161,7 +161,7 @@ export function CourierConfigForm({
         {config.pricingType === "PER_KM" && (
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-              Tarif Tambahan per Kilometer
+              Additional Rate per Kilometer
             </label>
             <div
               style={{
@@ -212,20 +212,20 @@ export function CourierConfigForm({
         {/* Hairline Divider Between Pricing & Delivery Rules */}
         <div style={{ height: 1, background: theme.border, margin: "22px 0 18px 0" }} />
 
-        {/* Section 2: Jangkauan & Ketentuan Antar */}
+        {/* Section 2: Coverage & Delivery Terms */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: theme.ink, marginBottom: 2 }}>
-            Jangkauan & Ketentuan Antar
+            Coverage &amp; Delivery Terms
           </div>
           <div style={{ fontSize: 12.5, color: theme.inkSoft }}>
-            Batasan jarak pengantaran maksimal dan estimasi durasi sampai
+            Maximum delivery distance limit and estimated arrival time
           </div>
         </div>
 
         {/* Max Delivery Radius */}
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-            Jarak Maksimal Pengantaran
+            Maximum Delivery Distance
           </label>
           <div
             style={{
@@ -276,7 +276,7 @@ export function CourierConfigForm({
         <div style={{ marginBottom: 16 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
             <label style={{ fontSize: 13, fontWeight: 600, color: theme.ink }}>
-              Gratis Ongkir Min. Belanja
+              Free Shipping Min. Order
             </label>
             <span
               style={{
@@ -289,7 +289,7 @@ export function CourierConfigForm({
                 border: `1px solid ${theme.border}`
               }}
             >
-              Opsional
+              Optional
             </span>
           </div>
           <div
@@ -323,7 +323,7 @@ export function CourierConfigForm({
               step={5000}
               value={config.freeDeliveryThreshold ?? 0}
               onChange={e => setConfig(prev => ({ ...prev, freeDeliveryThreshold: Number(e.target.value) || 0 }))}
-              placeholder="0 jika tidak ada promo"
+              placeholder="0 if no promo"
               style={{
                 flex: 1,
                 border: "none",
@@ -337,20 +337,20 @@ export function CourierConfigForm({
             />
           </div>
           <span style={{ fontSize: 12, color: theme.inkSoft, marginTop: 6, display: "block", lineHeight: 1.4 }}>
-            Contoh: Belanja di atas Rp 50.000 otomatis gratis ongkir.
+            Example: Orders above Rp 50.000 automatically get free shipping.
           </span>
         </div>
 
         {/* Estimated Delivery Time */}
         <div style={{ marginBottom: 20 }}>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-            Estimasi Waktu Pengantaran
+            Estimated Delivery Time
           </label>
           <input
             type="text"
             value={config.estimatedMinutes}
             onChange={e => setConfig(prev => ({ ...prev, estimatedMinutes: e.target.value }))}
-            placeholder="Contoh: 30-45 Menit atau Siang & Sore"
+            placeholder="Example: 30-45 Mins or Same-Day Slots"
             style={{
               width: "100%",
               boxSizing: "border-box",
@@ -385,7 +385,7 @@ export function CourierConfigForm({
             }}
           >
             <Check size={16} color="#10B981" />
-            <span>Pengaturan berhasil disimpan.</span>
+            <span>Settings saved successfully.</span>
           </div>
         )}
 
@@ -432,7 +432,7 @@ export function CourierConfigForm({
             gap: 8
           }}
         >
-          {isSaving ? "Menyimpan..." : "Simpan Pengaturan"}
+          {isSaving ? "Saving..." : "Save Settings"}
         </button>
       </form>
     </div>

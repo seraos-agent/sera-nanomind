@@ -56,7 +56,7 @@ export function ShippingFooterBar({
             transition: 'all 0.15s ease',
           }}
         >
-          Batal
+          Cancel
         </button>
 
         <button
@@ -82,7 +82,7 @@ export function ShippingFooterBar({
           }}
         >
           {isSaved ? <Check size={18} /> : null}
-          <span>{isSaved ? 'Tersimpan!' : 'Simpan Pengaturan'}</span>
+          <span>{isSaved ? 'Saved!' : 'Save Settings'}</span>
         </button>
       </div>
     </div>

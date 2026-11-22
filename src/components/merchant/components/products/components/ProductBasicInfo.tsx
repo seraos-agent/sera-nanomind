@@ -61,10 +61,10 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
         >
           <label style={{ fontSize: 12, fontWeight: 600, color: theme.ink }}>
             {storeType === "JASA"
-              ? "Nama Jasa"
+              ? "Service Name"
               : storeType === "FOOD"
-                ? "Nama Menu Food"
-                : "Nama Produk Barang"}
+                ? "Menu Item Name"
+                : "Product Name"}
           </label>
           <span
             style={{
@@ -81,10 +81,10 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
           maxLength={maxNameLength}
           placeholder={
             storeType === "JASA"
-              ? "Contoh: Servis AC 1 PK"
+              ? "Example: AC Tune-Up & Repair"
               : storeType === "FOOD"
-                ? "Contoh: Nasi Goreng Spesial Telur"
-                : "Contoh: Beras Rojolele 5kg"
+                ? "Example: Special Signature Fried Rice"
+                : "Example: Premium Jasmine Rice 5kg"
           }
           value={prodName}
           onChange={(e) => setProdName(e.target.value.replace(/[\r\n]/g, "").slice(0, maxNameLength))}
@@ -123,7 +123,7 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
             marginBottom: 6
           }}
         >
-          Kategori {storeType === "FOOD" ? "Menu" : "di Toko"}
+          {storeType === "FOOD" ? "Menu Category" : "Store Category"}
         </label>
         <select
           value={prodCategory}
@@ -140,7 +140,7 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
             boxSizing: "border-box"
           }}
         >
-          <option value="">- Tanpa Kategori (Tampil di Semua) -</option>
+          <option value="">- Uncategorized (Shown in All) -</option>
           {getStoreProductCategories(store?.customCategories).map((cat) => (
             <option key={cat} value={cat}>
               {cat}
@@ -161,10 +161,10 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
         >
           <label style={{ fontSize: 12, fontWeight: 600, color: theme.ink }}>
             {storeType === "JASA"
-              ? "Deskripsi Layanan / Jasa"
+              ? "Service Description"
               : storeType === "FOOD"
-                ? "Deskripsi Menu"
-                : "Deskripsi Produk"}
+                ? "Menu Description"
+                : "Product Description"}
           </label>
           <span
             style={{
@@ -181,10 +181,10 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
           maxLength={maxDescLength}
           placeholder={
             storeType === "JASA"
-              ? "Jelaskan cakupan pengerjaan, garansi, estimasi durasi, atau keunggulan layanan..."
+              ? "Describe scope of work, warranty, estimated duration, or key highlights..."
               : storeType === "FOOD"
-                ? "Jelaskan rasa, porsi, bahan utama, tingkat kepedasan, atau saran penyajian..."
-                : "Jelaskan spesifikasi, material/bahan, ukuran, atau keunggulan produk..."
+                ? "Describe flavor, portion size, key ingredients, or serving suggestions..."
+                : "Describe specifications, materials, dimensions, or product highlights..."
           }
           value={prodDescription}
           onChange={(e) => setProdDescription(e.target.value.slice(0, maxDescLength))}
@@ -231,7 +231,7 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
               }}
             >
               <Barcode size={14} color={theme.accent} />
-              <span>{isMobileView ? "Barcode / SKU" : "Barcode / Kode SKU (Kasir)"}</span>
+              <span>{isMobileView ? "Barcode / SKU" : "Barcode / SKU Code (POS)"}</span>
             </label>
 
             <button
@@ -240,7 +240,7 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
                 const randomDigits = Math.floor(1000000000 + Math.random() * 9000000000);
                 setProdBarcode(`899${randomDigits}`);
               }}
-              title="Generate Barcode Acak"
+              title="Generate Random Barcode"
               style={{
                 background: "none",
                 border: "none",
@@ -253,7 +253,7 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
                 textUnderlineOffset: 2
               }}
             >
-              + Acak Barcode
+              + Random Barcode
             </button>
           </div>
 
@@ -268,7 +268,7 @@ export const ProductBasicInfo: React.FC<ProductBasicInfoProps> = ({
               type="text"
               value={prodBarcode}
               onChange={(e) => setProdBarcode(e.target.value)}
-              placeholder="Scan atau ketik kode barcode"
+              placeholder="Scan or type barcode"
               style={{
                 width: "100%",
                 padding: "9px 85px 9px 12px",

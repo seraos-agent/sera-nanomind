@@ -61,7 +61,7 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <FolderPlus size={16} color={theme.ink} />
             <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-              Tambah Kategori Baru
+              Add New Category
             </span>
           </div>
 
@@ -73,10 +73,10 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
               maxLength={80}
               placeholder={
                 storeType === "FOOD"
-                  ? "Nama kategori (misal: Minuman Segar...)"
+                  ? "Category name (e.g., Fresh Beverages...)"
                   : storeType === "JASA"
-                    ? "Nama kategori (misal: Servis Ringan...)"
-                    : "Nama kategori (misal: Minyak Goreng...)"
+                    ? "Category name (e.g., Quick Repairs...)"
+                    : "Category name (e.g., Cooking Essentials...)"
               }
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value.replace(/[\r\n]/g, ""))}
@@ -155,7 +155,7 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
                 boxSizing: "border-box"
               }}
             >
-              Batal
+              Cancel
             </button>
             <button
               type="submit"
@@ -176,13 +176,13 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
                 boxShadow: "0 2px 6px rgba(0,0,0,0.08)"
               }}
             >
-              Simpan
+              Save
             </button>
           </div>
         </form>
       )}
 
-      {/* List Kategori di Halaman */}
+      {/* Category List */}
       {categories.length === 0 ? (
         <div
           style={{
@@ -212,11 +212,11 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
             <FolderPlus size={20} />
           </div>
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-            Belum Ada Kategori yang Dibuat
+            No Categories Created Yet
           </div>
           <div style={{ fontSize: 11, color: theme.inkSoft, maxWidth: 380 }}>
-            Semua produk saat ini otomatis masuk ke etalase utama (Semua). Anda dapat membuat
-            kategori menggunakan tombol di atas.
+            All products currently appear in the main catalog (All). You can create
+            categories using the button above.
           </div>
           {!isAddingCategory && (
             <button
@@ -234,7 +234,7 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
                 cursor: "pointer"
               }}
             >
-              + Tambah Kategori Sekarang
+              + Add Category Now
             </button>
           )}
         </div>
@@ -275,7 +275,7 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
                     {cat}
                   </div>
                   <div style={{ fontSize: 11, color: theme.inkSoft, marginTop: 2 }}>
-                    {count} produk
+                    {count} products
                   </div>
                 </div>
 
@@ -302,12 +302,12 @@ export const ProductCategoryManager: React.FC<ProductCategoryManagerProps> = ({
                       (e.currentTarget as HTMLElement).style.background = theme.surface;
                     }}
                   >
-                    Lihat Produk
+                    View Products
                   </button>
                   <button
                     type="button"
                     onClick={() => onSetCategoryToDelete(cat)}
-                    title={`Hapus kategori "${cat}"`}
+                    title={`Delete category "${cat}"`}
                     style={{
                       padding: "6px 8px",
                       borderRadius: 6,

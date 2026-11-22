@@ -167,9 +167,9 @@ export function useMerchantOrderReconciliation({
 
     // 4. Success message
     const codText =
-      codAmount > 0 ? ` dan kas COD sebesar Rp ${codAmount.toLocaleString("id-ID")}` : "";
+      codAmount > 0 ? ` and Rp ${codAmount.toLocaleString("id-ID")} in COD cash` : "";
     setSettlementSuccessMsg(
-      `${ordersToSettle.length} pesanan dari kurir ${courierName}${codText} resmi diverifikasi dan dipindahkan ke tab Selesai.`
+      `${ordersToSettle.length} orders from courier ${courierName}${codText} verified and moved to Completed.`
     );
     setTimeout(() => setSettlementSuccessMsg(null), 4500);
   };

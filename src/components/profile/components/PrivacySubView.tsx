@@ -28,14 +28,14 @@ export function PrivacySubView({
         }}
       >
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: theme.ink, margin: 0 }}>Privasi Data</h2>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: theme.ink, margin: 0 }}>Data Privacy</h2>
           <div style={{ fontSize: 12.5, color: theme.inkSoft, marginTop: 2 }}>
-            Dikelola oleh PT SERA TEKNOLOGI DIGITAL
+            Managed by PT SERA TEKNOLOGI DIGITAL
           </div>
         </div>
 
         <p style={{ fontSize: 14, lineHeight: 1.6, color: theme.ink, margin: 0 }}>
-          PT SERA TEKNOLOGI DIGITAL meyakini pentingnya tata kelola data yang transparan dan kedaulatan informasi pengguna. Menjaga keamanan data dan integrasi Anda adalah prioritas utama kami. Dokumen bisnis, kredensial autentikasi, dan riwayat tugas Anda dilindungi secara ketat.
+          PT SERA TEKNOLOGI DIGITAL values transparent data governance and user information sovereignty. Protecting your data and integrations is our top priority. Your business documents, authentication credentials, and task history are strictly protected.
         </p>
 
         {/* Direct Link to Official Privacy Policy */}
@@ -53,7 +53,7 @@ export function PrivacySubView({
               cursor: 'pointer',
             }}
           >
-            Pelajari selengkapnya di Kebijakan Privasi Resmi SERA OS
+            Learn more in the Official SERA OS Privacy Policy
           </a>
         </div>
       </div>
@@ -73,10 +73,10 @@ export function PrivacySubView({
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <h2 style={{ fontSize: 17, fontWeight: 700, color: theme.ink, margin: 0 }}>
-              Peningkatan Kualitas AI
+              AI Model Improvement
             </h2>
             <p style={{ fontSize: 13.5, lineHeight: 1.55, color: theme.inkSoft, margin: 0 }}>
-              Izinkan riwayat percakapan anonim untuk melatih kecerdasan Agent SERA. Seluruh identitas dan data pribadi disaring secara otomatis.
+              Allow anonymized conversation history to improve SERA Agent intelligence. All identities and personal data are filtered out automatically.
             </p>
           </div>
 
@@ -85,7 +85,7 @@ export function PrivacySubView({
             type="button"
             role="switch"
             aria-checked={trainAiOptIn}
-            aria-label="Izinkan riwayat percakapan untuk pelatihan Agent SERA"
+            aria-label="Allow conversation history for SERA Agent training"
             onClick={onToggleAiTraining}
             style={{
               width: 52,
@@ -130,7 +130,7 @@ export function PrivacySubView({
               textUnderlineOffset: 3,
             }}
           >
-            Kebijakan Privasi Pelatihan
+            AI Training Privacy Policy
           </a>
         </div>
       </div>
@@ -150,10 +150,10 @@ export function PrivacySubView({
       >
         <div>
           <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>
-            Pembersihan Cache Lokal
+            Clear Local Cache
           </div>
           <div style={{ fontSize: 12.5, color: theme.inkSoft, marginTop: 4, lineHeight: 1.45 }}>
-            Hapus pesan obrolan sementara dan file cache yang tersimpan di browser ini tanpa keluar akun.
+            Delete temporary chat messages and cache files stored in this browser without signing out.
           </div>
         </div>
 
@@ -181,7 +181,7 @@ export function PrivacySubView({
             (e.currentTarget as HTMLElement).style.color = theme.ink;
           }}
         >
-          Bersihkan
+          Clear
         </button>
       </div>
     </div>

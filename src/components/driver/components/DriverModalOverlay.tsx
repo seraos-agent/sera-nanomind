@@ -108,13 +108,13 @@ export function DriverModalOverlay({
                   justifyContent: "center",
                   borderRadius: 6
                 }}
-                aria-label="Kembali"
+                aria-label="Back"
               >
                 <ChevronLeft size={22} />
               </button>
             )}
             <span style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-              {activeModal === "settlement" ? "Rekap & Setoran Kas COD" : "Informasi Profil Kurir"}
+              {activeModal === "settlement" ? "COD Cash Ledger & Settlement" : "Courier Profile Info"}
             </span>
           </div>
           {activeModal !== "settlement" && (
@@ -132,7 +132,7 @@ export function DriverModalOverlay({
                 justifyContent: "center",
                 borderRadius: 6
               }}
-              aria-label="Tutup"
+              aria-label="Close"
             >
               <X size={18} />
             </button>

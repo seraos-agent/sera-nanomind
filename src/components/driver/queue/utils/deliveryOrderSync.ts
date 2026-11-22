@@ -184,7 +184,7 @@ export async function syncEligibleStopsFromSources(
       mo.shippingAddress ||
       localMo?.shippingAddress ||
       existing?.destAddress ||
-      "Alamat Pengantaran Toko";
+      "Store Delivery Address";
 
     const matchingCo = customerOrderMap.get(mo.id);
     const resolvedCoords =
@@ -206,7 +206,7 @@ export async function syncEligibleStopsFromSources(
       orderId: mo.id,
       stopNumber: assignedStopNumber,
       customerName:
-        mo.customer?.name || mo.customerName || localMo?.customerName || existing?.customerName || "Pelanggan Toko",
+        mo.customer?.name || mo.customerName || localMo?.customerName || existing?.customerName || "Store Customer",
       customerPhone:
         mo.customer?.phone || mo.customerPhone || localMo?.customerPhone || existing?.customerPhone || "08123456789",
       destAddress: resolvedAddress,
@@ -215,7 +215,7 @@ export async function syncEligibleStopsFromSources(
       estimatedMinutes: computedMinutes,
       itemsSummary: Array.isArray(mo.items)
         ? mo.items.map((i: any) => `${i.name} (${i.quantity}x)`).join(", ")
-        : mo.itemsSummary || localMo?.itemsSummary || existing?.itemsSummary || "Pesanan Toko",
+        : mo.itemsSummary || localMo?.itemsSummary || existing?.itemsSummary || "Store Order",
       totalAmount: mo.totalAmount || localMo?.totalAmount || existing?.totalAmount || 50000,
       paymentMethod: isCod ? "COD" : "QRIS",
       isCod,
@@ -224,7 +224,7 @@ export async function syncEligibleStopsFromSources(
       note:
         mo.customer?.notes ||
         mo.notes ||
-        (mo.customer?.bookingDate ? "Jadwal Pesanan Khusus" : existing?.note || "Mohon antar dengan aman"),
+        (mo.customer?.bookingDate ? "Scheduled Booking Order" : existing?.note || "Please deliver carefully"),
       completedAt: existing?.completedAt
     };
   });

@@ -109,12 +109,12 @@ export const StoreSummaryCard: React.FC<StoreSummaryCardProps> = ({
                 textOverflow: "ellipsis"
               }}
             >
-              {editName.trim() || `Nama ${entity}`}
+              {editName.trim() || `${entity} Name`}
             </div>
           </div>
         </div>
 
-        {/* Row 2: Subtext Kategori di kiri (di bawah foto) & Kota di kanan tanpa pin */}
+        {/* Row 2: Category subtext on left & City on right without pin */}
         <div
           style={{
             display: "flex",
@@ -126,7 +126,7 @@ export const StoreSummaryCard: React.FC<StoreSummaryCardProps> = ({
           }}
         >
           <span style={{ fontWeight: 500 }}>
-            {editCategory || `Kategori ${entity}`}
+            {editCategory || `${entity} Category`}
           </span>
           <span style={{ fontWeight: 500 }}>
             {formatStorePinLocation({
@@ -134,7 +134,7 @@ export const StoreSummaryCard: React.FC<StoreSummaryCardProps> = ({
               district: editDistrict,
               village: editVillage,
               address: editAddress,
-              fallback: `Kota ${entity}`
+              fallback: `${entity} City`
             })}
           </span>
         </div>

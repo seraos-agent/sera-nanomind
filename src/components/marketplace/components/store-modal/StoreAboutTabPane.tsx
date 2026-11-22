@@ -36,7 +36,7 @@ export const StoreAboutTabPane: React.FC<StoreAboutTabPaneProps> = ({
               marginBottom: '6px',
             }}
           >
-            Tentang Penjual
+            About Seller
           </h3>
           <p
             style={{
@@ -55,14 +55,14 @@ export const StoreAboutTabPane: React.FC<StoreAboutTabPaneProps> = ({
             <div>
               <span style={{ color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                 <MapPinIcon size={13} color="#EF4444" />
-                <span>Alamat:</span>
+                <span>Address:</span>
               </span>
               <div style={{ fontWeight: 600, color: 'var(--text-main)', marginTop: '2px' }}>
                 {store.address}, {store.city}
               </div>
             </div>
             <div>
-              <span style={{ color: 'var(--text-muted)' }}>Status Toko:</span>
+              <span style={{ color: 'var(--text-muted)' }}>Store Status:</span>
               <div
                 style={{
                   fontWeight: 700,
@@ -73,11 +73,11 @@ export const StoreAboutTabPane: React.FC<StoreAboutTabPaneProps> = ({
                   gap: '5px',
                 }}
               >
-                <span>{store.isOpen ? 'Sedang Buka' : 'Sedang Tutup / Istirahat'}</span>
+                <span>{store.isOpen ? 'Open Now' : 'Closed / On Break'}</span>
               </div>
             </div>
             <div>
-              <span style={{ color: 'var(--text-muted)' }}>⏰ Jam Buka:</span>
+              <span style={{ color: 'var(--text-muted)' }}>⏰ Opening Hours:</span>
               <div style={{ fontWeight: 600, color: 'var(--text-main)', marginTop: '2px' }}>
                 {store.operatingHours}
               </div>
@@ -85,7 +85,7 @@ export const StoreAboutTabPane: React.FC<StoreAboutTabPaneProps> = ({
             <div>
               <span style={{ color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                 <StarIcon size={13} color="#EAB308" fill="#EAB308" />
-                <span>Penilaian Toko:</span>
+                <span>Store Rating:</span>
               </span>
               <div style={{ fontWeight: 700, color: 'var(--text-main)', marginTop: '2px' }}>
                 {store.rating} / 5.0
@@ -95,7 +95,7 @@ export const StoreAboutTabPane: React.FC<StoreAboutTabPaneProps> = ({
               <div>
                 <span style={{ color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                   <WhatsAppIcon size={13} />
-                  <span>No. WhatsApp:</span>
+                  <span>WhatsApp:</span>
                 </span>
                 <div style={{ fontWeight: 600, color: '#16A34A', marginTop: '2px' }}>
                   {store.whatsapp}
@@ -136,7 +136,7 @@ export const StoreAboutTabPane: React.FC<StoreAboutTabPaneProps> = ({
             }}
           >
             <WhatsAppIcon size={20} />
-            <span>Hubungi Penjual via WhatsApp</span>
+            <span>Contact Seller via WhatsApp</span>
           </button>
         </div>
       </div>

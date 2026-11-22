@@ -71,7 +71,7 @@ export function OpenShiftView({
           </div>
           <div>
             <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: theme.ink }}>
-              Buka Shift Kasir
+              Open Cashier Shift
             </h3>
             <p style={{ margin: "2px 0 0", fontSize: 12, color: theme.inkSoft }}>
               {storeName} • {cashier.name}
@@ -82,14 +82,14 @@ export function OpenShiftView({
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <div>
             <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: theme.ink, marginBottom: 6 }}>
-              Modal Awal Laci Kas (Rp)
+              Opening Drawer Cash (Rp)
             </label>
             <input
               type="text"
               inputMode="numeric"
               value={formatNumberWithDots(openingCashInput)}
               onChange={(e) => setOpeningCashInput(e.target.value.replace(/\D/g, ""))}
-              placeholder="Contoh: 200.000"
+              placeholder="Example: 200.000"
               autoFocus
               style={{
                 width: "100%",
@@ -108,13 +108,13 @@ export function OpenShiftView({
 
           <div>
             <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: theme.ink, marginBottom: 6 }}>
-              Catatan Shift (Opsional)
+              Shift Notes (Optional)
             </label>
             <input
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Contoh: Shift Pagi"
+              placeholder="Example: Morning Shift"
               style={{
                 width: "100%",
                 padding: "10px 14px",
@@ -144,7 +144,7 @@ export function OpenShiftView({
               opacity: isSubmitting ? 0.7 : 1
             }}
           >
-            {isSubmitting ? "Membuka Shift..." : "Buka Shift & Mulai Kasir"}
+            {isSubmitting ? "Opening Shift..." : "Open Shift & Start Register"}
           </button>
 
           <button
@@ -161,7 +161,7 @@ export function OpenShiftView({
               cursor: "pointer"
             }}
           >
-            Ganti Kasir / Putus Koneksi
+            Switch Cashier / Disconnect
           </button>
         </form>
       </div>
@@ -228,7 +228,7 @@ export function CashMovementModal({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Catat Kas Masuk / Keluar
+            Record Cash In / Out
           </h3>
           <button type="button" onClick={onClose} style={{ background: "transparent", border: "none", color: theme.inkSoft, cursor: "pointer" }}>
             <X size={18} />
@@ -255,7 +255,7 @@ export function CashMovementModal({
                 cursor: "pointer"
               }}
             >
-              <ArrowUpCircle size={15} /> Kas Keluar
+              <ArrowUpCircle size={15} /> Cash Out
             </button>
             <button
               type="button"
@@ -275,7 +275,7 @@ export function CashMovementModal({
                 cursor: "pointer"
               }}
             >
-              <ArrowDownCircle size={15} /> Kas Masuk
+              <ArrowDownCircle size={15} /> Cash In
             </button>
           </div>
 
@@ -284,7 +284,7 @@ export function CashMovementModal({
             inputMode="numeric"
             value={formatNumberWithDots(amountInput)}
             onChange={(e) => setAmountInput(e.target.value.replace(/\D/g, ""))}
-            placeholder="Nominal (Rp)"
+            placeholder="Amount (Rp)"
             required
             style={{
               padding: "10px 12px",
@@ -301,7 +301,7 @@ export function CashMovementModal({
             type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Keterangan"
+            placeholder="Description / Note"
             required
             style={{
               padding: "10px 12px",
@@ -327,7 +327,7 @@ export function CashMovementModal({
               cursor: isSubmitting ? "wait" : "pointer"
             }}
           >
-            {isSubmitting ? "Menyimpan..." : "Simpan Catatan Kas"}
+            {isSubmitting ? "Saving..." : "Save Cash Entry"}
           </button>
         </form>
       </div>
@@ -399,7 +399,7 @@ export function CloseShiftModal({
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: theme.ink }}>
-            Tutup Shift & Rekonsiliasi Laci
+            Close Shift & Drawer Reconciliation
           </h3>
           <button type="button" onClick={onClose} style={{ background: "transparent", border: "none", color: theme.inkSoft, cursor: "pointer" }}>
             <X size={18} />
@@ -421,21 +421,21 @@ export function CloseShiftModal({
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Modal Awal</span>
+            <span>Opening Cash</span>
             <strong style={{ color: theme.ink }}>Rp {shift.openingCash.toLocaleString("id-ID")}</strong>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Penjualan Tunai Shift</span>
+            <span>Shift Cash Sales</span>
             <strong style={{ color: theme.ink }}>Rp {cashSales.toLocaleString("id-ID")}</strong>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Kas Masuk / Keluar</span>
+            <span>Cash In / Out</span>
             <strong style={{ color: theme.ink }}>
               +Rp {shift.cashIn.toLocaleString("id-ID")} / -Rp {shift.cashOut.toLocaleString("id-ID")}
             </strong>
           </div>
           <div style={{ borderTop: `1px solid ${theme.border}`, paddingTop: 6, display: "flex", justifyContent: "space-between" }}>
-            <span style={{ fontWeight: 700, color: theme.ink }}>Ekspektasi Tunai di Laci</span>
+            <span style={{ fontWeight: 700, color: theme.ink }}>Expected Cash in Drawer</span>
             <strong style={{ color: theme.accent }}>Rp {expectedCash.toLocaleString("id-ID")}</strong>
           </div>
         </div>
@@ -443,7 +443,7 @@ export function CloseShiftModal({
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div>
             <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: theme.ink, marginBottom: 6 }}>
-              Uang Fisik Aktual di Laci (Rp)
+              Actual Physical Cash in Drawer (Rp)
             </label>
             <input
               type="text"
@@ -468,7 +468,7 @@ export function CloseShiftModal({
             />
             {actualCashInput !== "" && (
               <div style={{ marginTop: 6, fontSize: 12, fontWeight: 600, color: variance === 0 ? "#10B981" : "#F59E0B" }}>
-                Selisih: {variance >= 0 ? "+" : "-"}Rp {Math.abs(variance).toLocaleString("id-ID")}
+                Variance: {variance >= 0 ? "+" : "-"}Rp {Math.abs(variance).toLocaleString("id-ID")}
               </div>
             )}
           </div>
@@ -477,7 +477,7 @@ export function CloseShiftModal({
             type="text"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Catatan tutup shift (opsional)"
+            placeholder="Shift closing notes (optional)"
             style={{
               padding: "10px 12px",
               borderRadius: 10,
@@ -508,7 +508,7 @@ export function CloseShiftModal({
             }}
           >
             <CheckCircle2 size={16} />
-            <span>{isSubmitting ? "Menutup Shift..." : "Konfirmasi Tutup Shift"}</span>
+            <span>{isSubmitting ? "Closing Shift..." : "Confirm Close Shift"}</span>
           </button>
         </form>
       </div>
@@ -536,9 +536,9 @@ export function SupervisorPinModal({
   isSubmitting,
   onClose,
   onConfirm,
-  title = "Otorisasi PIN Supervisor",
-  description = "Pembatalan (Void) transaksi membutuhkan PIN Supervisor dari pemilik toko.",
-  confirmLabel = "Otorisasi & Void Transaksi"
+  title = "Supervisor PIN Authorization",
+  description = "Voiding a transaction requires the Supervisor PIN from the store owner.",
+  confirmLabel = "Authorize & Void Transaction"
 }: SupervisorPinModalProps) {
   const [pin, setPin] = useState("");
   if (!isOpen) return null;
@@ -596,7 +596,7 @@ export function SupervisorPinModal({
             inputMode="numeric"
             value={pin}
             onChange={(e) => setPin(e.target.value)}
-            placeholder="Masukkan PIN Supervisor"
+            placeholder="Enter Supervisor PIN"
             autoFocus
             required
             style={{
@@ -624,7 +624,7 @@ export function SupervisorPinModal({
               cursor: isSubmitting ? "wait" : "pointer"
             }}
           >
-            {isSubmitting ? "Memverifikasi..." : confirmLabel}
+            {isSubmitting ? "Verifying..." : confirmLabel}
           </button>
         </form>
       </div>

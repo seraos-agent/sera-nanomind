@@ -46,14 +46,14 @@ export function RegularCourierCard({
           }}
         >
           <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Ekspedisi Reguler
+            Regular Logistics
           </div>
 
           <ShippingToggleSwitch checked={regularCourier} theme={theme} />
         </div>
 
         <p style={{ margin: 0, fontSize: 13, color: theme.inkSoft, lineHeight: 1.45 }}>
-          Pengiriman paket pesanan melalui jasa kurir logistik (JNE, J&T, SiCepat).
+          Deliver order packages through logistics courier services (JNE, J&T, SiCepat).
         </p>
       </div>
     </div>

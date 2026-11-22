@@ -113,7 +113,7 @@ export function SubPageLayout({
             <button
               type="button"
               onClick={handleBack}
-              title="Kembali"
+              title="Back"
               style={{
                 border: "none",
                 background: "transparent",

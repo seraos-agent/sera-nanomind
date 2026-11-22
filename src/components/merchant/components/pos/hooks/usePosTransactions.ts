@@ -48,7 +48,7 @@ export function usePosTransactions({
     localStorage.setItem("sera_merchant_pos_history", JSON.stringify(posTransactions));
   }, [posTransactions]);
 
-  // Hydrate cloud POS transactions (Owner + Mitra Kasir terminals) for date-range & profit reporting
+  // Hydrate cloud POS transactions (Owner + POS Cashier terminals) for date-range & profit reporting
   useEffect(() => {
     if (!store?.id) return;
     let cancelled = false;
@@ -189,7 +189,7 @@ export function usePosTransactions({
         payments: hasSplit ? payments : undefined,
         amountPaid: computedPaid,
         changeAmount: computedChange,
-        customerName: "Pelanggan Kasir",
+        customerName: "Walk-In Customer",
         cashierName: "Store Owner",
         tableOrQueueNumber: cleanTable,
         createdAt: Date.now(),
@@ -383,7 +383,7 @@ export function usePosTransactions({
       }
 
       onPlayBeep?.();
-      onNotify?.(`Transaksi ${tx.receiptNumber} dibatalkan & stok dikembalikan.`);
+      onNotify?.(`Transaction ${tx.receiptNumber} voided & stock restored.`);
     },
     [store?.id, products, onUpdateProducts, onPlayBeep, onNotify]
   );

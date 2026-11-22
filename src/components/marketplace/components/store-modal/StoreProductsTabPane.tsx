@@ -49,7 +49,7 @@ export const StoreProductsTabPane: React.FC<StoreProductsTabPaneProps> = ({
           onClick={() => onSelectSort('populer')}
           className={`store-sort-btn ${sortBy === 'populer' ? 'active' : ''}`}
         >
-          Populer
+          Popular
         </button>
         <button
           type="button"
@@ -57,7 +57,7 @@ export const StoreProductsTabPane: React.FC<StoreProductsTabPaneProps> = ({
           className={`store-sort-btn ${sortBy === 'terbaru' ? 'active' : ''}`}
         >
           <span style={{ position: 'relative' }}>
-            Terbaru
+            Newest
             <span
               style={{
                 position: 'absolute',
@@ -76,7 +76,7 @@ export const StoreProductsTabPane: React.FC<StoreProductsTabPaneProps> = ({
           onClick={() => onSelectSort('terlaris')}
           className={`store-sort-btn ${sortBy === 'terlaris' ? 'active' : ''}`}
         >
-          Terlaris
+          Best Seller
         </button>
         <button
           type="button"
@@ -92,7 +92,7 @@ export const StoreProductsTabPane: React.FC<StoreProductsTabPaneProps> = ({
       {/* Active Category Filter Chip */}
       {activeCategoryFilter && (
         <div style={{ padding: '8px 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Kategori:</span>
+          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Category:</span>
           <div
             style={{
               display: 'inline-flex',
@@ -130,8 +130,8 @@ export const StoreProductsTabPane: React.FC<StoreProductsTabPaneProps> = ({
       <div style={{ padding: '12px 14px 40px' }}>
         {filteredStoreItems.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)' }}>
-            <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>Tidak ada produk yang cocok</p>
-            <p style={{ fontSize: '0.78rem', marginTop: '4px' }}>Coba ubah kata kunci pencarian atau kategori</p>
+            <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>No matching products</p>
+            <p style={{ fontSize: '0.78rem', marginTop: '4px' }}>Try changing your search keywords or category</p>
           </div>
         ) : (
           <div className="products-grid">

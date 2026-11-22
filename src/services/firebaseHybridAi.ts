@@ -612,19 +612,19 @@ function buildDiagnosticFailureMessage(
   lastError?: string
 ): string {
   return [
-    '### Gemini Nano & Cloud Fallback Belum Aktif di Browser Ini',
+    '### Gemini Nano & Cloud Fallback Not Yet Active in This Browser',
     '',
-    'SERA NanoMind **tidak memakai jawaban mock**, jadi pesan ini muncul karena kedua mesin inferensi asli belum tersedia:',
-    `* **Status Chrome Gemini Nano:** \`${diag.availability}\` (${diag.detailMessage})`,
-    `* **Status Firebase Cloud Fallback:** ${diag.firebaseCloudConfigured ? 'Terkonfigurasi' : 'Belum dikonfigurasi'}`,
-    lastError ? `* **Detail Error Runtime:** \`${lastError}\`` : null,
+    'SERA NanoMind **never uses mock responses**, so this diagnostic appears because neither live inference engine is ready yet:',
+    `* **Chrome Gemini Nano Status:** \`${diag.availability}\` (${diag.detailMessage})`,
+    `* **Firebase Cloud Fallback Status:** ${diag.firebaseCloudConfigured ? 'Configured' : 'Not configured'}`,
+    lastError ? `* **Runtime Error Detail:** \`${lastError}\`` : null,
     '',
-    '**Cara mengaktifkan Gemini Nano lokal di Google Chrome Desktop:**',
-    '1. Buka `chrome://flags/#optimization-guide-on-device-model` → pilih **Enabled BypassPerfRequirement**.',
-    '2. Buka `chrome://flags/#prompt-api-for-gemini-nano` → pilih **Enabled**.',
-    '3. Klik **Relaunch** untuk me-restart Chrome.',
-    '4. Buka `chrome://components`, cari **Optimization Guide On Device Model**, lalu klik **Check for update** sampai versinya terunduh.',
-    '5. Kembali ke tab ini lalu buka **Workspace → Storage Vault & Hybrid AI** dan klik **Check / Initialize Gemini Nano**.',
+    '**How to enable local Gemini Nano in Google Chrome Desktop:**',
+    '1. Open `chrome://flags/#optimization-guide-on-device-model` and select **Enabled BypassPerfRequirement**.',
+    '2. Open `chrome://flags/#prompt-api-for-gemini-nano` and select **Enabled**.',
+    '3. Click **Relaunch** to restart Chrome.',
+    '4. Open `chrome://components`, find **Optimization Guide On Device Model**, and click **Check for update** until downloaded.',
+    '5. Return here, open **Workspace -> Storage Vault & Hybrid AI**, and click **Check / Initialize Gemini Nano**.',
     '',
     '*Optional:* Paste your `firebaseConfig` under **Workspace -> Storage Vault & Hybrid AI** so `PREFER_ON_DEVICE` can also fall back to **Gemini 3.5 Flash (Cloud)** when local Gemini Nano is unavailable.',
   ]
@@ -968,7 +968,7 @@ export function executeCommerceProposal(
   action: 'APPROVE' | 'REJECT'
 ): string {
   if (action === 'REJECT') {
-    return `Proposal **${proposal.intent.replace(/_/g, ' ')}** dibatalkan. Tidak ada perubahan pada data lokal toko.`;
+    return `Proposal **${proposal.intent.replace(/_/g, ' ')}** rejected. No changes were made to local store data.`;
   }
 
   const p = proposal.parameters || {};
@@ -978,7 +978,7 @@ export function executeCommerceProposal(
     const newProduct = {
       id: `nm-prod-${Date.now()}`,
       storeId: DEMO_STORE_ID,
-      name: p.productName || 'Produk Baru NanoMind',
+      name: p.productName || 'New NanoMind Product',
       description: p.description || 'Added via SERA NanoMind Hybrid Assistant.',
       type: 'GOODS',
       category: p.category || 'Signature Coffee',
@@ -995,12 +995,12 @@ export function executeCommerceProposal(
     writeJson('sera_cashier_products', nextProducts);
     window.dispatchEvent(new Event('storage'));
     window.dispatchEvent(new Event('sera_merchant_products_updated'));
-    return `Berhasil menambahkan **${newProduct.name}** (${formatIdr(newProduct.price)}, stok **${newProduct.stock}**) ke **Mitra Store**, **Mitra Kasir**, dan **Marketplace**.`;
+    return `Successfully added **${newProduct.name}** (${formatIdr(newProduct.price)}, stock **${newProduct.stock}**) to **Merchant Store**, **POS Cashier**, and **Marketplace**.`;
   }
 
   if (proposal.intent === 'UPDATE_STOCK') {
     const products = readJson<any[]>('sera_merchant_products', []);
-    let updatedName = p.productName || 'Produk';
+    let updatedName = p.productName || 'Product';
     const nextProducts = products.map((item) => {
       const matches =
         (p.productId && item.id === p.productId) ||
@@ -1019,7 +1019,11 @@ export function executeCommerceProposal(
     writeJson('sera_cashier_products', nextProducts);
     window.dispatchEvent(new Event('storage'));
     window.dispatchEvent(new Event('sera_merchant_products_updated'));
-    return `Stok **${updatedName}** berhasil diperbarui menjadi **${p.newStock}** unit di seluruh kanal lokal.`;
+    const updatedParts: string[] = [];
+    if (p.newStock !== undefined) updatedParts.push(`stock to **${p.newStock}** units`);
+    if (p.newPrice !== undefined) updatedParts.push(`price to **${formatIdr(Number(p.newPrice))}**`);
+    const summary = updatedParts.length > 0 ? updatedParts.join(' and ') : 'details';
+    return `Updated **${updatedName}** ${summary} across all local channels.`;
   }
 
   if (proposal.intent === 'CREATE_POS_ORDER') {
@@ -1038,7 +1042,7 @@ export function executeCommerceProposal(
       cashierId: DEMO_CASHIER_PROFILE.id,
       cashierName: DEMO_CASHIER_PROFILE.name,
       tableOrQueueNumber: p.tableOrQueueNumber || 'Takeaway',
-      customerName: p.customerName || 'Pelanggan POS',
+      customerName: p.customerName || 'POS Customer',
       paymentMethod: p.paymentMethod || 'CASH',
       subtotal: totalAmount,
       discountAmount: 0,
@@ -1068,7 +1072,7 @@ export function executeCommerceProposal(
     }
 
     window.dispatchEvent(new Event('storage'));
-    return `Transaksi POS **${newTx.receiptNumber}** (${newTx.tableOrQueueNumber} · ${formatIdr(totalAmount)} · ${newTx.paymentMethod}) telah tercatat ke shift **Mitra Kasir**.`;
+    return `POS transaction **${newTx.receiptNumber}** (${newTx.tableOrQueueNumber} · ${formatIdr(totalAmount)} · ${newTx.paymentMethod}) recorded in **POS Cashier** shift.`;
   }
 
   if (proposal.intent === 'SCHEDULE_GOAL') {
@@ -1092,7 +1096,7 @@ export function executeCommerceProposal(
     };
     writeJson('sera_nanomind_triggers', [newTrigger, ...triggers]);
     window.dispatchEvent(new Event('storage'));
-    return `Otomasi baru **${newTrigger.goalName}** telah diaktifkan di **Active Intents**.`;
+    return `New automation **${newTrigger.goalName}** is now active in **Active Intents**.`;
   }
 
   if (proposal.intent === 'ACTIVATE_AUTONOMY_AGREEMENT') {
@@ -1112,8 +1116,8 @@ export function executeCommerceProposal(
     };
     writeJson('sera_nanomind_agreements', [newAgr, ...agreements]);
     window.dispatchEvent(new Event('storage'));
-    return `Operating Agreement **${newAgr.title}** sekarang aktif di **Active Intents**.`;
+    return `Operating Agreement **${newAgr.title}** is now active in **Active Intents**.`;
   }
 
-  return `Proposal **${proposal.intent}** telah disetujui.`;
+  return `Proposal **${proposal.intent}** approved.`;
 }

@@ -29,13 +29,13 @@ export function useShippingSettingsForm({
     shippingConfig?.storeDeliveryMaxRadius !== undefined ? String(shippingConfig.storeDeliveryMaxRadius) : '5'
   );
   const [storeDeliveryNotes, setStoreDeliveryNotes] = useState(
-    shippingConfig?.storeDeliveryNotes ?? 'Pengantaran langsung oleh kurir toko untuk area sekitar.'
+    shippingConfig?.storeDeliveryNotes ?? 'Direct delivery by store courier for nearby areas.'
   );
   const [selfPickup, setSelfPickup] = useState(shippingConfig?.selfPickup ?? true);
   const [regularCourier, setRegularCourier] = useState(shippingConfig?.regularCourier ?? false);
   const [pickupInstructions, setPickupInstructions] = useState(
     shippingConfig?.pickupInstructions ??
-      'Silakan tunjukkan nama pemesan atau nomor pesanan ke kasir saat mengambil pesanan.'
+      'Please show the buyer name or order number to the cashier when picking up your order.'
   );
   const [isSaved, setIsSaved] = useState(false);
 
@@ -62,13 +62,13 @@ export function useShippingSettingsForm({
         shippingConfig.storeDeliveryMaxRadius !== undefined ? String(shippingConfig.storeDeliveryMaxRadius) : '5'
       );
       setStoreDeliveryNotes(
-        shippingConfig.storeDeliveryNotes ?? 'Pengantaran langsung oleh kurir toko untuk area sekitar.'
+        shippingConfig.storeDeliveryNotes ?? 'Direct delivery by store courier for nearby areas.'
       );
       setSelfPickup(shippingConfig.selfPickup ?? true);
       setRegularCourier(shippingConfig.regularCourier ?? false);
       setPickupInstructions(
         shippingConfig.pickupInstructions ??
-          'Silakan tunjukkan nama pemesan atau nomor pesanan ke kasir saat mengambil pesanan.'
+          'Please show the buyer name or order number to the cashier when picking up your order.'
       );
       setIsSaved(false);
     }

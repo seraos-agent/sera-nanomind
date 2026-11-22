@@ -6,7 +6,7 @@ import { isStoreCurrentlyOpen, type MerchantStore } from '../../merchant/types';
 
 /**
  * Reconciles store open status with local merchant state from localStorage.
- * Ensures instant synchronization between Mitra Merchant and Marketplace on the same device.
+ * Ensures instant synchronization between Merchant Store and Marketplace on the same device.
  */
 function mergeLocalMerchantStore(storesList: MarketplaceStore[]): MarketplaceStore[] {
   // Strip known leaked test stores and evaluate live schedule for all remaining stores
@@ -33,7 +33,7 @@ function mergeLocalMerchantStore(storesList: MarketplaceStore[]): MarketplaceSto
 
     const convertedLocal: MarketplaceStore = {
       id: localStore.id,
-      name: localStore.name || 'Toko Mitra SERA',
+      name: localStore.name || 'SERA Partner Store',
       tagline: localStore.tagline || '',
       description: localStore.description || '',
       logoUrl: localStore.logoUrl || '',
@@ -44,7 +44,7 @@ function mergeLocalMerchantStore(storesList: MarketplaceStore[]): MarketplaceSto
           : (localStore.type as any) === 'MAKANAN' || (localStore.type as any) === 'FOOD'
             ? 'FOOD'
             : 'GOODS',
-      category: localStore.category || 'Umum',
+      category: localStore.category || 'General',
       rating: localStore.rating || 4.9,
       totalProducts: localStore.totalProducts || 0,
       followers: (localStore as any).followers ?? 0,
@@ -52,7 +52,7 @@ function mergeLocalMerchantStore(storesList: MarketplaceStore[]): MarketplaceSto
       city: localStore.city || '',
       isOpen: evaluated.isOpen,
       isOpenManualOverride: localStore.isOpenManualOverride,
-      operatingHours: localStore.operatingHours || '08:00 - 21:00 WIB',
+      operatingHours: localStore.operatingHours || '08:00 - 21:00',
       openDays: localStore.openDays,
       openTime: localStore.openTime,
       closeTime: localStore.closeTime,
@@ -93,7 +93,7 @@ function mergeLocalMerchantProducts(itemsList: MarketplaceItem[]): MarketplaceIt
     const rawStore = localStorage.getItem('sera_merchant_store');
     const localStore = rawStore ? JSON.parse(rawStore) : null;
     const storeId = localStore?.id || 'toko-berkah-sembako';
-    const storeName = localStore?.name || 'Toko Berkah Sembako';
+    const storeName = localStore?.name || 'Berkah Pantry Store';
 
     const convertedItems: MarketplaceItem[] = localProducts
       .filter(p => p && p.isActive !== false && p.status !== 'DRAFT')

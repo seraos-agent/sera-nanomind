@@ -89,7 +89,7 @@ export function UnlinkCourierModal({
             color: theme.ink
           }}
         >
-          Keluarkan Kurir?
+          Remove Courier?
         </h3>
 
         {/* Courier Name Badge */}
@@ -120,7 +120,7 @@ export function UnlinkCourierModal({
             color: theme.inkSoft
           }}
         >
-          Kurir ini akan dikeluarkan dari armada resmi toko Anda. Aplikasi kurir akan terputus dan tidak dapat lagi menerima order toko.
+          This courier will be removed from your store's official fleet. Their courier app will disconnect and stop receiving store orders.
         </p>
 
         <div
@@ -148,7 +148,7 @@ export function UnlinkCourierModal({
               cursor: isDeleting ? "not-allowed" : "pointer"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -171,7 +171,7 @@ export function UnlinkCourierModal({
               gap: 6
             }}
           >
-            {isDeleting ? "Mengeluarkan..." : "Ya, Keluarkan"}
+            {isDeleting ? "Removing..." : "Yes, Remove"}
           </button>
         </div>
       </div>

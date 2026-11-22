@@ -67,10 +67,10 @@ export function DeliveryMapOverlays({
           <div style={{ fontSize: 12, color: theme.ink, flex: 1 }}>
             {mapError ? (
               <span style={{ color: "#EF4444" }}>
-                {mapError} (Navigasi external via tombol GPS tetap aktif)
+                {mapError} (External navigation via GPS button remains active)
               </span>
             ) : (
-              <span>Memuat Peta Navigasi Google Maps...</span>
+              <span>Loading Google Maps navigation...</span>
             )}
           </div>
         </div>
@@ -110,7 +110,7 @@ export function DeliveryMapOverlays({
                 fontFamily: "Inter, sans-serif"
               }}
             >
-              Layanan Lokasi (GPS) Belum Aktif
+              Location Services (GPS) Disabled
             </h3>
             <p
               style={{
@@ -121,7 +121,7 @@ export function DeliveryMapOverlays({
                 fontFamily: "Inter, sans-serif"
               }}
             >
-              Untuk menentukan titik lokasi dengan akurat, silakan aktifkan GPS dan berikan izin lokasi pada HP Anda.
+              To determine your coordinates accurately, please enable GPS and grant location permission on your device.
             </p>
             <button
               type="button"
@@ -140,7 +140,7 @@ export function DeliveryMapOverlays({
                 boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
               }}
             >
-              Aktifkan GPS / Coba Lagi
+              Enable GPS / Retry
             </button>
           </div>
         </div>
@@ -179,7 +179,7 @@ export function DeliveryMapOverlays({
               fontFamily: "Inter, sans-serif"
             }}
           >
-            Mendeteksi lokasi GPS...
+            Detecting GPS location...
           </span>
         </div>
       )}
@@ -188,7 +188,7 @@ export function DeliveryMapOverlays({
       <button
         type="button"
         onClick={onRecenterDriver}
-        title="Pusatkan Peta (Kurir & Titik Tujuan)"
+        title="Center Map (Courier & Destination)"
         style={{
           position: "absolute",
           bottom: activeStop

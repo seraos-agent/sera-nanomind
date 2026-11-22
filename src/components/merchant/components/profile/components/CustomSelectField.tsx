@@ -24,7 +24,7 @@ export function CustomSelectField({
   value,
   options,
   onChange,
-  placeholder = "Pilih...",
+  placeholder = "Select...",
   theme,
   isMobileView
 }: CustomSelectFieldProps) {
@@ -168,7 +168,7 @@ export function CustomSelectField({
                 <span
                   style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}
                 >
-                  Pilih {label}
+                  Select {label}
                 </span>
                 <button
                   type="button"

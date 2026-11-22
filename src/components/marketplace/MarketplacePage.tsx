@@ -444,7 +444,7 @@ export function MarketplacePage({
     if (firstItem) {
       setItems(prev => [firstItem, ...prev]);
     }
-    showToast(`🎉 Toko "${newStore.name}" berhasil dibuka!`);
+    showToast(`🎉 Store "${newStore.name}" is now open!`);
   };
 
   const storeModalItems = useMemo(() => {
@@ -688,7 +688,7 @@ export function MarketplacePage({
           onClose={() => setIsProfileModalOpen(false)}
           onSuccess={u => {
             const displayName = u.email.split('@')[0] || u.phone;
-            showToast(`👋 Selamat datang, ${displayName}! Anda berhasil masuk.`);
+            showToast(`👋 Welcome, ${displayName}! You have signed in.`);
           }}
         />
       )}

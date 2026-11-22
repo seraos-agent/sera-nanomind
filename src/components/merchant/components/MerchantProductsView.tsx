@@ -172,25 +172,25 @@ export function MerchantProductsView({
           </div>
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
             {selectedFilterCategory === "DRAFT"
-              ? "Belum ada produk di Draft"
+              ? "No products in Drafts yet"
               : selectedFilterCategory === "ALL"
                 ? storeType === "FOOD"
-                  ? "Belum ada menu di daftar makanan Anda"
+                  ? "No items in your menu yet"
                   : storeType === "JASA"
-                    ? "Belum ada layanan di etalase jasa Anda"
-                    : "Belum ada produk di etalase toko Anda"
+                    ? "No services in your showcase yet"
+                    : "No products in your store yet"
                 : storeType === "FOOD"
-                  ? `Belum ada menu di kategori "${selectedFilterCategory}"`
-                  : `Belum ada produk di kategori "${selectedFilterCategory}"`}
+                  ? `No menu items in category "${selectedFilterCategory}"`
+                  : `No products in category "${selectedFilterCategory}"`}
           </div>
           <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
             {selectedFilterCategory === "DRAFT"
-              ? "Produk yang belum memiliki foto (termasuk inputan dari chat SERA) akan tersimpan di sini sebelum tayang di Marketplace dan POS."
+              ? "Products without photos (including items added via SERA chat) are saved here before publishing to Marketplace and POS."
               : storeType === "FOOD"
-                ? "Mulai tambahkan menu Anda agar pembeli dapat langsung memesan."
+                ? "Start adding your menu items so buyers can order right away."
                 : storeType === "JASA"
-                  ? "Mulai tambahkan layanan Anda agar pembeli dapat langsung memesan."
-                  : "Mulai isi etalase Anda agar pembeli dapat langsung memesan."}
+                  ? "Start adding your services so buyers can book right away."
+                  : "Start stocking your catalog so buyers can shop right away."}
           </p>
           <button
             type="button"
@@ -208,10 +208,10 @@ export function MerchantProductsView({
             }}
           >
             {storeType === "FOOD"
-              ? "+ Tambah Menu Sekarang"
+              ? "+ Add Menu Item Now"
               : storeType === "JASA"
-                ? "+ Tambah Layanan Sekarang"
-                : "+ Tambah Produk Sekarang"}
+                ? "+ Add Service Now"
+                : "+ Add Product Now"}
           </button>
         </div>
       ) : (

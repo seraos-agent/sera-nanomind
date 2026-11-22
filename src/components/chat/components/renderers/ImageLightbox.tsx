@@ -277,7 +277,7 @@ export function ImageLightbox({ src, onClose }: { src: string; onClose: () => vo
 
         <button
           onClick={onClose}
-          title="Tutup (Esc)"
+          title="Close (Esc)"
           style={{
             background: 'rgba(239, 68, 68, 0.18)',
             border: '1px solid rgba(239, 68, 68, 0.25)',

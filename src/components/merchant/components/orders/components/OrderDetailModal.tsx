@@ -69,17 +69,17 @@ export function OrderDetailModal({
     switch (currentStatus) {
       case "PENDING":
       case "CONFIRMED":
-        return { label: "Menunggu Konfirmasi", bg: "#FEF3C7", text: "#B45309", border: "#FDE68A" };
+        return { label: "Awaiting Confirmation", bg: "#FEF3C7", text: "#B45309", border: "#FDE68A" };
       case "PROCESSING":
-        return { label: "Sedang Diproses", bg: "#DBEAFE", text: "#1D4ED8", border: "#BFDBFE" };
+        return { label: "Processing", bg: "#DBEAFE", text: "#1D4ED8", border: "#BFDBFE" };
       case "SHIPPED":
-        return { label: "Dalam Pengiriman", bg: "#E0E7FF", text: "#4338CA", border: "#C7D2FE" };
+        return { label: "In Transit", bg: "#E0E7FF", text: "#4338CA", border: "#C7D2FE" };
       case "DELIVERED":
-        return { label: "Paket Tiba", bg: "#D1FAE5", text: "#065F46", border: "#A7F3D0" };
+        return { label: "Delivered", bg: "#D1FAE5", text: "#065F46", border: "#A7F3D0" };
       case "COMPLETED":
-        return { label: "Selesai", bg: "#ECFDF5", text: "#047857", border: "#6EE7B7" };
+        return { label: "Completed", bg: "#ECFDF5", text: "#047857", border: "#6EE7B7" };
       case "CANCELLED":
-        return { label: "Dibatalkan", bg: "#FEE2E2", text: "#B91C1C", border: "#FECACA" };
+        return { label: "Cancelled", bg: "#FEE2E2", text: "#B91C1C", border: "#FECACA" };
       default:
         return { label: currentStatus, bg: theme.surface2, text: theme.ink, border: theme.border };
     }
@@ -91,7 +91,7 @@ export function OrderDetailModal({
     if (!order.customerPhone || String(order.customerPhone) === "-") return;
     const cleanPhone = String(order.customerPhone).replace(/^0/, "62").replace(/[^0-9]/g, "");
     const text = encodeURIComponent(
-      `Halo Kak ${order.customerName}, kami dari ${store?.name || "Toko"} mengenai pesanan ${order.id}.`
+      `Hi ${order.customerName}, we are reaching out from ${store?.name || "the store"} regarding order ${order.id}.`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
   };
@@ -122,7 +122,7 @@ export function OrderDetailModal({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Detail Pesanan"
+        aria-label="Order Details"
         style={{
           background: theme.surface,
           width: "100%",
@@ -152,7 +152,7 @@ export function OrderDetailModal({
             <button
               type="button"
               onClick={onClose}
-              title="Kembali"
+              title="Back"
               style={{
                 background: "transparent",
                 border: "none",
@@ -168,7 +168,7 @@ export function OrderDetailModal({
               <ArrowLeft size={19} />
             </button>
             <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0, color: theme.ink }}>
-              Detail Pesanan
+              Order Details
             </h3>
           </div>
         </div>
@@ -235,7 +235,7 @@ export function OrderDetailModal({
               <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                 <ShieldCheck size={16} color={theme.status} />
                 <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                  {isOfflinePos ? "Status Pembayaran Kasir" : "Bukti Pembayaran"}
+                  {isOfflinePos ? "POS Payment Status" : "Payment Proof"}
                 </span>
               </div>
               <span
@@ -267,8 +267,8 @@ export function OrderDetailModal({
                   alignItems: "center"
                 }}
               >
-                <span>Pembayaran diterima langsung di kasir</span>
-                <strong style={{ color: "#10B981" }}>LUNAS</strong>
+                <span>Payment received at POS register</span>
+                <strong style={{ color: "#10B981" }}>PAID</strong>
               </div>
             ) : proofUrl ? (
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -289,7 +289,7 @@ export function OrderDetailModal({
                 >
                   <img
                     src={proofUrl}
-                    alt="Bukti Transfer Pembeli"
+                    alt="Buyer Payment Proof"
                     style={{ width: "100%", maxHeight: 220, objectFit: "contain" }}
                   />
                   <div
@@ -309,11 +309,11 @@ export function OrderDetailModal({
                     }}
                   >
                     <Eye size={12} />
-                    <span>Perbesar</span>
+                    <span>Zoom</span>
                   </div>
                 </div>
                 <div style={{ fontSize: 11.5, color: theme.inkSoft, lineHeight: 1.4 }}>
-                  ✓ Struk/screenshot telah dilampirkan oleh pembeli saat checkout.
+                  Receipt/screenshot was attached by the buyer at checkout.
                 </div>
               </div>
             ) : (
@@ -328,12 +328,12 @@ export function OrderDetailModal({
                   textAlign: "center"
                 }}
               >
-                Pesanan tanpa bukti transfer digital (Tunai / Bayar saat ambil).
+                No digital transfer proof uploaded (Cash / Pay on Pickup).
               </div>
             )}
           </div>
 
-          {/* 3. DAFTAR BARANG BELANJA */}
+          {/* 3. ORDER ITEMS LIST */}
           <div
             style={{
               background: theme.surface2,
@@ -348,7 +348,7 @@ export function OrderDetailModal({
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <ShoppingBag size={16} color={theme.accent} />
               <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                {isFoodStore ? "Rincian Menu Pesanan" : "Rincian Barang Belanja"}
+                {isFoodStore ? "Ordered Menu Items" : "Ordered Items"}
               </span>
             </div>
 
@@ -408,14 +408,14 @@ export function OrderDetailModal({
               >
                 <FileText size={15} color={theme.accent} style={{ flexShrink: 0, marginTop: 2 }} />
                 <div>
-                  <strong style={{ color: theme.ink }}>Catatan Khusus Pembeli:</strong>
+                  <strong style={{ color: theme.ink }}>Buyer Special Note:</strong>
                   <div style={{ marginTop: 2, color: theme.inkSoft }}>&ldquo;{order.customerNote}&rdquo;</div>
                 </div>
               </div>
             )}
           </div>
 
-          {/* 4. DATA PEMBELI & PENGIRIMAN */}
+          {/* 4. BUYER & SHIPPING DETAILS */}
           <div
             style={{
               background: theme.surface2,
@@ -432,10 +432,10 @@ export function OrderDetailModal({
                 <MapPin size={16} color={theme.accent} />
                 <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
                   {isOfflinePos
-                    ? "Layanan & Pelanggan"
+                    ? "Service & Customer"
                     : isPickupOnline
-                      ? `Ambil di ${entity} & Pelanggan`
-                      : "Pengiriman & Pelanggan"}
+                      ? `${entity} Pickup & Customer`
+                      : "Shipping & Customer"}
                 </span>
               </div>
               <span
@@ -453,16 +453,16 @@ export function OrderDetailModal({
                 {isOfflinePos
                   ? order.tableOrQueueNumber
                     ? order.tableOrQueueNumber === "Takeaway"
-                      ? "Takeaway (Kasir)"
+                      ? "Takeaway (POS)"
                       : `Dine-In • ${order.tableOrQueueNumber}`
-                    : "Transaksi Kasir"
+                    : "POS Transaction"
                   : isPickupOnline
-                    ? `Ambil di ${entity}`
+                    ? `${entity} Pickup`
                     : order.shippingMethod === "STORE_DELIVERY"
-                      ? `Kurir ${entity}`
+                      ? `${entity} Courier`
                       : order.shippingMethod === "REGULAR"
-                        ? "Ekspedisi"
-                        : "Kurir SERA"}
+                        ? "Standard Shipping"
+                        : "SERA Courier"}
               </span>
             </div>
 
@@ -485,7 +485,7 @@ export function OrderDetailModal({
                 </div>
                 {isOfflinePos ? (
                   <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
-                    Kasir: {order.cashierName || "Store Owner"}
+                    Cashier: {order.cashierName || "Store Owner"}
                   </div>
                 ) : order.customerPhone && String(order.customerPhone) !== "-" ? (
                   <div style={{ fontSize: 11.5, color: theme.inkSoft }}>
@@ -531,14 +531,14 @@ export function OrderDetailModal({
                 }}
               >
                 <div style={{ fontSize: 11, fontWeight: 600, color: theme.inkSoft, marginBottom: 3 }}>
-                  Alamat Tujuan Pengiriman:
+                  Delivery Destination Address:
                 </div>
                 <div>{order.shippingAddress}</div>
               </div>
             )}
           </div>
 
-          {/* 5. RINCIAN BIAYA & TOTAL PEMBAYARAN */}
+          {/* 5. FEE BREAKDOWN & PAYMENT TOTAL */}
           <div
             style={{
               background: theme.surface2,
@@ -553,31 +553,31 @@ export function OrderDetailModal({
             <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 2 }}>
               <Receipt size={16} color={theme.accent} />
               <span style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-                Ringkasan Pembayaran
+                Payment Summary
               </span>
             </div>
 
             {isOfflinePos ? (
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
-                <span>Metode Pembayaran</span>
+                <span>Payment Method</span>
                 <span style={{ color: theme.ink, fontWeight: 600 }}>
                   {order.paymentMethod}
                 </span>
               </div>
             ) : isPickupOnline ? (
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
-                <span>Pengambilan</span>
+                <span>Fulfillment</span>
                 <span style={{ color: theme.ink, fontWeight: 600 }}>
-                  Ambil di {entity} (Rp 0)
+                  {entity} Pickup (Rp 0)
                 </span>
               </div>
             ) : (
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12.5, color: theme.inkSoft }}>
-                <span>Ongkos Kirim {entity}</span>
+                <span>{entity} Shipping Fee</span>
                 <span style={{ color: theme.ink, fontWeight: 600 }}>
                   {order.shippingCost && order.shippingCost > 0
                     ? `Rp ${order.shippingCost.toLocaleString("id-ID")}`
-                    : "Gratis Ongkir"}
+                    : "Free Shipping"}
                 </span>
               </div>
             )}
@@ -594,7 +594,7 @@ export function OrderDetailModal({
                 fontWeight: 700
               }}
             >
-              <span style={{ color: theme.ink }}>Total Tagihan</span>
+              <span style={{ color: theme.ink }}>Total Amount</span>
               <span style={{ fontSize: 17, fontWeight: 800, color: theme.accent }}>
                 Rp {(order.totalAmount || 0).toLocaleString("id-ID")}
               </span>

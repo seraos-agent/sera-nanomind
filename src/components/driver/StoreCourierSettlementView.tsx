@@ -58,7 +58,7 @@ export function StoreCourierSettlementView({
     const storePhone = driver.linkedStorePhone || "08123456789";
     const cleanPhone = storePhone.replace(/^0/, "62").replace(/[^0-9]/g, "");
     const text = encodeURIComponent(
-      `Halo Kasir ${driver.linkedStoreName || "Toko"}, saya ${driver.name} (Kurir Toko). Saya ingin koordinasi terkait setoran tunai COD hari ini.`
+      `Hello Cashier at ${driver.linkedStoreName || "Store"}, this is ${driver.name} (Store Courier). I would like to coordinate today's COD cash settlement.`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
   };
@@ -88,7 +88,7 @@ export function StoreCourierSettlementView({
               letterSpacing: 0.5
             }}
           >
-            Kas COD Wajib Disetor
+            COD Cash Due to Store
           </span>
           <span
             style={{
@@ -107,7 +107,7 @@ export function StoreCourierSettlementView({
                 : (theme.isDark ? "rgba(16, 185, 129, 0.25)" : "#A7F3D0")}`
             }}
           >
-            {totalCodInHand > 0 ? "Belum Disetor" : "Semua Beres"}
+            {totalCodInHand > 0 ? "Unsettled" : "All Settled"}
           </span>
         </div>
 
@@ -124,8 +124,8 @@ export function StoreCourierSettlementView({
 
         <div style={{ fontSize: 12, color: theme.inkSoft }}>
           {totalCodInHand > 0
-            ? `Terkumpul dari ${codStops.length} pesanan COD. Silakan serahkan uang tunai ke kasir toko.`
-            : "Tidak ada setoran kas yang tertunda. Semua pembayaran telah diselesaikan."}
+            ? `Collected from ${codStops.length} COD orders. Please hand over the cash to the store cashier.`
+            : "No pending cash settlement. All COD payments have been reconciled."}
         </div>
 
         {totalCodInHand > 0 ? (
@@ -151,7 +151,7 @@ export function StoreCourierSettlementView({
             }}
           >
             <Check size={16} />
-            <span>Tandai Sudah Disetor ke Kasir</span>
+            <span>Mark as Handed Over to Cashier</span>
           </button>
         ) : (
           <div
@@ -168,7 +168,7 @@ export function StoreCourierSettlementView({
             }}
           >
             <Check size={14} color="#10B981" />
-            <span>Setoran kas hari ini sudah tercatat diserahkan ke kasir.</span>
+            <span>Today's cash settlement has been recorded as handed over to cashier.</span>
           </div>
         )}
       </div>
@@ -188,10 +188,10 @@ export function StoreCourierSettlementView({
       >
         <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-            {driver.linkedStoreName || "Toko Mitra SERA"}
+            {driver.linkedStoreName || "SERA Partner Store"}
           </div>
           <div style={{ fontSize: 11.5, color: theme.inkSoft, marginTop: 1 }}>
-            Kasir Toko • {driver.linkedStorePhone || "0812-3456-7890"}
+            Store Cashier • {driver.linkedStorePhone || "0812-3456-7890"}
           </div>
         </div>
         <button
@@ -209,7 +209,7 @@ export function StoreCourierSettlementView({
             flexShrink: 0
           }}
         >
-          Chat Kasir
+          Chat Cashier
         </button>
       </div>
 
@@ -228,10 +228,10 @@ export function StoreCourierSettlementView({
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: 6 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-            Rincian Antaran Selesai
+            Completed Delivery Breakdown
           </div>
           <span style={{ fontSize: 11.5, color: theme.inkSoft }}>
-            {completedStops.length} Pesanan
+            {completedStops.length} Orders
           </span>
         </div>
 
@@ -246,7 +246,7 @@ export function StoreCourierSettlementView({
               fontSize: 12
             }}
           >
-            Belum ada antaran yang selesai diserahkan hari ini.
+            No completed deliveries recorded yet today.
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -296,7 +296,7 @@ export function StoreCourierSettlementView({
                     {stop.isCod ? `Rp ${stop.codAmount.toLocaleString("id-ID")}` : "Non-COD"}
                   </div>
                   <div style={{ fontSize: 10.5, color: theme.inkSoft, marginTop: 1 }}>
-                    {stop.completedAt || (stop.isCod ? "Tunai" : "Lunas")}
+                    {stop.completedAt || (stop.isCod ? "Cash" : "Paid")}
                   </div>
                 </div>
               </div>

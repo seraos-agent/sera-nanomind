@@ -38,7 +38,7 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
         borderBottom: '1px solid var(--border-color, rgba(226, 232, 240, 0.8))',
       }}
     >
-      {/* Segmented Control: Produk vs Toko */}
+      {/* Segmented Control: Product vs Store */}
       <div
         style={{
           display: 'inline-flex',
@@ -71,7 +71,7 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
             userSelect: 'none',
           }}
         >
-          Produk
+          Products
         </button>
         <button
           type="button"
@@ -93,7 +93,7 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
             userSelect: 'none',
           }}
         >
-          Toko
+          Stores
         </button>
       </div>
 
@@ -123,10 +123,10 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
           }}
         >
           <span>
-            {sortBy === 'popular' && 'Paling Populer'}
-            {sortBy === 'rating' && 'Rating Tertinggi'}
-            {sortBy === 'price_asc' && 'Harga Termurah'}
-            {sortBy === 'price_desc' && 'Harga Tertinggi'}
+            {sortBy === 'popular' && 'Most Popular'}
+            {sortBy === 'rating' && 'Highest Rated'}
+            {sortBy === 'price_asc' && 'Lowest Price'}
+            {sortBy === 'price_desc' && 'Highest Price'}
           </span>
           <svg
             width="11"
@@ -174,12 +174,12 @@ export const MarketplaceToolbar: React.FC<MarketplaceToolbarProps> = ({
               }}
             >
               {[
-                { value: 'popular', label: 'Paling Populer' },
-                { value: 'rating', label: 'Rating Tertinggi' },
+                { value: 'popular', label: 'Most Popular' },
+                { value: 'rating', label: 'Highest Rated' },
                 ...(searchTarget === 'PRODUCT'
                   ? [
-                      { value: 'price_asc', label: 'Harga Termurah' },
-                      { value: 'price_desc', label: 'Harga Tertinggi' },
+                      { value: 'price_asc', label: 'Lowest Price' },
+                      { value: 'price_desc', label: 'Highest Price' },
                     ]
                   : []),
               ].map((opt) => {

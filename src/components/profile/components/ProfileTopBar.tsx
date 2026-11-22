@@ -20,17 +20,17 @@ export function ProfileTopBar({
   const getTitle = () => {
     switch (viewMode) {
       case 'profile':
-        return 'Profil';
+        return 'Profile';
       case 'address':
-        return 'Alamat';
+        return 'Address';
       case 'billing':
-        return 'Penagihan';
+        return 'Billing';
       case 'privacy':
-        return 'Privasi';
+        return 'Privacy';
       case 'notification':
-        return 'Notifikasi';
+        return 'Notifications';
       default:
-        return 'Pengaturan';
+        return 'Settings';
     }
   };
 
@@ -52,7 +52,7 @@ export function ProfileTopBar({
       <button
         onClick={onBackClick}
         className="profile-button-secondary"
-        aria-label="Kembali"
+        aria-label="Back"
         style={{
           border: 'none',
           background: 'transparent',

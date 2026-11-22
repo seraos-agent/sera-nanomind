@@ -129,7 +129,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url);
     }
-    showToast('🔗 Tautan produk berhasil disalin ke clipboard!');
+    showToast('🔗 Product link copied to clipboard!');
     setIsMenuOpen(false);
   };
 
@@ -140,7 +140,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
   const handleSubmitReport = (reason: string) => {
     setIsReportModalOpen(false);
-    showToast(`🚩 Laporan "${reason}" berhasil dikirim ke tim SERA.`);
+    showToast(`🚩 Report "${reason}" submitted to the SERA team.`);
   };
 
   const currentPrice = selectedVariant ? selectedVariant.price : item.price;
@@ -149,7 +149,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
   const handleWhatsAppChat = () => {
     const waNumber = store?.whatsapp || '6281234567891';
     const text = encodeURIComponent(
-      `Halo ${item.storeName}, saya tertarik dengan "${item.name}" (Rp ${item.price.toLocaleString('id-ID')}). Apakah masih ada?`
+      `Hello ${item.storeName}, I am interested in "${item.name}" (Rp ${item.price.toLocaleString('id-ID')}). Is it still available?`
     );
     window.open(`https://wa.me/${waNumber}?text=${text}`, '_blank');
   };
@@ -209,7 +209,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
         >
           <span>🔗</span>
-          <span>Bagikan Produk</span>
+          <span>Share Product</span>
         </button>
 
         <button
@@ -234,7 +234,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
         >
           <span>🚩</span>
-          <span>Laporkan Produk</span>
+          <span>Report Product</span>
         </button>
       </div>
     </>
@@ -250,7 +250,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               if (dispatchBackButton()) return;
               onClose();
             }}
-            aria-label="Kembali"
+            aria-label="Back"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -337,8 +337,8 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           <div style={{ position: 'relative' }}>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              title="Pilihan Produk"
-              aria-label="Pilihan Produk"
+              title="Product Options"
+              aria-label="Product Options"
               style={{
                 width: '34px',
                 height: '34px',
@@ -360,7 +360,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            aria-label="Tutup"
+            aria-label="Close"
             style={{
               width: '34px',
               height: '34px',
@@ -439,7 +439,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 }}
               >
                 <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginBottom: '2px' }}>
-                  Harga Satuan
+                  Unit Price
                 </div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
                   <div
@@ -500,7 +500,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 })()}
               </div>
 
-              {/* Tab Switcher: Deskripsi | Ulasan */}
+              {/* Tab Switcher: Description | Reviews */}
               <div style={{ marginTop: '2px' }}>
                 <div
                   style={{
@@ -527,7 +527,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       transition: 'color 0.12s ease, border-color 0.12s ease',
                     }}
                   >
-                    Deskripsi
+                    Description
                   </button>
                   <button
                     type="button"
@@ -548,7 +548,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                       transition: 'color 0.12s ease, border-color 0.12s ease',
                     }}
                   >
-                    <span>Ulasan</span>
+                    <span>Reviews</span>
                     <span
                       style={{
                         fontSize: '0.68rem',
@@ -636,8 +636,8 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         <div className="product-detail-bottom-bar-mobile">
           <button
             onClick={handleWhatsAppChat}
-            aria-label="Chat WhatsApp Penjual"
-            title="Chat WhatsApp Penjual"
+            aria-label="Chat Seller on WhatsApp"
+            title="Chat Seller on WhatsApp"
             style={{
               width: '46px',
               height: '46px',
@@ -670,7 +670,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               whiteSpace: 'nowrap',
             }}
           >
-            {isService ? 'Booking Sekarang' : 'Tambah ke Keranjang'}
+            {isService ? 'Book Now' : 'Add to Cart'}
           </button>
         </div>
 

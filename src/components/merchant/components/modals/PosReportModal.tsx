@@ -94,7 +94,7 @@ export function PosReportModal({
       return {
         rangeStartTs: startToday.getTime(),
         rangeEndTs: endToday.getTime(),
-        periodLabel: "Hari Ini"
+        periodLabel: "Today"
       };
     }
 
@@ -105,7 +105,7 @@ export function PosReportModal({
       return {
         rangeStartTs: start7.getTime(),
         rangeEndTs: endToday.getTime(),
-        periodLabel: "7 Hari Terakhir"
+        periodLabel: "Last 7 Days"
       };
     }
 
@@ -116,7 +116,7 @@ export function PosReportModal({
       return {
         rangeStartTs: start30.getTime(),
         rangeEndTs: endToday.getTime(),
-        periodLabel: "30 Hari Terakhir"
+        periodLabel: "Last 30 Days"
       };
     }
 
@@ -204,7 +204,7 @@ export function PosReportModal({
 
   const handleExportCsv = () => {
     if (filteredList.length === 0) {
-      onNotify?.("Tidak ada transaksi pada rentang ini untuk diekspor.");
+      onNotify?.("No transactions in this range to export.");
       return;
     }
     const csvContent = buildPosReportCsv({
@@ -214,18 +214,18 @@ export function PosReportModal({
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    const slug = (store?.name || "toko")
+    const slug = (store?.name || "store")
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
     const dateTag = toDateInputValue(new Date());
     link.href = url;
-    link.download = `rekap-kasir-${slug}-${dateTag}.csv`;
+    link.download = `pos-report-${slug}-${dateTag}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    onNotify?.(`Export CSV berhasil (${filteredList.length} transaksi).`);
+    onNotify?.(`CSV exported (${filteredList.length} transactions).`);
   };
 
   // Send summary to WhatsApp
@@ -233,7 +233,7 @@ export function PosReportModal({
     const phone = store?.whatsapp ? store.whatsapp.replace(/[^0-9]/g, "") : "";
     const target = phone.startsWith("0") ? `62${phone.slice(1)}` : phone;
 
-    const nowTime = new Date().toLocaleTimeString("id-ID", {
+    const nowTime = new Date().toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit"
     });
@@ -241,25 +241,25 @@ export function PosReportModal({
     const itemsText =
       itemsSoldSummary.length > 0
         ? itemsSoldSummary.map(([name, qty]) => `• ${qty}x ${name}`).join("\n")
-        : "Belum ada produk terjual";
+        : "No items sold yet";
 
     const profitLines =
       showProfitSummary && hasCostData
-        ? `\n• Total Modal (HPP): Rp ${totalCogs.toLocaleString("id-ID")}\n• *Laba Kotor: Rp ${grossProfit.toLocaleString("id-ID")}* (Margin ${grossMarginPercent}%)`
+        ? `\n• Total COGS: Rp ${totalCogs.toLocaleString("id-ID")}\n• *Gross Profit: Rp ${grossProfit.toLocaleString("id-ID")}* (Margin ${grossMarginPercent}%)`
         : "";
 
-    const message = `*LAPORAN REKAP KASIR - ${store?.name || "MITRA SERA"}*
-Periode: ${periodLabel} (${nowTime} WIB)
+    const message = `*POS SALES REPORT - ${store?.name || "SERA MERCHANT"}*
+Period: ${periodLabel} (${nowTime})
 --------------------------------
-*Total Omset Kasir: Rp ${totalRevenue.toLocaleString("id-ID")}*
-• Uang Tunai: Rp ${totalCashInDrawer.toLocaleString("id-ID")}
-• Non-Tunai (QRIS/Transfer): Rp ${totalNonCash.toLocaleString("id-ID")}${profitLines}
-• Total Transaksi Selesai: ${activeTransactions.length} transaksi
+*Total POS Revenue: Rp ${totalRevenue.toLocaleString("id-ID")}*
+• Cash: Rp ${totalCashInDrawer.toLocaleString("id-ID")}
+• Non-Cash (QRIS/Transfer): Rp ${totalNonCash.toLocaleString("id-ID")}${profitLines}
+• Completed Transactions: ${activeTransactions.length}
 --------------------------------
-*Rincian Produk Terjual:*
+*Items Sold Breakdown:*
 ${itemsText}
 --------------------------------
-Laporan dibuat otomatis dari sistem kasir SERA.`;
+Generated automatically by SERA POS.`;
 
     const url = target
       ? `https://wa.me/${target}?text=${encodeURIComponent(message)}`
@@ -280,7 +280,7 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
       });
       if (onNotify) onNotify(res.message);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Gagal mencetak rekap kasir.";
+      const msg = err instanceof Error ? err.message : "Failed to print POS summary.";
       if (onNotify) onNotify(msg);
     }
   };
@@ -338,7 +338,7 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
             <button
               type="button"
               onClick={onClose}
-              title="Kembali"
+              title="Back"
               style={{
                 width: 32,
                 height: 32,
@@ -371,10 +371,10 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: 15.5, fontWeight: 700, color: theme.ink }}>
-                Rekap Kasir & Laba
+                POS Summary &amp; Profit
               </h3>
               <p style={{ margin: 0, fontSize: 11, color: theme.inkSoft }}>
-                Periode: {periodLabel}
+                Period: {periodLabel}
               </p>
             </div>
           </div>
@@ -396,10 +396,10 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
               <Calendar size={14} style={{ color: theme.inkSoft }} />
               {[
-                { id: "TODAY", label: "Hari Ini" },
-                { id: "7D", label: "7 Hari" },
-                { id: "30D", label: "30 Hari" },
-                { id: "CUSTOM", label: "Pilih Tanggal" }
+                { id: "TODAY", label: "Today" },
+                { id: "7D", label: "7 Days" },
+                { id: "30D", label: "30 Days" },
+                { id: "CUSTOM", label: "Custom Dates" }
               ].map((p) => {
                 const active = datePreset === p.id;
                 return (
@@ -438,7 +438,7 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
               >
                 <div>
                   <div style={{ fontSize: 10.5, fontWeight: 600, color: theme.inkSoft, marginBottom: 4 }}>
-                    Dari Tanggal
+                    Start Date
                   </div>
                   <input
                     type="date"
@@ -458,7 +458,7 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
                 </div>
                 <div>
                   <div style={{ fontSize: 10.5, fontWeight: 600, color: theme.inkSoft, marginBottom: 4 }}>
-                    Sampai Tanggal
+                    End Date
                   </div>
                   <input
                     type="date"
@@ -519,7 +519,7 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
               }}
             >
               <Printer size={15} />
-              <span>{isMobile ? "Cetak" : "Cetak Rekap"}</span>
+              <span>{isMobile ? "Print" : "Print Summary"}</span>
             </button>
 
             <button
@@ -567,7 +567,7 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
               }}
             >
               <Share2 size={15} />
-              <span>{isMobile ? "Kirim WA" : "Kirim ke WA"}</span>
+              <span>{isMobile ? "Share WA" : "Send via WA"}</span>
             </button>
           </div>
 
@@ -589,12 +589,12 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
                 whiteSpace: "nowrap"
               }}
             >
-              Riwayat Transaksi ({filteredList.length})
+              Transaction History ({filteredList.length})
             </span>
             <div style={{ display: "flex", gap: isMobile ? 4 : 6 }}>
               {[
-                { id: "ALL", label: "Semua" },
-                { id: "CASH", label: "Tunai" },
+                { id: "ALL", label: "All" },
+                { id: "CASH", label: "Cash" },
                 { id: "QRIS", label: "QRIS" },
                 { id: "SPLIT", label: "Split" }
               ].map((f) => {
@@ -638,7 +638,7 @@ Laporan dibuat otomatis dari sistem kasir SERA.`;
               >
                 <ShoppingBag size={32} style={{ opacity: 0.3, marginBottom: 6 }} />
                 <p style={{ margin: 0, fontSize: 12, fontWeight: 600 }}>
-                  Belum ada transaksi pada filter ini
+                  No transactions match this filter yet
                 </p>
               </div>
             ) : (

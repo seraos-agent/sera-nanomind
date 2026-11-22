@@ -107,7 +107,7 @@ export function SetCourierPinModal({
             color: theme.ink
           }}
         >
-          {courier.hasPin ? "Ganti PIN Kurir" : "Atur PIN Kurir"}
+          {courier.hasPin ? "Change Courier PIN" : "Set Courier PIN"}
         </h3>
 
         <div
@@ -135,7 +135,7 @@ export function SetCourierPinModal({
             color: theme.inkSoft
           }}
         >
-          Masukkan 4–6 digit angka PIN pribadi untuk kurir ini. Kurir wajib memasukkan Kode Aktivasi beserta PIN ini saat login atau ganti perangkat.
+          Enter a personal 4-6 digit numeric PIN for this courier. The courier must enter both the Activation Code and this PIN when signing in or switching devices.
         </p>
 
         <input
@@ -144,7 +144,7 @@ export function SetCourierPinModal({
           maxLength={6}
           autoFocus
           required
-          placeholder="PIN 4–6 digit angka"
+          placeholder="4-6 digit PIN"
           value={pinInput}
           onChange={e => setPinInput(e.target.value.replace(/\D/g, "").slice(0, 6))}
           style={{
@@ -190,7 +190,7 @@ export function SetCourierPinModal({
               cursor: isUpdating ? "not-allowed" : "pointer"
             }}
           >
-            Batal
+            Cancel
           </button>
 
           <button
@@ -209,7 +209,7 @@ export function SetCourierPinModal({
               cursor: !isPinValid || isUpdating ? "not-allowed" : "pointer"
             }}
           >
-            {isUpdating ? "Menyimpan..." : "Simpan PIN"}
+            {isUpdating ? "Saving..." : "Save PIN"}
           </button>
         </div>
       </form>

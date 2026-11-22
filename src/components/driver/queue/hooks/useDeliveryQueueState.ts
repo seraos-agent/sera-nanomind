@@ -173,7 +173,7 @@ export function useDeliveryQueueState({
       const settledKey = `sera_driver_settled_${driver.id || "me"}`;
       localStorage.setItem(settledKey, "true");
       setIsCodSettled(true);
-      setNotification("Setoran kas COD diterima toko");
+      setNotification("COD cash settlement received by store");
       setTimeout(() => setNotification(null), 3500);
     };
     window.addEventListener("sera:driver-settlement-confirmed", handleSettlementConfirmed);
@@ -201,7 +201,7 @@ export function useDeliveryQueueState({
         candidates.find((c) => isRealCustomerAddress(c)) ||
         order.shippingAddress ||
         order.destAddress ||
-        "Alamat Pengantaran Toko";
+        "Store Delivery Address";
 
       const resolvedCoords =
         order.destCoords ||
@@ -229,7 +229,7 @@ export function useDeliveryQueueState({
         id: `STP-${order.id || Date.now().toString().slice(-4)}`,
         orderId: order.id || `ORD-${Date.now().toString().slice(-4)}`,
         stopNumber: nextNum,
-        customerName: order.customerName || "Pelanggan Toko",
+        customerName: order.customerName || "Store Customer",
         customerPhone: order.customerPhone || "08123456789",
         destAddress: resolvedAddress,
         destCoords: resolvedCoords,
@@ -237,13 +237,13 @@ export function useDeliveryQueueState({
           ? calculateRoadDistanceKm(liveGpsCoords || driverCoords, resolvedCoords)
           : Number((1.5 + Math.random() * 2).toFixed(1)),
         estimatedMinutes: Math.round(5 + Math.random() * 8),
-        itemsSummary: order.itemsSummary || "Pesanan Toko",
+        itemsSummary: order.itemsSummary || "Store Order",
         totalAmount: order.totalAmount || 50000,
         paymentMethod: order.paymentMethod === "COD" ? "COD" : "QRIS",
         isCod: order.paymentMethod === "COD",
         codAmount: order.paymentMethod === "COD" ? order.totalAmount || 50000 : 0,
         status: "ACTIVE",
-        note: order.note || "Pesanan baru ditugaskan dari kasir toko"
+        note: order.note || "New order assigned by store cashier"
       };
 
       setDeliveryQueue((prev) => {
@@ -253,7 +253,7 @@ export function useDeliveryQueueState({
       setSelectedStopId(null);
       if (resetFittedStopKey) resetFittedStopKey();
       setQueueTab("ACTIVE");
-      setNotification(`Pesanan baru ${newStop.orderId}`);
+      setNotification(`New order ${newStop.orderId}`);
       setTimeout(() => setNotification(null), 3500);
     };
 
@@ -379,14 +379,14 @@ export function useDeliveryQueueState({
       isCod: picked.isCod,
       codAmount: picked.isCod ? picked.total : 0,
       status: "ACTIVE",
-      note: "Pesanan baru ditugaskan dari kasir toko"
+      note: "New order assigned by store cashier"
     };
 
     setDeliveryQueue((prev) => [newStop, ...prev]);
     setSelectedStopId(null);
     if (resetFittedStopKey) resetFittedStopKey();
     setQueueTab("ACTIVE");
-    setNotification(`🔔 Pesanan Baru Masuk! ${newStop.orderId} (${newStop.customerName})`);
+    setNotification(`New Incoming Order! ${newStop.orderId} (${newStop.customerName})`);
     setTimeout(() => setNotification(null), 4500);
   }, [pendingStops.length, resetFittedStopKey]);
 
@@ -399,7 +399,7 @@ export function useDeliveryQueueState({
     setSelectedStopId(null);
     if (resetFittedStopKey) resetFittedStopKey();
     setIsCodSettled(false);
-    setNotification("Daftar antaran di-reset ke data simulasi awal (3 paket).");
+    setNotification("Delivery queue reset to initial demo data (3 packages).");
     setTimeout(() => setNotification(null), 3000);
   }, [driver.id, resetFittedStopKey]);
 
@@ -407,7 +407,7 @@ export function useDeliveryQueueState({
     const storePhone = driver.linkedStorePhone || "08123456789";
     const cleanPhone = storePhone.replace(/^0/, "62").replace(/[^0-9]/g, "");
     const text = encodeURIComponent(
-      `Halo Kasir / Admin ${driver.linkedStoreName || "Toko"}, saya ${driver.name} (Kurir Resmi Toko). Mohon koordinasi terkait orderan dan operasional antaran, terima kasih!`
+      `Hello Cashier / Admin at ${driver.linkedStoreName || "Store"}, this is ${driver.name} (Official Store Courier). Checking in regarding active delivery tasks.`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
   }, [driver.linkedStorePhone, driver.linkedStoreName, driver.name]);
@@ -416,7 +416,7 @@ export function useDeliveryQueueState({
     (phone: string, customerName: string, stopNum: number) => {
       const cleanPhone = phone.replace(/^0/, "62").replace(/[^0-9]/g, "");
       const text = encodeURIComponent(
-        `Halo Kak ${customerName}, saya kurir resmi dari ${driver.linkedStoreName || "Toko"}. Saya sedang mengantarkan pesanan Anda (Antaran #${stopNum}). Mohon konfirmasi bila sudah di tempat ya, terima kasih!`
+        `Hello ${customerName}, I am an official courier from ${driver.linkedStoreName || "Store"} delivering your order (Stop #${stopNum}). Please let me know when you are available!`
       );
       window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
     },
@@ -459,7 +459,7 @@ export function useDeliveryQueueState({
     }
 
     setStopToComplete(null);
-    setNotification(`Antaran #${stop.stopNumber} selesai`);
+    setNotification(`Delivery #${stop.stopNumber} completed`);
     setTimeout(() => setNotification(null), 2800);
   }, [stopToComplete, selectedStopId, resetFittedStopKey, onUpdateDriver, driver.totalTrips, driver.todayEarnings]);
 

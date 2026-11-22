@@ -117,13 +117,13 @@ export function DeliveryPendingCard({
               lineHeight: 1.4
             }}
           >
-            <span style={{ color: theme.inkSoft, fontWeight: 600 }}>Catatan: </span>
+            <span style={{ color: theme.inkSoft, fontWeight: 600 }}>Note: </span>
             <span>"{stop.note}"</span>
           </div>
         )}
       </div>
 
-      {/* Footer Kartu: Total Pembayaran & Tombol Aksi */}
+      {/* Card Footer: Total Payment & Action Buttons */}
       <div
         style={{
           display: "flex",
@@ -137,7 +137,7 @@ export function DeliveryPendingCard({
       >
         <div>
           <div style={{ fontSize: 10, color: theme.inkSoft, textTransform: "uppercase" }}>
-            {stop.isCod ? "Tagihan COD" : "Total Nilai"}
+            {stop.isCod ? "COD Due" : "Order Total"}
           </div>
           <div style={{ fontSize: 16, fontWeight: 800, color: theme.accent, marginTop: 2 }}>
             Rp {(stop.codAmount || stop.totalAmount || 0).toLocaleString("id-ID")}
@@ -164,7 +164,7 @@ export function DeliveryPendingCard({
             }}
           >
             <SolidMapPinIcon size={14} color="#EF4444" />
-            <span>Peta</span>
+            <span>Map</span>
           </button>
 
           <button
@@ -204,7 +204,7 @@ export function DeliveryPendingCard({
               boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
             }}
           >
-            <span>Selesai</span>
+            <span>Complete</span>
           </button>
         </div>
       </div>

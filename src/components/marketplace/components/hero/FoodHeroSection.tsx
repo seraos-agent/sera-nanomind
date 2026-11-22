@@ -39,7 +39,7 @@ export const FoodHeroSection: React.FC<FoodHeroSectionProps> = ({
       >
         <img
           src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&auto=format&fit=crop&q=80"
-          alt="Kuliner Pilihan SERA"
+          alt="SERA Featured Culinary"
           style={{
             width: '100%',
             height: '100%',
@@ -72,7 +72,7 @@ export const FoodHeroSection: React.FC<FoodHeroSectionProps> = ({
               width: 'fit-content'
             }}
           >
-            🔥 Kuliner Nusantara &amp; Kafe
+            🔥 Artisan Food &amp; Cafe Picks
           </span>
           <h3
             style={{
@@ -84,7 +84,7 @@ export const FoodHeroSection: React.FC<FoodHeroSectionProps> = ({
               letterSpacing: '-0.02em'
             }}
           >
-            Jelajahi Rasa &amp; Menu Favorit
+            Explore Signature Dishes &amp; Favorites
           </h3>
           <p
             style={{
@@ -94,7 +94,7 @@ export const FoodHeroSection: React.FC<FoodHeroSectionProps> = ({
               maxWidth: '400px'
             }}
           >
-            Dari resto autentik, coffee shop, hingga aneka cemilan segar.
+            From authentic local Kitchens and coffee shops to fresh daily snacks.
           </p>
         </div>
       </div>

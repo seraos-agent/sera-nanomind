@@ -69,10 +69,10 @@ export function StoreSavedModal({ isOpen, onClose, theme }: StoreSavedModalProps
 
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Pengaturan Toko Disimpan
+            Store Settings Saved
           </h3>
           <p style={{ margin: 0, fontSize: 12, color: theme.inkSoft, lineHeight: 1.4 }}>
-            Perubahan informasi toko Anda berhasil diperbarui di etalase.
+            Your store information changes have been updated on the storefront.
           </p>
         </div>
 

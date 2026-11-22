@@ -51,14 +51,14 @@ export function SelfPickupCard({
           }}
         >
           <div style={{ fontSize: 15, fontWeight: 700, color: theme.ink }}>
-            Ambil di {entity}
+            Pick Up at {entity}
           </div>
 
           <ShippingToggleSwitch checked={selfPickup} theme={theme} />
         </div>
 
         <p style={{ margin: 0, fontSize: 13, color: theme.inkSoft, lineHeight: 1.45 }}>
-          Pembeli mengambil pesanan secara langsung di {entityLower} fisik Anda.
+          Buyers pick up their orders directly at your physical {entityLower}.
         </p>
       </div>
     </div>

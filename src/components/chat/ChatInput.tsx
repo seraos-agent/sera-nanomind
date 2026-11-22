@@ -313,7 +313,7 @@ export function ChatInput({
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                     >
                       <ImageIcon size={16} color={theme.inkSoft} />
-                      Galeri
+                      Gallery
                     </button>
                     <button
                       onClick={() => handleAttachOption('document')}
@@ -345,7 +345,7 @@ export function ChatInput({
                       onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                     >
                       <Trash2 size={16} color="#ef4444" />
-                      Hapus Chat
+                      Clear Chat
                     </button>
                   </div>
                 )}

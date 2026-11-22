@@ -45,7 +45,7 @@ export function MerchantHeader({
         <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
           <button
             onClick={onBack}
-            title="Kembali ke Dashboard Utama"
+            title="Back to Main Dashboard"
             style={{
               background: "transparent",
               border: "none",
@@ -67,7 +67,7 @@ export function MerchantHeader({
             textOverflow: "ellipsis",
             whiteSpace: "nowrap"
           }}>
-            {store?.name || "Mitra Store"}
+            {store?.name || "Merchant Store"}
           </span>
         </div>
 
@@ -83,14 +83,14 @@ export function MerchantHeader({
               : theme.inkFaint;
 
           const tooltip = isOpen
-            ? `${status.statusDescription}. Klik untuk tutup sementara.`
+            ? `${status.statusDescription}. Click to temporarily close.`
             : isManual
-              ? `${status.statusDescription}. Klik untuk kembali buka sesuai jadwal.`
-              : `${status.statusDescription}. Klik untuk buka sementara.`;
+              ? `${status.statusDescription}. Click to resume scheduled hours.`
+              : `${status.statusDescription}. Click to open temporarily.`;
 
           const displayLabel = isManual
-            ? (isOpen ? "Buka (Manual)" : "Tutup Sementara")
-            : (isOpen ? "Buka" : "Tutup");
+            ? (isOpen ? "Open (Manual)" : "Temporarily Closed")
+            : (isOpen ? "Open" : "Closed");
 
           return (
             <button
@@ -149,7 +149,7 @@ export function MerchantHeader({
         width: "100%",
         boxSizing: "border-box"
       }}>
-        {/* 1. INFO TOKO */}
+        {/* 1. STORE INFO */}
         <button
           type="button"
           onClick={() => {
@@ -195,11 +195,11 @@ export function MerchantHeader({
             whiteSpace: "nowrap",
             transition: "color 0.15s ease"
           }}>
-            Info {getStoreEntityLabel(store?.type)}
+            {getStoreEntityLabel(store?.type)} Info
           </span>
         </button>
 
-        {/* 2. PRODUK */}
+        {/* 2. PRODUCTS */}
         <button
           type="button"
           onClick={() => setCurrentView("products")}
@@ -248,11 +248,11 @@ export function MerchantHeader({
             whiteSpace: "nowrap",
             transition: "color 0.15s ease"
           }}>
-            {store?.type === "FOOD" ? "Menu" : store?.type === "JASA" ? "Layanan" : "Produk"}
+            {store?.type === "FOOD" ? "Menu" : store?.type === "JASA" ? "Services" : "Products"}
           </span>
         </button>
 
-        {/* 3. KASIR (POS) */}
+        {/* 3. POS CASHIER */}
         <button
           type="button"
           onClick={() => setCurrentView("pos")}
@@ -295,11 +295,11 @@ export function MerchantHeader({
             whiteSpace: "nowrap",
             transition: "color 0.15s ease"
           }}>
-            Kasir
+            POS
           </span>
         </button>
 
-        {/* 4. PENJUALAN */}
+        {/* 4. SALES */}
         <button
           type="button"
           onClick={() => setCurrentView("orders")}
@@ -363,7 +363,7 @@ export function MerchantHeader({
             whiteSpace: "nowrap",
             transition: "color 0.15s ease"
           }}>
-            Penjualan
+            Sales
           </span>
         </button>
       </div>

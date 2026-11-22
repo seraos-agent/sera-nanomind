@@ -49,7 +49,7 @@ const CheckboxButton: React.FC<{
       transition: 'all 0.15s ease',
       boxShadow: checked ? '0 1px 4px rgba(59, 130, 246, 0.35)' : 'none',
     }}
-    aria-label={label || (checked ? 'Hapus centang' : 'Centang')}
+    aria-label={label || (checked ? 'Uncheck' : 'Check')}
   >
     {checked && (
       <svg
@@ -109,7 +109,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
 
     items.forEach((cartItem, originalIndex) => {
       const sId = cartItem.item.storeId || 'default-store';
-      const sName = cartItem.item.storeName || 'Toko Marketplace';
+      const sName = cartItem.item.storeName || 'Marketplace Store';
 
       if (!map.has(sId)) {
         const g: CartStoreGroup = {
@@ -160,7 +160,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
         );
         if (otherStoreSelected) {
           if (onToast) {
-            onToast(`Beralih ke toko: ${cartItem.item.storeName}`);
+            onToast(`Switched to store: ${cartItem.item.storeName}`);
           }
           return new Set([key]);
         }
@@ -188,7 +188,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
     });
   };
 
-  // Master "Pilih Semua" toggle
+  // Master "Select All" toggle
   const toggleSelectAll = () => {
     if (isAllSelected) {
       setSelectedKeys(new Set());
@@ -204,7 +204,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
         );
         setSelectedKeys(new Set(targetKeys));
         if (onToast) {
-          onToast(`Memilih semua produk dari toko: ${targetStore.storeName}`);
+          onToast(`Selected all products from store: ${targetStore.storeName}`);
         }
       }
     }
@@ -268,15 +268,15 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
               <CartIcon size={46} color="currentColor" />
             </div>
             <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px', fontSize: '0.95rem' }}>
-              Keranjang Belanja Kosong
+              Your Cart is Empty
             </div>
             <p style={{ fontSize: '0.78rem', lineHeight: 1.5, margin: 0 }}>
-              Pilih produk sembako, kuliner, atau jasa dari etalase marketplace.
+              Choose groceries, food, or services from the marketplace catalog.
             </p>
           </div>
         ) : (
           <>
-            {/* Top Bar: "Pilih Semua" (Select All) + Bulk Delete */}
+            {/* Top Bar: Select All + Bulk Delete */}
             <div
               style={{
                 display: 'flex',
@@ -303,10 +303,10 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
                   checked={isAllSelected}
                   onChange={toggleSelectAll}
                   size={19}
-                  label="Pilih semua produk"
+                  label="Select all products"
                 />
                 <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                  Pilih Semua ({selectedCount}/{items.length})
+                  Select All ({selectedCount}/{items.length})
                 </span>
               </div>
 
@@ -324,7 +324,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
                     padding: '3px 6px',
                   }}
                 >
-                  Hapus ({selectedCount})
+                  Remove ({selectedCount})
                 </button>
               )}
             </div>
@@ -367,7 +367,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
                       checked={isStoreAllSelected}
                       onChange={() => toggleSelectStore(group)}
                       size={18}
-                      label={`Pilih semua produk dari ${group.storeName}`}
+                      label={`Select all products from ${group.storeName}`}
                     />
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flex: 1, minWidth: 0 }}>
                       <span style={{ fontSize: '0.9rem' }}>🏪</span>
@@ -420,7 +420,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
                           checked={isSelected}
                           onChange={() => toggleSelectItem(cartItem, originalIndex)}
                           size={19}
-                          label={`Pilih ${cartItem.item.name}`}
+                          label={`Select ${cartItem.item.name}`}
                         />
 
                         {/* Thumbnail */}
@@ -452,7 +452,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
                               className={`badge ${isService ? 'badge-service' : 'badge-goods'}`}
                               style={{ padding: '1px 5px', fontSize: '0.62rem' }}
                             >
-                              {isService ? 'JASA' : 'PRODUK'}
+                              {isService ? 'SERVICE' : 'PRODUCT'}
                             </span>
                           </div>
 
@@ -471,13 +471,13 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
 
                           {cartItem.selectedVariant && (
                             <div style={{ fontSize: '0.7rem', color: 'var(--color-brand)' }}>
-                              Varian: {cartItem.selectedVariant.name}
+                              Variant: {cartItem.selectedVariant.name}
                             </div>
                           )}
 
                           {isService && cartItem.bookingDate && (
                             <div style={{ fontSize: '0.7rem', color: 'var(--color-service)' }}>
-                              📅 Jadwal: {cartItem.bookingDate}
+                              📅 Schedule: {cartItem.bookingDate}
                             </div>
                           )}
 
@@ -559,7 +559,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
                                     fontWeight: 700,
                                   }}
                                 >
-                                  Hapus
+                                  Remove
                                 </button>
                               )}
                             </div>
@@ -596,7 +596,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
               color: 'var(--text-sub)',
             }}
           >
-            <span>Subtotal ({selectedCount} item terpilih)</span>
+            <span>Subtotal ({selectedCount} items selected)</span>
             <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
               Rp {dynamicSubtotal.toLocaleString('id-ID')}
             </span>
@@ -610,13 +610,13 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
               color: 'var(--text-sub)',
             }}
           >
-            <span>Ongkir / Biaya Layanan</span>
+            <span>Shipping / Service Fee</span>
             <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
               {selectedCount === 0
                 ? 'Rp 0'
                 : dynamicDeliveryFee > 0
                 ? `Rp ${dynamicDeliveryFee.toLocaleString('id-ID')}`
-                : 'Gratis'}
+                : 'Free'}
             </span>
           </div>
 
@@ -629,7 +629,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
               borderTop: '1px dashed var(--border-color)',
             }}
           >
-            <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>Total Tagihan</span>
+            <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>Total Due</span>
             <span
               style={{
                 fontFamily: 'var(--font-heading)',
@@ -660,7 +660,7 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
               transition: 'all 0.15s ease',
             }}
           >
-            {selectedCount > 0 ? `Checkout (${selectedCount})` : 'Pilih Produk Terlebih Dahulu'}
+            {selectedCount > 0 ? `Checkout (${selectedCount})` : 'Select Products First'}
           </button>
         </div>
       )}

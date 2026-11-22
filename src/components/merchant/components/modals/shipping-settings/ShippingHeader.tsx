@@ -39,7 +39,7 @@ export function ShippingHeader({
         <button
           type="button"
           onClick={onClose}
-          title="Kembali"
+          title="Back"
           style={{
             background: theme.surface2,
             border: `1px solid ${theme.border}`,
@@ -65,10 +65,10 @@ export function ShippingHeader({
         </button>
         <div>
           <div style={{ fontSize: 16, fontWeight: 700, color: theme.ink }}>
-            Atur Pengiriman {entity}
+            Configure {entity} Shipping
           </div>
           <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 1 }}>
-            Kelola metode pengiriman
+            Manage delivery methods
           </div>
         </div>
       </div>
@@ -95,7 +95,7 @@ export function ShippingHeader({
           }}
         >
           {isSaved ? <Check size={16} /> : null}
-          <span>{isSaved ? 'Tersimpan!' : 'Simpan'}</span>
+          <span>{isSaved ? 'Saved!' : 'Save'}</span>
         </button>
       )}
     </div>

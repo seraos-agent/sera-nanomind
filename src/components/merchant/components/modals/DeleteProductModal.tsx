@@ -63,10 +63,10 @@ export function DeleteProductModal({ product, onClose, onConfirm, theme }: Delet
           fontWeight: 700,
           color: theme.ink
         }}>
-          Hapus Produk?
+          Delete Product?
         </h3>
 
-        {/* Kotak Highlight Nama Produk */}
+        {/* Product Name Highlight Box */}
         <div style={{
           width: "100%",
           padding: "10px 14px",
@@ -91,7 +91,7 @@ export function DeleteProductModal({ product, onClose, onConfirm, theme }: Delet
           lineHeight: 1.5,
           color: theme.inkSoft
         }}>
-          Produk ini akan dihapus secara permanen dari etalase toko Anda.
+          This product will be permanently removed from your store showcase.
         </p>
 
         <div style={{
@@ -116,7 +116,7 @@ export function DeleteProductModal({ product, onClose, onConfirm, theme }: Delet
               cursor: "pointer"
             }}
           >
-            Batal
+            Cancel
           </button>
           <button
             type="button"
@@ -134,7 +134,7 @@ export function DeleteProductModal({ product, onClose, onConfirm, theme }: Delet
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.12)"
             }}
           >
-            Ya, Hapus
+            Yes, Delete
           </button>
         </div>
       </div>

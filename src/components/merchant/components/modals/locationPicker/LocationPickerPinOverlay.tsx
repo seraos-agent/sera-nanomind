@@ -55,10 +55,10 @@ export function LocationPickerPinOverlay({
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0, flex: 1 }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: theme.ink }}>
-              GPS Belum Aktif
+              GPS Not Active Yet
             </span>
             <span style={{ fontSize: 11, color: theme.inkSoft, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              Geser peta atau cari alamat untuk menentukan titik.
+              Drag the map or search an address to set the pin.
             </span>
           </div>
           <button
@@ -76,7 +76,7 @@ export function LocationPickerPinOverlay({
               flexShrink: 0
             }}
           >
-            Coba Lagi
+            Retry
           </button>
         </div>
       )}
@@ -114,7 +114,7 @@ export function LocationPickerPinOverlay({
               fontFamily: "Inter, sans-serif"
             }}
           >
-            Menemukan lokasi...
+            Finding location...
           </span>
         </div>
       )}
@@ -210,7 +210,7 @@ export function LocationPickerPinOverlay({
                 onSearchLocation();
               }
             }}
-            placeholder="Cari jalan atau kota..."
+            placeholder="Search street or city..."
             style={{
               flex: 1,
               border: "none",
@@ -239,7 +239,7 @@ export function LocationPickerPinOverlay({
               flexShrink: 0
             }}
           >
-            {isSearching ? "..." : "Cari"}
+            {isSearching ? "..." : "Search"}
           </button>
         </div>
       </div>
@@ -248,7 +248,7 @@ export function LocationPickerPinOverlay({
       <button
         type="button"
         onClick={onRecenter}
-        title="Pusatkan ke lokasi saya saat ini"
+        title="Center on my current location"
         style={{
           position: "absolute",
           right: 14,
@@ -310,10 +310,10 @@ export function LocationPickerPinOverlay({
         >
           <AlertCircle size={32} color="#F59E0B" />
           <div style={{ fontSize: 13, fontWeight: 700, color: theme.ink }}>
-            Peta Belum Dapat Dimuat
+            Unable to Load Map
           </div>
           <div style={{ fontSize: 12, color: theme.inkSoft, maxWidth: 320 }}>
-            {mapError}. Anda tetap dapat mengisi alamat teks atau mencoba deteksi lokasi.
+            {mapError}. You can still enter the text address or retry location detection.
           </div>
           <button
             type="button"
@@ -329,7 +329,7 @@ export function LocationPickerPinOverlay({
               cursor: "pointer"
             }}
           >
-            Deteksi Lokasi Otomatis
+            Auto-Detect Location
           </button>
         </div>
       )}

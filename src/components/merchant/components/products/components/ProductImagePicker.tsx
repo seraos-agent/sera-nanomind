@@ -33,14 +33,14 @@ export const ProductImagePicker: React.FC<ProductImagePickerProps> = ({
         const file = files[i];
         if (!file.type.startsWith("image/")) {
           setUploadError(
-            `Format file "${file.name}" tidak didukung. Harap pilih gambar (JPG, PNG, atau WEBP).`
+            `File format "${file.name}" is not supported. Please choose an image (JPG, PNG, or WEBP).`
           );
           continue;
         }
 
         // Smart client-side compression: scales down any photo resolution (even 15MB+) to ~50KB
         // Staged Draft Pattern: kept locally for instant preview without touching Cloudflare R2.
-        // The image is ONLY uploaded to Cloudflare R2 when the merchant clicks "Simpan Produk".
+        // The image is ONLY uploaded when the merchant clicks Save Product.
         const compressed = await compressImageFile(file, {
           maxWidth: 720,
           maxHeight: 720,
@@ -57,7 +57,7 @@ export const ProductImagePicker: React.FC<ProductImagePickerProps> = ({
       setProdImages(newImages.slice(0, 3));
     } catch (err) {
       console.error("Failed to process image:", err);
-      setUploadError("Gagal memproses foto. Silakan coba kembali.");
+      setUploadError("Failed to process photo. Please try again.");
     } finally {
       e.target.value = "";
     }
@@ -81,9 +81,9 @@ export const ProductImagePicker: React.FC<ProductImagePickerProps> = ({
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <label style={{ fontSize: 12, fontWeight: 600, color: theme.ink }}>
-          Foto {storeType === "FOOD" ? "Menu" : "Produk"}
+          {storeType === "FOOD" ? "Menu Photos" : "Product Photos"}
         </label>
-        <span style={{ fontSize: 11, color: theme.inkSoft }}>{prodImages.length}/3 Foto</span>
+        <span style={{ fontSize: 11, color: theme.inkSoft }}>{prodImages.length}/3 Photos</span>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
@@ -109,7 +109,7 @@ export const ProductImagePicker: React.FC<ProductImagePickerProps> = ({
                 <>
                   <img
                     src={imgUrl}
-                    alt={`Foto ${slotIndex + 1}`}
+                    alt={`Photo ${slotIndex + 1}`}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                   {slotIndex === 0 && (
@@ -126,13 +126,13 @@ export const ProductImagePicker: React.FC<ProductImagePickerProps> = ({
                         borderRadius: 4
                       }}
                     >
-                      Utama
+                      Main
                     </span>
                   )}
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(slotIndex)}
-                    title="Hapus Foto"
+                    title="Remove Photo"
                     style={{
                       position: "absolute",
                       top: 4,
@@ -183,7 +183,7 @@ export const ProductImagePicker: React.FC<ProductImagePickerProps> = ({
                       textAlign: "center"
                     }}
                   >
-                    {slotIndex === 0 ? "+ Foto Utama" : `+ Foto ${slotIndex + 1}`}
+                    {slotIndex === 0 ? "+ Main Photo" : `+ Photo ${slotIndex + 1}`}
                   </span>
                 </label>
               )}
@@ -230,10 +230,10 @@ export const ProductImagePicker: React.FC<ProductImagePickerProps> = ({
 
       <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 4 }}>
         <span style={{ fontSize: 11, color: theme.inkSoft }}>
-          Foto pertama otomatis menjadi foto sampul etalase toko.
+          The first photo automatically serves as your store cover image.
         </span>
         <span style={{ fontSize: 10, color: theme.inkSoft, opacity: 0.85 }}>
-          Maks. 3 foto • Maks. 5 MB per foto (JPG, PNG, WEBP) • Otomatis dikompres agar cepat dimuat pembeli.
+          Max 3 photos • Max 5 MB each (JPG, PNG, WEBP) • Auto-compressed for fast loading.
         </span>
       </div>
     </div>

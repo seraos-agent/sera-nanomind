@@ -57,7 +57,7 @@ export function ProfileEditSubView({
 
         <div
           onClick={onEditPhotoClick}
-          title="Klik untuk memilih foto dari galeri"
+          title="Click to select a photo from gallery"
           style={{
             width: 96,
             height: 96,
@@ -82,7 +82,7 @@ export function ProfileEditSubView({
           {avatarUrl ? (
             <img
               src={avatarUrl}
-              alt="Foto Profil"
+              alt="Profile Photo"
               style={{
                 width: '100%',
                 height: '100%',
@@ -126,14 +126,14 @@ export function ProfileEditSubView({
             onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = theme.surface)}
           >
             <Camera size={14} />
-            <span>Edit foto</span>
+            <span>Edit photo</span>
           </button>
 
           {avatarUrl && (
             <button
               type="button"
               onClick={onRemovePhoto}
-              title="Kembalikan ke inisial huruf"
+              title="Revert to letter initial"
               style={{
                 borderRadius: 20,
                 padding: '7px 14px',
@@ -148,22 +148,22 @@ export function ProfileEditSubView({
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = theme.surface2)}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
             >
-              Hapus
+              Remove
             </button>
           )}
         </div>
       </div>
 
-      {/* Form Input 1: Nama Lengkap */}
+      {/* Form Input 1: Full Name */}
       <div>
         <label style={{ display: 'block', fontSize: 15, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Nama lengkap
+          Full name
         </label>
         <input
           type="text"
           value={nameValue}
           onChange={(e) => setNameValue(e.target.value)}
-          placeholder="Contoh: Om Jiban"
+          placeholder="Example: John Doe"
           style={{
             width: '100%',
             padding: '14px 16px',
@@ -179,16 +179,16 @@ export function ProfileEditSubView({
         />
       </div>
 
-      {/* Form Input 2: Panggilan */}
+      {/* Form Input 2: Nickname */}
       <div>
         <label style={{ display: 'block', fontSize: 15, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Nama panggilan
+          Nickname
         </label>
         <input
           type="text"
           value={nicknameValue}
           onChange={(e) => setNicknameValue(e.target.value)}
-          placeholder="Nama panggilan (opsional)"
+          placeholder="Nickname (optional)"
           style={{
             width: '100%',
             padding: '14px 16px',
@@ -204,16 +204,16 @@ export function ProfileEditSubView({
         />
       </div>
 
-      {/* Form Input 3: Alamat Email */}
+      {/* Form Input 3: Email Address */}
       <div>
         <label style={{ display: 'block', fontSize: 15, fontWeight: 600, color: theme.ink, marginBottom: 8 }}>
-          Alamat email
+          Email address
         </label>
         <input
           type="email"
           value={emailValue}
           readOnly
-          placeholder="nama@email.com"
+          placeholder="name@email.com"
           style={{
             width: '100%',
             padding: '14px 16px',
@@ -229,7 +229,7 @@ export function ProfileEditSubView({
           }}
         />
         <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 5 }}>
-          Email akun login tidak dapat diubah.
+          Login account email cannot be changed.
         </div>
       </div>
 
@@ -237,7 +237,7 @@ export function ProfileEditSubView({
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <label style={{ fontSize: 15, fontWeight: 600, color: theme.ink }}>
-            Nomor WhatsApp
+            WhatsApp Number
           </label>
 
           {isPhoneVerified ? (
@@ -255,7 +255,7 @@ export function ProfileEditSubView({
               }}
             >
               <CheckCircle2 size={12} />
-              <span>Terverifikasi</span>
+              <span>Verified</span>
             </span>
           ) : (
             <span
@@ -269,7 +269,7 @@ export function ProfileEditSubView({
                 borderRadius: 12,
               }}
             >
-              Verifikasi via WhatsApp segera hadir
+              WhatsApp verification coming soon
             </span>
           )}
         </div>
@@ -279,7 +279,7 @@ export function ProfileEditSubView({
           inputMode="numeric"
           value={phoneValue}
           onChange={(e) => onPhoneInputChange(e.target.value)}
-          placeholder="Contoh: 081234567890"
+          placeholder="Example: 081234567890"
           style={{
             width: '100%',
             padding: '14px 16px',
@@ -294,7 +294,7 @@ export function ProfileEditSubView({
           }}
         />
         <div style={{ fontSize: 12, color: theme.inkSoft, marginTop: 5 }}>
-          Digunakan untuk konfirmasi pesanan Marketplace dan verifikasi keamanan.
+          Used for Marketplace order confirmation and security verification.
         </div>
       </div>
 
@@ -317,11 +317,11 @@ export function ProfileEditSubView({
             transition: 'opacity 0.15s ease',
           }}
         >
-          {isSaving ? 'Menyimpan...' : 'Perbarui profil'}
+          {isSaving ? 'Saving...' : 'Update profile'}
         </button>
       </div>
 
-      {/* Delete Account Danger Action (Mock) */}
+      {/* Delete Account Danger Action */}
       <div style={{ marginTop: 24, paddingTop: 20, borderTop: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
         <button
           type="button"
@@ -344,10 +344,10 @@ export function ProfileEditSubView({
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
         >
           <Trash2 size={16} />
-          <span>Hapus akun</span>
+          <span>Delete account</span>
         </button>
         <div style={{ fontSize: 12, color: theme.inkSoft, textAlign: 'center' }}>
-          Hapus data profil, riwayat percakapan, dan sesi lokal
+          Delete profile data, conversation history, and local session
         </div>
       </div>
     </form>
