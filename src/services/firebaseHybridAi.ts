@@ -507,9 +507,10 @@ function buildCompactSystemInstruction(snapshot: ReturnType<typeof buildCommerce
     courierSummary,
     `Orders: ${snapshot.orders.pendingOrProcessing.length} pending/processing, ${snapshot.orders.shippedWithCourier.length} out for delivery.`,
     '',
+    'CRITICAL PROPOSAL SAFETY RULE: You CANNOT apply store, inventory, POS, or automation mutations directly. Whenever you include a <<<PROPOSAL ... PROPOSAL>>> tag, the change has NOT happened yet and is strictly PENDING user confirmation. NEVER claim it was "processed successfully", "updated", "added", "recorded", or "completed". Instead, clearly state that you have prepared a proposal for review (including current vs. proposed values when relevant) and ask the user to click Approve below to apply the change.',
     'If the user explicitly asks to add a product, update stock/price, record a POS order, or create an automation, append ONE JSON tag at the very end wrapped in <<<PROPOSAL and PROPOSAL>>>:',
     'CREATE_PRODUCT: <<<PROPOSAL {"intent":"CREATE_PRODUCT","parameters":{"productName":"string","price":25000,"stock":20,"category":"Signature Coffee"}} PROPOSAL>>>',
-    'UPDATE_STOCK: <<<PROPOSAL {"intent":"UPDATE_STOCK","parameters":{"productId":"id","productName":"name","newStock":25}} PROPOSAL>>>',
+    'UPDATE_STOCK: <<<PROPOSAL {"intent":"UPDATE_STOCK","parameters":{"productId":"id","productName":"name","previousStock":25,"newStock":37}} PROPOSAL>>>',
     'CREATE_POS_ORDER: <<<PROPOSAL {"intent":"CREATE_POS_ORDER","parameters":{"tableOrQueueNumber":"Table 4","paymentMethod":"QRIS","itemsSummary":"2x Cold Brew Citrus Tonic","items":[{"name":"Cold Brew Citrus Tonic","quantity":2,"price":30000}],"totalAmount":60000}} PROPOSAL>>>',
     'SCHEDULE_GOAL: <<<PROPOSAL {"intent":"SCHEDULE_GOAL","parameters":{"goalName":"string","cronExpression":"0 21 * * *","description":"string"}} PROPOSAL>>>',
   ].join('\n');
@@ -525,12 +526,32 @@ function extractProposalFromText(rawText: string): { cleanText: string; proposal
   try {
     const parsed = JSON.parse(match[1].trim());
     if (parsed && typeof parsed.intent === 'string') {
+      const parameters: Record<string, any> = { ...(parsed.parameters || {}) };
+
+      if (parsed.intent === 'UPDATE_STOCK') {
+        const products = readJson<any[]>('sera_merchant_products', []);
+        const matched = products.find(
+          (item) =>
+            (parameters.productId && item.id === parameters.productId) ||
+            (parameters.productName &&
+              String(item.name || '').toLowerCase() === String(parameters.productName).toLowerCase())
+        );
+        if (matched) {
+          parameters.productId = matched.id;
+          parameters.productName = matched.name;
+          parameters.previousStock = Number(matched.stock ?? 0);
+        }
+      }
+
+      const fallbackPendingText =
+        'I have prepared this action proposal for your review. Click Approve below to apply the change.';
+
       return {
-        cleanText,
+        cleanText: cleanText || fallbackPendingText,
         proposal: {
           proposalId: `prop-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           intent: parsed.intent,
-          parameters: parsed.parameters || {},
+          parameters,
         },
       };
     }
