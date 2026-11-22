@@ -97,7 +97,7 @@ export function MarketplacePage({
   } = useMarketplaceCart(showToast);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState<MarketplaceFilterTab>(() => parseMarketplaceTabParam() || 'STORE');
+  const [selectedType, setSelectedType] = useState<MarketplaceFilterTab>(() => parseMarketplaceTabParam() || 'FOOD');
   const [activeCategoryByTab, setActiveCategoryByTab] = useState<Record<MarketplaceFilterTab, string | null>>(
     INITIAL_ACTIVE_CATEGORIES
   );
@@ -398,10 +398,15 @@ export function MarketplacePage({
   }, []);
 
   useEffect(() => {
-    const targetIdx = TABS.indexOf(selectedType);
-    if (targetIdx > 0 && pagerRef.current) {
-      pagerRef.current.scrollLeft = targetIdx * pagerRef.current.clientWidth;
-    }
+    const syncInitialTabScroll = () => {
+      const targetIdx = TABS.indexOf(selectedType);
+      if (targetIdx > 0 && pagerRef.current) {
+        pagerRef.current.scrollLeft = targetIdx * pagerRef.current.clientWidth;
+      }
+    };
+    syncInitialTabScroll();
+    const rafId = requestAnimationFrame(syncInitialTabScroll);
+    return () => cancelAnimationFrame(rafId);
   }, []);
 
   useEffect(() => {

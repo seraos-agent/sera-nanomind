@@ -495,6 +495,32 @@ export function CashierPage({ theme, isMobileView, userEmail, socket, onBack }: 
     return () => window.removeEventListener("sera_pos_config_updated", handlePosConfigUpdated);
   }, [sessionStoreId]);
 
+  useEffect(() => {
+    const syncLocalCatalog = (event?: Event) => {
+      if (
+        event instanceof StorageEvent &&
+        event.key &&
+        event.key !== "sera_merchant_products" &&
+        event.key !== CASHIER_PRODUCTS_KEY
+      ) {
+        return;
+      }
+      const latest = readCachedJson<MerchantProduct[]>(
+        "sera_merchant_products",
+        readCachedJson<MerchantProduct[]>(CASHIER_PRODUCTS_KEY, [])
+      );
+      if (Array.isArray(latest) && latest.length > 0) {
+        setProducts(latest);
+      }
+    };
+    window.addEventListener("sera_merchant_products_updated", syncLocalCatalog);
+    window.addEventListener("storage", syncLocalCatalog);
+    return () => {
+      window.removeEventListener("sera_merchant_products_updated", syncLocalCatalog);
+      window.removeEventListener("storage", syncLocalCatalog);
+    };
+  }, []);
+
   // Native back button navigation stack
   useEffect(() => {
     const unregs: (() => void)[] = [];

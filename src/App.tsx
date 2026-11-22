@@ -552,7 +552,7 @@ function InnerApp() {
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", background: theme.bg, color: theme.inkSoft }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
                 <ShoppingBag size={32} color={theme.accent} />
-                <span style={{ fontSize: 13, fontWeight: 500, fontFamily: "Inter, sans-serif" }}>Memuat Marketplace...</span>
+                <span style={{ fontSize: 13, fontWeight: 500, fontFamily: "Inter, sans-serif" }}>Loading Marketplace...</span>
               </div>
             </div>
           }>

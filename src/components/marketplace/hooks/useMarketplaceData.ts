@@ -115,17 +115,19 @@ function mergeLocalMerchantProducts(itemsList: MarketplaceItem[]): MarketplaceIt
           address: localStore?.address,
           fallback: p.location || 'Indonesia'
         }),
-        tags: [p.category || 'Umum'],
+        tags: [p.category || 'General'],
         type: p.type === 'SERVICE' ? 'SERVICE' : 'GOODS',
-        category: p.category || 'Umum',
-        rating: 5.0,
+        category: p.category || 'General',
+        rating: p.rating || 5.0,
         imageUrl: p.imageUrl || '',
         images: Array.isArray(p.images) && p.images.length > 0 ? p.images : (p.imageUrl ? [p.imageUrl] : []),
+        badge: p.badge,
+        createdAt: p.createdAt || 0,
         inStock: (p.stock ?? 1) > 0,
-        soldCount: 0,
-        reviewsCount: 0,
+        soldCount: p.soldCount ?? 0,
+        reviewsCount: p.reviewsCount ?? 0,
         variants: p.variants?.map((v: any) => ({ name: v.name, price: Number(v.price) || 0 })),
-        duration: p.serviceDuration ? `${p.serviceDuration} menit` : undefined,
+        duration: p.serviceDuration ? `${p.serviceDuration} min` : undefined,
       }));
 
     if (convertedItems.length === 0) return itemsList;
@@ -376,19 +378,37 @@ export function useMarketplaceData() {
     fetchData();
     const interval = setInterval(fetchData, 10000);
 
-    const handleLocalUpdate = () => {
-      fetchData();
+    const handleLocalUpdate = (event?: Event) => {
+      if (
+        event instanceof StorageEvent &&
+        event.key &&
+        ![
+          'sera_merchant_products',
+          'sera_merchant_store',
+          'sera_market_items_cache',
+          'sera_market_stores_cache',
+        ].includes(event.key)
+      ) {
+        return;
+      }
+      memoryItemsCache = null;
+      memoryStoresCache = null;
+      setItems((prev) => mergeLocalMerchantProducts(prev));
+      setStores((prev) => mergeLocalMerchantStore(prev));
+      void fetchData();
     };
 
     window.addEventListener('focus', fetchData);
     window.addEventListener('storage', handleLocalUpdate);
     window.addEventListener('sera_merchant_store_updated', handleLocalUpdate);
+    window.addEventListener('sera_merchant_products_updated', handleLocalUpdate);
 
     return () => {
       clearInterval(interval);
       window.removeEventListener('focus', fetchData);
       window.removeEventListener('storage', handleLocalUpdate);
       window.removeEventListener('sera_merchant_store_updated', handleLocalUpdate);
+      window.removeEventListener('sera_merchant_products_updated', handleLocalUpdate);
     };
   }, [fetchData]);
 

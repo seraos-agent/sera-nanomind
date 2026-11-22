@@ -163,9 +163,11 @@ function buildMarketplaceProductFromMerchant(p: any, store: any) {
     barcode: p.barcode,
     rating: p.rating || 4.9,
     reviewsCount: 12,
-    soldCount: 42,
+    soldCount: p.soldCount ?? 42,
     images: Array.isArray(p.images) && p.images.length > 0 ? p.images : ['https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600'],
     badge: p.badge,
+    status: p.status || 'ACTIVE',
+    createdAt: p.createdAt || 0,
     location: store?.city || 'Malang',
     tags: [p.category || 'kopi', 'food'],
     inStock: (p.stock ?? 1) > 0,
@@ -420,6 +422,7 @@ export function installLocalMarketApiInterceptor(): void {
       if (method === 'GET') {
         const marketplaceLocalStore = {
           ...localStore,
+          totalProducts: localProducts.length,
           type: localStore.type === 'JASA' ? 'SERVICE' : localStore.type === 'FOOD' ? 'FOOD' : 'GOODS',
           followers: 215,
         };

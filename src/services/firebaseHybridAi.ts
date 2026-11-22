@@ -15,9 +15,11 @@ import {
 } from 'firebase/ai';
 import {
   DEMO_CASHIER_PROFILE,
+  DEMO_PRODUCTS,
   DEMO_STORE,
   DEMO_STORE_ID,
 } from './demoCommerceSeed';
+import { safeSetStorage } from '../utils/safeStorage';
 
 interface NanoAICoreStatusResult {
   aicoreInstalled: boolean;
@@ -137,9 +139,7 @@ function readJson<T>(key: string, fallback: T): T {
 }
 
 function writeJson(key: string, value: unknown): void {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {}
+  safeSetStorage(key, JSON.stringify(value));
 }
 
 export function getRuntimeFirebaseConfig(): FirebaseRuntimeConfig | null {
@@ -996,37 +996,83 @@ export function executeCommerceProposal(
   const p = proposal.parameters || {};
 
   if (proposal.intent === 'CREATE_PRODUCT') {
-    const products = readJson<any[]>('sera_merchant_products', []);
+    const rawSaved = localStorage.getItem('sera_merchant_products');
+    const parsedSaved = rawSaved !== null ? readJson<any[]>('sera_merchant_products', DEMO_PRODUCTS) : DEMO_PRODUCTS;
+    const products = rawSaved === null || !Array.isArray(parsedSaved) ? DEMO_PRODUCTS : parsedSaved;
+    const activeStore = readJson<any>('sera_merchant_store', DEMO_STORE);
+    const activeStoreId = activeStore?.id || DEMO_STORE_ID;
+    const price = Number(p.price || 25000);
+    const category = String(p.category || 'Signature Coffee').trim() || 'Signature Coffee';
+
     const newProduct = {
       id: `nm-prod-${Date.now()}`,
-      storeId: DEMO_STORE_ID,
-      name: p.productName || 'New NanoMind Product',
+      storeId: activeStoreId,
+      name: String(p.productName || 'New NanoMind Product').trim() || 'New NanoMind Product',
       description: p.description || 'Added via SERA NanoMind Hybrid Assistant.',
-      type: 'GOODS',
-      category: p.category || 'Signature Coffee',
-      price: Number(p.price || 25000),
+      type: p.type === 'SERVICE' ? 'SERVICE' : 'GOODS',
+      category,
+      price,
+      originalPrice: price,
+      costPrice: Math.round(price * 0.45),
       currency: 'IDR',
       stock: Number(p.stock ?? 20),
       rating: 5.0,
+      status: 'ACTIVE',
       images: ['https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600'],
       badge: 'New',
-      location: 'Malang',
+      location: activeStore?.city || 'Malang',
+      createdAt: Date.now(),
     };
     const nextProducts = [newProduct, ...products];
     writeJson('sera_merchant_products', nextProducts);
     writeJson('sera_cashier_products', nextProducts);
+
+    if (activeStore && typeof activeStore === 'object') {
+      const existingCats: string[] = Array.isArray(activeStore.customCategories)
+        ? activeStore.customCategories
+        : [];
+      const hasCategory = existingCats.some(
+        (c) => String(c || '').trim().toLowerCase() === category.toLowerCase()
+      );
+      const nextStore = {
+        ...activeStore,
+        totalProducts: nextProducts.length,
+        customCategories: hasCategory ? existingCats : [...existingCats, category],
+      };
+      writeJson('sera_merchant_store', nextStore);
+    }
+
+    try {
+      localStorage.removeItem('sera_market_items_cache');
+      localStorage.removeItem('sera_market_stores_cache');
+    } catch {}
+
     window.dispatchEvent(new Event('storage'));
     window.dispatchEvent(new Event('sera_merchant_products_updated'));
+    window.dispatchEvent(new Event('sera_merchant_store_updated'));
     return `Successfully added **${newProduct.name}** (${formatIdr(newProduct.price)}, stock **${newProduct.stock}**) to **Merchant Store**, **POS Cashier**, and **Marketplace**.`;
   }
 
   if (proposal.intent === 'UPDATE_STOCK') {
-    const products = readJson<any[]>('sera_merchant_products', []);
+    const rawSaved = localStorage.getItem('sera_merchant_products');
+    const parsedSaved = rawSaved !== null ? readJson<any[]>('sera_merchant_products', DEMO_PRODUCTS) : DEMO_PRODUCTS;
+    const products = rawSaved === null || !Array.isArray(parsedSaved) ? DEMO_PRODUCTS : parsedSaved;
     let updatedName = p.productName || 'Product';
-    const nextProducts = products.map((item) => {
-      const matches =
+    const targetName = String(p.productName || '').trim().toLowerCase();
+    const hasExactMatch = products.some(
+      (item) =>
         (p.productId && item.id === p.productId) ||
-        (p.productName && item.name.toLowerCase() === String(p.productName).toLowerCase());
+        (targetName && String(item.name || '').trim().toLowerCase() === targetName)
+    );
+
+    const nextProducts = products.map((item) => {
+      const itemNameLower = String(item.name || '').trim().toLowerCase();
+      const matches = hasExactMatch
+        ? (p.productId && item.id === p.productId) || (targetName && itemNameLower === targetName)
+        : Boolean(
+            targetName &&
+              (itemNameLower.includes(targetName) || targetName.includes(itemNameLower))
+          );
       if (matches) {
         updatedName = item.name;
         return {
@@ -1039,8 +1085,12 @@ export function executeCommerceProposal(
     });
     writeJson('sera_merchant_products', nextProducts);
     writeJson('sera_cashier_products', nextProducts);
+    try {
+      localStorage.removeItem('sera_market_items_cache');
+    } catch {}
     window.dispatchEvent(new Event('storage'));
     window.dispatchEvent(new Event('sera_merchant_products_updated'));
+    window.dispatchEvent(new Event('sera_merchant_store_updated'));
     const updatedParts: string[] = [];
     if (p.newStock !== undefined) updatedParts.push(`stock to **${p.newStock}** units`);
     if (p.newPrice !== undefined) updatedParts.push(`price to **${formatIdr(Number(p.newPrice))}**`);

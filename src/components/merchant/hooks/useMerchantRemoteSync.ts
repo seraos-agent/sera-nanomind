@@ -68,6 +68,15 @@ export function useMerchantRemoteSync({
     if (store?.id && !isMismatch) return;
 
     if (isMismatch) {
+      if (store?.id === "kopi-nanomind-roastery") {
+        setStore((prev) => {
+          if (!prev) return prev;
+          const updated = { ...prev, ownerId: cleanEmail };
+          safeSetStorage("sera_merchant_store", JSON.stringify(updated));
+          return updated;
+        });
+        return;
+      }
       setStore(null);
       setProducts([]);
       setOrders([]);
@@ -504,9 +513,23 @@ export function useMerchantRemoteSync({
 
   // Real-time Listeners: Socket.IO, Storage & Window Events
   useEffect(() => {
-    // 1. Cross-tab storage synchronization
+    const syncLocalProducts = () => {
+      try {
+        const raw = localStorage.getItem("sera_merchant_products");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            setProducts(parsed);
+          }
+        }
+      } catch {}
+    };
+
+    // 1. Cross-tab & in-tab storage synchronization
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === "sera_merchant_orders" && e.newValue) {
+      if (e.key === "sera_merchant_products") {
+        syncLocalProducts();
+      } else if (e.key === "sera_merchant_orders" && e.newValue) {
         try {
           const parsed = JSON.parse(e.newValue);
           if (Array.isArray(parsed)) {
@@ -659,6 +682,7 @@ export function useMerchantRemoteSync({
     };
 
     window.addEventListener("sera:pos-transaction-voided", handleLocalPosVoid);
+    window.addEventListener("sera_merchant_products_updated", syncLocalProducts);
 
     if (socket) {
       socket.on("market:new_order", handleSocketNewOrder);
@@ -672,6 +696,7 @@ export function useMerchantRemoteSync({
       window.removeEventListener("sera:new-merchant-order", handleNewOrderEvent);
       window.removeEventListener("sera:new-market-order", handleNewOrderEvent);
       window.removeEventListener("sera:pos-transaction-voided", handleLocalPosVoid);
+      window.removeEventListener("sera_merchant_products_updated", syncLocalProducts);
       if (socket) {
         socket.off("market:new_order", handleSocketNewOrder);
         socket.off("market:order_status_updated", handleSocketStatusUpdate);
@@ -679,7 +704,7 @@ export function useMerchantRemoteSync({
         socket.off("pos:transaction_voided", handlePosTransactionVoided);
       }
     };
-  }, [socket, store?.id, setOrders, mapMarketplaceOrderToMerchant]);
+  }, [socket, store?.id, setOrders, setProducts, mapMarketplaceOrderToMerchant]);
 
   // Real-time synchronization of courier status (Online / Offline)
   useEffect(() => {
