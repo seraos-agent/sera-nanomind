@@ -26,7 +26,7 @@ export interface PosProductGridProps {
 }
 
 const DEFAULT_POS_CARD_IMAGE =
-  "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=360&auto=format&fit=crop&q=75";
+  "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=360&auto=format&fit=crop&q=75";
 
 /**
  * Rewrites Unsplash URLs to lightweight 360px thumbnails for snappy POS/Cashier mobile grids.

@@ -3,6 +3,7 @@ import type { MarketplaceOrder } from '../../types';
 import { CheckCircleIcon, StarIcon, CameraIcon } from '../Icons';
 import { formatOrderDate } from '../../utils/formatters';
 import type { ReviewedItemRecord } from './types';
+import { resolveCartItemImage } from './resolveItemImage';
 
 interface CompletedOrdersTabPaneProps {
   orders: MarketplaceOrder[];
@@ -172,11 +173,12 @@ export const CompletedOrdersTabPane: React.FC<CompletedOrdersTabPaneProps> = ({
                           }}
                         >
                           <img
-                            src={
-                              it.imageUrl ||
-                              'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500'
-                            }
-                            alt=""
+                            src={resolveCartItemImage({
+                              itemId: it.itemId,
+                              name: it.name,
+                              imageUrl: it.imageUrl,
+                            })}
+                            alt={it.name || ''}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         </div>

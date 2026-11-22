@@ -1,6 +1,7 @@
 import React from 'react';
 import type { MarketplaceOrder } from '../../types';
 import { ProcessingIcon, DeliveryTruckIcon, WhatsAppIcon } from '../Icons';
+import { resolveCartItemImage } from './resolveItemImage';
 
 interface ProcessingOrdersTabPaneProps {
   orders: MarketplaceOrder[];
@@ -287,11 +288,12 @@ export const ProcessingOrdersTabPane: React.FC<ProcessingOrdersTabPaneProps> = (
                         }}
                       >
                         <img
-                          src={
-                            it.imageUrl ||
-                            'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500'
-                          }
-                          alt=""
+                          src={resolveCartItemImage({
+                            itemId: it.itemId,
+                            name: it.name,
+                            imageUrl: it.imageUrl,
+                          })}
+                          alt={it.name || ''}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       </div>

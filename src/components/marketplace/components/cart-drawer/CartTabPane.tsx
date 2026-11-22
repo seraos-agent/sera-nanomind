@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import type { CartItem } from '../../types';
 import { CartIcon } from '../Icons';
+import { resolveCartItemImage } from './resolveItemImage';
 
 interface CartTabPaneProps {
   items: CartItem[];
@@ -435,12 +436,14 @@ export const CartTabPane: React.FC<CartTabPaneProps> = ({
                           }}
                         >
                           <img
-                            src={
-                              cartItem.selectedImage ||
-                              cartItem.item.images[0] ||
-                              'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500'
-                            }
-                            alt=""
+                            src={resolveCartItemImage({
+                              id: cartItem.item.id,
+                              name: cartItem.item.name,
+                              selectedImage: cartItem.selectedImage,
+                              imageUrl: (cartItem.item as any).imageUrl,
+                              images: cartItem.item.images,
+                            })}
+                            alt={cartItem.item.name || ''}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         </div>

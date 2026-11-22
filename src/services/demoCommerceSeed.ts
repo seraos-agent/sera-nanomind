@@ -264,8 +264,22 @@ export const DEMO_CUSTOMER_ORDERS = [
     storeId: DEMO_STORE_ID,
     storeName: DEMO_STORE.name,
     items: [
-      { itemId: 'nm-prod-1', name: 'Es Kopi Susu Gula Aren', price: 22000, quantity: 2, type: 'GOODS' },
-      { itemId: 'nm-prod-3', name: 'Artisanal Butter Croissant', price: 24000, quantity: 1, type: 'GOODS' },
+      {
+        itemId: 'nm-prod-1',
+        name: 'Es Kopi Susu Gula Aren',
+        price: 22000,
+        quantity: 2,
+        type: 'GOODS',
+        imageUrl: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600',
+      },
+      {
+        itemId: 'nm-prod-3',
+        name: 'Artisanal Butter Croissant',
+        price: 24000,
+        quantity: 1,
+        type: 'GOODS',
+        imageUrl: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600',
+      },
     ],
     subtotal: 68000,
     deliveryOrServiceFee: 6000,
@@ -289,8 +303,22 @@ export const DEMO_CUSTOMER_ORDERS = [
     storeId: DEMO_STORE_ID,
     storeName: DEMO_STORE.name,
     items: [
-      { itemId: 'nm-prod-2', name: 'Matcha Oat Cold Whisk', price: 28000, quantity: 2, type: 'GOODS' },
-      { itemId: 'nm-prod-5', name: 'Pain au Chocolat', price: 26000, quantity: 2, type: 'GOODS' },
+      {
+        itemId: 'nm-prod-2',
+        name: 'Matcha Oat Cold Whisk',
+        price: 28000,
+        quantity: 2,
+        type: 'GOODS',
+        imageUrl: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=600',
+      },
+      {
+        itemId: 'nm-prod-5',
+        name: 'Pain au Chocolat',
+        price: 26000,
+        quantity: 2,
+        type: 'GOODS',
+        imageUrl: 'https://images.unsplash.com/photo-1530610476181-d83430b64dcd?w=600',
+      },
     ],
     subtotal: 108000,
     deliveryOrServiceFee: 6000,
@@ -314,8 +342,22 @@ export const DEMO_CUSTOMER_ORDERS = [
     storeId: DEMO_STORE_ID,
     storeName: DEMO_STORE.name,
     items: [
-      { itemId: 'nm-prod-4', name: 'Japanese V60 Pour Over (Gayo)', price: 32000, quantity: 1, type: 'GOODS' },
-      { itemId: 'nm-prod-7', name: 'House Blend Arabica Beans (250g)', price: 85000, quantity: 1, type: 'GOODS' },
+      {
+        itemId: 'nm-prod-4',
+        name: 'Japanese V60 Pour Over (Gayo)',
+        price: 32000,
+        quantity: 1,
+        type: 'GOODS',
+        imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600',
+      },
+      {
+        itemId: 'nm-prod-7',
+        name: 'House Blend Arabica Beans (250g)',
+        price: 85000,
+        quantity: 1,
+        type: 'GOODS',
+        imageUrl: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600',
+      },
     ],
     subtotal: 117000,
     deliveryOrServiceFee: 6000,
@@ -339,7 +381,14 @@ export const DEMO_CUSTOMER_ORDERS = [
     storeId: DEMO_STORE_ID,
     storeName: DEMO_STORE.name,
     items: [
-      { itemId: 'nm-prod-6', name: 'Cold Brew Citrus Tonic', price: 30000, quantity: 2, type: 'GOODS' },
+      {
+        itemId: 'nm-prod-6',
+        name: 'Cold Brew Citrus Tonic',
+        price: 30000,
+        quantity: 2,
+        type: 'GOODS',
+        imageUrl: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=600',
+      },
     ],
     subtotal: 60000,
     deliveryOrServiceFee: 0,
@@ -703,6 +752,53 @@ export function ensureDemoCommerceSeeded(): void {
   }
 
   if (localStorage.getItem('sera_nanomind_seeded_v2') === 'true') {
+    try {
+      const rawCustomerOrders = localStorage.getItem('sera_customer_orders');
+      if (rawCustomerOrders) {
+        const parsedOrders = JSON.parse(rawCustomerOrders);
+        if (Array.isArray(parsedOrders)) {
+          const rawMerchantProducts = localStorage.getItem('sera_merchant_products');
+          const parsedMerchantProducts = rawMerchantProducts ? JSON.parse(rawMerchantProducts) : [];
+          const catalogPool = [
+            ...(Array.isArray(parsedMerchantProducts) ? parsedMerchantProducts : []),
+            ...DEMO_PRODUCTS,
+          ];
+          let didBackfill = false;
+          const backfilled = parsedOrders.map((ord: any) => {
+            if (!Array.isArray(ord?.items)) return ord;
+            let ordChanged = false;
+            const nextItems = ord.items.map((it: any) => {
+              if (it?.imageUrl && !String(it.imageUrl).includes('photo-1586201375761')) {
+                return it;
+              }
+              const byId = it?.itemId
+                ? catalogPool.find((p: any) => p?.id === it.itemId)
+                : undefined;
+              const byName =
+                !byId && it?.name
+                  ? catalogPool.find(
+                      (p: any) =>
+                        String(p?.name || '').trim().toLowerCase() ===
+                        String(it.name).trim().toLowerCase()
+                    )
+                  : undefined;
+              const matched = byId || byName;
+              const resolvedUrl = matched?.images?.[0] || matched?.imageUrl;
+              if (resolvedUrl) {
+                ordChanged = true;
+                didBackfill = true;
+                return { ...it, imageUrl: resolvedUrl };
+              }
+              return it;
+            });
+            return ordChanged ? { ...ord, items: nextItems } : ord;
+          });
+          if (didBackfill) {
+            localStorage.setItem('sera_customer_orders', JSON.stringify(backfilled));
+          }
+        }
+      }
+    } catch {}
     return;
   }
 
