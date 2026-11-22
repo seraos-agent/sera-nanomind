@@ -492,6 +492,29 @@ export function installLocalMarketApiInterceptor(): void {
       });
     }
 
+    if (path.match(/^\/api\/market\/stores\/[^/]+\/courier\/[^/]+$/) && (method === 'PUT' || method === 'PATCH')) {
+      const courierId = path.split('/').pop();
+      const nextStatus = String(body.status || 'OFFLINE').toUpperCase() === 'ONLINE' ? 'ONLINE' : 'OFFLINE';
+      const nextOnline = nextStatus === 'ONLINE';
+      const updatedCouriers = Array.isArray(localStore.linkedCouriers)
+        ? localStore.linkedCouriers.map((c: any) =>
+            c.id === courierId ? { ...c, status: nextStatus } : c
+          )
+        : localStore.linkedCouriers;
+      const updatedStore = { ...localStore, linkedCouriers: updatedCouriers };
+      writeJson('sera_merchant_store', updatedStore);
+
+      const savedDriver = readJson<any>('sera_driver_profile', null);
+      if (savedDriver && savedDriver.id === courierId) {
+        writeJson('sera_driver_profile', { ...savedDriver, isOnline: nextOnline });
+      }
+      try {
+        localStorage.setItem('sera_driver_online_status', String(nextOnline));
+      } catch {}
+
+      return jsonResponse({ success: true, data: { id: courierId, status: nextStatus, isOnline: nextOnline } });
+    }
+
     if (path.match(/^\/api\/market\/stores\/[^/]+\/status$/)) {
       const updatedStore = { ...localStore, ...body };
       writeJson('sera_merchant_store', updatedStore);

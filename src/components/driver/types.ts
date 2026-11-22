@@ -221,8 +221,8 @@ export function buildDriverProfileFromServer(
     totalTrips: 0,
     todayEarnings: 0,
     city: String(store?.city || ""),
-    // Drivers always start OFFLINE until they explicitly toggle Online
-    isOnline: false,
+    // Preserve authoritative courier online/offline status from store record
+    isOnline: courier?.isOnline === true || String(courier?.status || "").toUpperCase() === "ONLINE",
     verified: true,
     isStoreCourier: true,
     linkedStoreId: String(store?.id || store?.storeId || ""),

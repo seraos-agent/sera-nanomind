@@ -72,8 +72,15 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
   );
 
   const [sessionNotice, setSessionNotice] = useState<string | null>(null);
-  // Drivers always start OFFLINE when entering Mitra Driver until explicitly toggled Online
-  const [isOnline, setIsOnline] = useState<boolean>(false);
+  // Preserve the courier's last chosen online/offline status across navigation and reloads
+  const [isOnline, setIsOnline] = useState<boolean>(() => {
+    try {
+      const savedStatus = localStorage.getItem("sera_driver_online_status");
+      if (savedStatus === "true") return true;
+      if (savedStatus === "false") return false;
+    } catch {}
+    return Boolean(driver?.isOnline);
+  });
   const [currentView, setCurrentView] = useState<DriverViewMode>("orders");
   const [activeModal, setActiveModal] = useState<"settlement" | "profile" | null>(null);
 
@@ -148,8 +155,10 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
     try {
       if (driver && !isLegacyDummyDriverProfile(driver)) {
         localStorage.setItem("sera_driver_profile", JSON.stringify({ ...driver, isOnline }));
+        localStorage.setItem("sera_driver_online_status", String(isOnline));
       } else {
         localStorage.removeItem("sera_driver_profile");
+        localStorage.removeItem("sera_driver_online_status");
       }
     } catch {}
   }, [driver, isOnline]);
@@ -161,6 +170,7 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
       localStorage.removeItem(storageKey);
       localStorage.removeItem(settledKey);
       localStorage.removeItem("sera_driver_profile");
+      localStorage.removeItem("sera_driver_online_status");
     } catch {}
     setActiveModal(null);
     setSessionNotice(reason);
@@ -324,6 +334,10 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
 
     const nextOnline = !isOnline;
     setIsOnline(nextOnline);
+    setDriver((prev) => (prev ? { ...prev, isOnline: nextOnline } : null));
+    try {
+      localStorage.setItem("sera_driver_online_status", String(nextOnline));
+    } catch {}
 
     if (driver?.linkedStoreId && driver?.id) {
       try {
@@ -432,10 +446,12 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
             recovered.courier,
             recovered.sessionId
           );
-          setIsOnline(false);
+          const nextOnline = Boolean(nextProfile.isOnline);
+          setIsOnline(nextOnline);
           setDriver(nextProfile);
           try {
             localStorage.setItem("sera_driver_profile", JSON.stringify(nextProfile));
+            localStorage.setItem("sera_driver_online_status", String(nextOnline));
           } catch {}
         }
       })
@@ -480,10 +496,12 @@ export function DriverPage({ theme, onBack, isMobileView, userEmail }: DriverPag
           skipAutoRecoverRef.current = false;
           setSessionNotice(null);
           const nextProfile = buildDriverProfileFromServer(pairedStore, pairedCourier, sessionId);
-          setIsOnline(false);
+          const nextOnline = Boolean(nextProfile.isOnline);
+          setIsOnline(nextOnline);
           setDriver(nextProfile);
           try {
             localStorage.setItem("sera_driver_profile", JSON.stringify(nextProfile));
+            localStorage.setItem("sera_driver_online_status", String(nextOnline));
           } catch {}
         }}
       />
