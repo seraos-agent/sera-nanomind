@@ -248,9 +248,10 @@ export function StoreLocationPickerModal({
       const scriptId = "google-maps-api-script";
       let script = document.getElementById(scriptId) as HTMLScriptElement | null;
       if (!script) {
+        (window as any).__seraGoogleMapsReady = (window as any).__seraGoogleMapsReady || (() => {});
         script = document.createElement("script");
         script.id = scriptId;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&loading=async&callback=__seraGoogleMapsReady`;
         script.async = true;
         script.defer = true;
         script.onerror = () => {

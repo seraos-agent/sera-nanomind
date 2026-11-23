@@ -3,7 +3,7 @@
  * Uses direct window.AndroidSystemBars or Capacitor SystemBars plugin, falling back
  * to @capacitor/status-bar only if neither custom bridge succeeds.
  */
-import { registerPlugin, Capacitor } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
 interface SystemBarsPluginInterface {
@@ -11,7 +11,6 @@ interface SystemBarsPluginInterface {
   getInsets(): Promise<{ top: number; bottom: number }>;
 }
 
-const NativeSystemBars = registerPlugin<SystemBarsPluginInterface>('SystemBars');
 let initialSyncCompleted = false;
 
 async function executeSystemBarsSync(isDark: boolean, targetColor: string): Promise<void> {
@@ -43,8 +42,13 @@ async function executeSystemBarsSync(isDark: boolean, targetColor: string): Prom
 
     if (!customBridgeHandled) {
       try {
-        await NativeSystemBars.setStyle({ isDark, color: targetColor });
-        customBridgeHandled = true;
+        const nativeSystemBars = (Capacitor as any).Plugins?.SystemBars as
+          | Partial<SystemBarsPluginInterface>
+          | undefined;
+        if (typeof nativeSystemBars?.setStyle === 'function') {
+          await nativeSystemBars.setStyle({ isDark, color: targetColor });
+          customBridgeHandled = true;
+        }
       } catch (e) {
         console.debug('[SystemBars] NativeSystemBars error:', e);
       }

@@ -154,7 +154,7 @@ export function useDeliveryMap({
         setIsLocatingGps(false);
       })
       .catch(err => {
-        console.warn("Initial GPS detection:", err?.message || err);
+        console.debug("Initial GPS detection:", err?.message || err);
         setIsLocatingGps(false);
         if (!driverCoordsRef.current) {
           setGpsError(err?.message || "GPS_DISABLED");
@@ -164,7 +164,7 @@ export function useDeliveryMap({
     const unwatch = watchLocation(
       pos => updateIfMoved(pos.latitude, pos.longitude),
       err => {
-        console.warn("Watch GPS error:", err?.message || err);
+        console.debug("Watch GPS error:", err?.message || err);
         if (!driverCoordsRef.current) {
           setGpsError(err?.message || "GPS_DISABLED");
         }
@@ -244,9 +244,10 @@ export function useDeliveryMap({
       const scriptId = "google-maps-api-script";
       let script = document.getElementById(scriptId) as HTMLScriptElement | null;
       if (!script) {
+        (window as any).__seraGoogleMapsReady = (window as any).__seraGoogleMapsReady || (() => {});
         script = document.createElement("script");
         script.id = scriptId;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&loading=async&callback=__seraGoogleMapsReady`;
         script.async = true;
         script.defer = true;
         script.onerror = () => {
