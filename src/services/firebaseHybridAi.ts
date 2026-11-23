@@ -381,17 +381,20 @@ export function getHybridCapabilitiesStatus(
 ): HybridCapabilitiesStatus {
   const cfg = getRuntimeFirebaseConfig();
   const { appCheckActive } = ensureCloudFirebaseInitialized();
+  const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
   return {
     firebaseConfigured: Boolean(cfg),
     appCheckActive: Boolean(cfg && appCheckActive),
     chromePromptApiAvailable: hasChromeBuiltInPromptApi(),
     nanoAvailability,
-    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
-    activeInferenceMode: cfg
-      ? modelTier === 'high'
-        ? 'PREFER_IN_CLOUD'
-        : 'PREFER_ON_DEVICE'
-      : 'ONLY_ON_DEVICE',
+    isOnline,
+    activeInferenceMode: !isOnline
+      ? 'ONLY_ON_DEVICE'
+      : cfg
+        ? modelTier === 'high'
+          ? 'PREFER_IN_CLOUD'
+          : 'PREFER_ON_DEVICE'
+        : 'ONLY_ON_DEVICE',
     projectId: cfg?.projectId,
   };
 }
@@ -637,8 +640,12 @@ function buildDiagnosticFailureMessage(
     '### Gemini Nano & Cloud Fallback Not Yet Active in This Browser',
     '',
     'SERA NanoMind **never uses mock responses**, so this diagnostic appears because neither live inference engine is ready yet:',
+    `* **Network Status:** ${diag.isOnline ? 'Online' : 'Offline (all local commerce modules: POS Cashier, Merchant Store, Marketplace, and Encrypted Vault remain 100% operational)'}`,
     `* **Chrome Gemini Nano Status:** \`${diag.availability}\` (${diag.detailMessage})`,
     `* **Firebase Cloud Fallback Status:** ${diag.firebaseCloudConfigured ? 'Configured' : 'Not configured'}`,
+    !diag.isOnline && diag.availability === 'downloadable'
+      ? '* **Offline Note:** Reconnect once and click **Check / Initialize Gemini Nano On-Device** in **Workspace -> Storage Vault & Hybrid AI** to cache weights locally for 100% offline inference.'
+      : null,
     lastError ? `* **Runtime Error Detail:** \`${lastError}\`` : null,
     '',
     '**How to enable local Gemini Nano in Google Chrome Desktop:**',
@@ -650,7 +657,7 @@ function buildDiagnosticFailureMessage(
     '',
     '*Optional:* Paste your `firebaseConfig` under **Workspace -> Storage Vault & Hybrid AI** so `PREFER_ON_DEVICE` can also fall back to **Gemini 3.5 Flash (Cloud)** when local Gemini Nano is unavailable.',
   ]
-    .filter(Boolean)
+    .filter((line): line is string => line !== null)
     .join('\n');
 }
 
@@ -762,21 +769,38 @@ export async function runHybridCommerceTurn(input: HybridTurnInput): Promise<Hyb
   // OR local-only FirebaseApp (ONLY_ON_DEVICE) when `self.LanguageModel` exists on Chrome.
   const CLOUD_MODELS = ['gemini-3.5-flash-lite', 'gemini-3.5-flash'] as const;
   const { app: cloudApp, appCheckActive } = ensureCloudFirebaseInitialized();
-  const canUseOnDevice =
-    diag.hasLanguageModelGlobal &&
-    (diag.availability === 'available' ||
-      diag.availability === 'downloadable' ||
-      diag.availability === 'downloading');
-  const canRunFirebaseOnDeviceOnly = !cloudApp && canUseOnDevice && modelTier !== 'high';
-  const activeApp = cloudApp || (canRunFirebaseOnDeviceOnly ? ensureLocalOnDeviceFirebaseApp() : null);
+  const canUseOnDevice = diag.isOnline
+    ? diag.hasLanguageModelGlobal &&
+      (diag.availability === 'available' ||
+        diag.availability === 'downloadable' ||
+        diag.availability === 'downloading')
+    : diag.hasLanguageModelGlobal && diag.availability === 'available';
 
-  if (activeApp) {
-    const chosenMode = !cloudApp
+  let activeApp: FirebaseApp | null = null;
+  let chosenMode: InferenceMode = InferenceMode.PREFER_ON_DEVICE;
+
+  if (!diag.isOnline) {
+    if (canUseOnDevice) {
+      activeApp = ensureLocalOnDeviceFirebaseApp();
+      chosenMode = InferenceMode.ONLY_ON_DEVICE;
+    } else {
+      activeApp = null;
+      lastSdkError =
+        diag.availability === 'downloadable'
+          ? 'Browser is offline and Chrome Gemini Nano weights have not been downloaded yet. Reconnect once to download weights for offline AI.'
+          : 'Browser is offline and local Chrome Gemini Nano is unavailable on this device.';
+    }
+  } else {
+    const canRunFirebaseOnDeviceOnly = !cloudApp && canUseOnDevice && modelTier !== 'high';
+    activeApp = cloudApp || (canRunFirebaseOnDeviceOnly ? ensureLocalOnDeviceFirebaseApp() : null);
+    chosenMode = !cloudApp
       ? InferenceMode.ONLY_ON_DEVICE
       : modelTier === 'high'
         ? InferenceMode.PREFER_IN_CLOUD
         : InferenceMode.PREFER_ON_DEVICE;
+  }
 
+  if (activeApp) {
     const ai = getAI(activeApp, { backend: new GoogleAIBackend() });
     const expectedInputs: Array<{ type: 'text' | 'image'; languages?: string[] }> = hasImages
       ? [{ type: 'text', languages: ['en'] }, { type: 'image' }]
@@ -915,7 +939,11 @@ export async function runHybridCommerceTurn(input: HybridTurnInput): Promise<Hyb
   }
 
   // 2. Direct Chrome Prompt API fallback (handles legacy `window.ai.languageModel` or string-prompt Chrome builds)
-  if (!hasImages && (diag.hasLanguageModelGlobal || diag.hasLegacyAiGlobal)) {
+  const canUseChromeDirect =
+    !hasImages &&
+    ((diag.hasLanguageModelGlobal && canUseOnDevice) ||
+      (diag.hasLegacyAiGlobal && (diag.availability === 'available' || diag.isOnline)));
+  if (canUseChromeDirect) {
     input.onActivity?.({
       phase: 'WORKING',
       subText: 'Running Chrome Built-in Gemini Nano directly...',

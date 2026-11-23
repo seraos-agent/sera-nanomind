@@ -1,0 +1,18 @@
+{
+  "name": "SERA NanoMind",
+  "short_name": "NanoMind",
+  "description": "Offline-first agentic commerce OS powered by Firebase AI Logic Hybrid Inference and Chrome Gemini Nano.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/sera-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

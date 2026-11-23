@@ -26,6 +26,9 @@ export function StorageVaultView({
 }: StorageVaultViewProps) {
   const [status, setStatus] = useState<HybridCapabilitiesStatus>(() => getHybridCapabilitiesStatus("flash"));
   const [nanoDiag, setNanoDiag] = useState<NanoDiagnosticState | null>(null);
+  const [swReady, setSwReady] = useState<boolean>(() =>
+    Boolean(typeof navigator !== "undefined" && "serviceWorker" in navigator && navigator.serviceWorker.controller)
+  );
   const [isInitializingNano, setIsInitializingNano] = useState(false);
   const [nanoProgress, setNanoProgress] = useState<number | null>(null);
   const existingCfg = getRuntimeFirebaseConfig();
@@ -44,14 +47,28 @@ export function StorageVaultView({
 
   useEffect(() => {
     void refreshDiagnostics();
+    const updateSwState = () => {
+      if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+        setSwReady(Boolean(navigator.serviceWorker.controller));
+      }
+    };
     const onNetworkChange = () => {
       void refreshDiagnostics();
     };
+    updateSwState();
     window.addEventListener("online", onNetworkChange);
     window.addEventListener("offline", onNetworkChange);
+    window.addEventListener("sera_sw_ready", updateSwState);
+
+    const swContainer = typeof navigator !== "undefined" && "serviceWorker" in navigator ? navigator.serviceWorker : null;
+    swContainer?.addEventListener("controllerchange", updateSwState);
+    swContainer?.ready.then(updateSwState).catch(() => {});
+
     return () => {
       window.removeEventListener("online", onNetworkChange);
       window.removeEventListener("offline", onNetworkChange);
+      window.removeEventListener("sera_sw_ready", updateSwState);
+      swContainer?.removeEventListener("controllerchange", updateSwState);
     };
   }, []);
 
@@ -163,9 +180,17 @@ export function StorageVaultView({
               Non-extractable Web Crypto AES-GCM key inside IndexedDB keeps chat continuity, POS ledger state, and store memory strictly on-device.
             </div>
           </div>
-          <div style={{ marginTop: "auto", paddingTop: 10, borderTop: `1px solid ${theme.border}`, display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, color: theme.inkSoft }}>
-            <span>Storage Engine</span>
-            <span style={{ fontFamily: "JetBrains Mono, monospace", fontWeight: 600, color: theme.ink }}>IndexedDB · Local-Only</span>
+          <div style={{ marginTop: "auto", paddingTop: 10, borderTop: `1px solid ${theme.border}`, display: "flex", flexDirection: "column", gap: 6, fontSize: 12, color: theme.inkSoft }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span>Storage Engine</span>
+              <span style={{ fontFamily: "JetBrains Mono, monospace", fontWeight: 600, color: theme.ink }}>IndexedDB · Local-Only</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span>Offline App Cache</span>
+              <span style={{ fontFamily: "JetBrains Mono, monospace", fontWeight: 600, color: swReady ? "#10b981" : theme.inkSoft }}>
+                {swReady ? "Active (Offline Ready)" : "Standby (Dev / Loading)"}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -175,9 +200,9 @@ export function StorageVaultView({
             <div style={{ width: 42, height: 42, borderRadius: 14, background: theme.surface, border: `1px solid ${theme.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Cpu size={20} color={theme.accent} />
             </div>
-            <span style={{ fontSize: 10, fontWeight: 700, padding: "4px 10px", borderRadius: 999, border: `1px solid ${theme.border}`, background: nanoReady || status.firebaseConfigured ? theme.statusSoft : theme.surface, color: nanoReady || status.firebaseConfigured ? theme.status : theme.inkSoft, display: "flex", alignItems: "center", gap: 4 }}>
+            <span style={{ fontSize: 10, fontWeight: 700, padding: "4px 10px", borderRadius: 999, border: `1px solid ${theme.border}`, background: nanoReady || (status.isOnline && status.firebaseConfigured) ? theme.statusSoft : theme.surface, color: nanoReady || (status.isOnline && status.firebaseConfigured) ? theme.status : !status.isOnline ? "#f59e0b" : theme.inkSoft, display: "flex", alignItems: "center", gap: 4 }}>
               {status.isOnline ? <Wifi size={12} /> : <WifiOff size={12} />}
-              {nanoReady ? "GEMINI NANO READY" : status.firebaseConfigured ? "CLOUD FALLBACK READY" : "SETUP REQUIRED"}
+              {nanoReady ? "GEMINI NANO READY" : !status.isOnline ? "OFFLINE · NANO NEEDED" : status.firebaseConfigured ? "CLOUD FALLBACK READY" : "SETUP REQUIRED"}
             </span>
           </div>
 
@@ -191,6 +216,12 @@ export function StorageVaultView({
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 6, padding: 12, borderRadius: 12, background: theme.surface, border: `1px solid ${theme.border}`, fontSize: 12 }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ color: theme.inkSoft }}>Network Status</span>
+              <span style={{ fontWeight: 600, color: status.isOnline ? "#10b981" : "#f59e0b" }}>
+                {status.isOnline ? "Online" : "Offline"}
+              </span>
+            </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span style={{ color: theme.inkSoft }}>Chrome Gemini Nano</span>
               <span style={{ fontWeight: 600, color: nanoReady ? "#10b981" : nanoAvailability === "downloadable" || nanoAvailability === "downloading" ? "#f59e0b" : "#ef4444" }}>

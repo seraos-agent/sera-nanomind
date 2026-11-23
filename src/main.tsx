@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client';
+import { Capacitor } from '@capacitor/core';
 import AppRoot from './AppRoot';
 import './index.css';
 import { ensureDemoCommerceSeeded } from './services/demoCommerceSeed';
@@ -17,6 +18,35 @@ if (typeof window !== 'undefined') {
 
   ensureDemoCommerceSeeded();
   installLocalMarketApiInterceptor();
+
+  if (import.meta.env.PROD && 'serviceWorker' in navigator && !Capacitor.isNativePlatform()) {
+    const registerSw = () => {
+      const emitSwReady = () => {
+        window.dispatchEvent(new CustomEvent('sera_sw_ready'));
+      };
+
+      navigator.serviceWorker.addEventListener('controllerchange', emitSwReady);
+      navigator.serviceWorker.ready.then(emitSwReady).catch(() => {});
+
+      navigator.serviceWorker
+        .register('/sw.js', { updateViaCache: 'none' })
+        .then((reg) => {
+          reg.update().catch(() => {});
+          if (navigator.serviceWorker.controller) {
+            emitSwReady();
+          }
+        })
+        .catch((err) => {
+          console.warn('[SERA-PWA] Service worker registration skipped:', err);
+        });
+    };
+
+    if (document.readyState === 'complete') {
+      registerSw();
+    } else {
+      window.addEventListener('load', registerSw, { once: true });
+    }
+  }
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
