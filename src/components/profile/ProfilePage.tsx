@@ -8,7 +8,6 @@ import { dispatchBackButton } from '../../utils/backButton';
 
 import { ProfileTopBar } from './components/ProfileTopBar';
 import { ProfileMainView } from './components/ProfileMainView';
-import { BillingSubView } from './components/BillingSubView';
 import { PrivacySubView } from './components/PrivacySubView';
 import { AddressSubView } from './components/AddressSubView';
 import { ProfileEditSubView } from './components/ProfileEditSubView';
@@ -82,16 +81,9 @@ export function ProfilePage({
     // Subscriptions & Tokens
     currentTier,
     isUnlimited,
-    agentCredits,
     tokenPercent,
-    isPayAsYouGoUnlocked,
-    selectedTopup,
-    setSelectedTopup,
-    isProcessing,
     balanceModal,
     setBalanceModal,
-    handleSubscribePass,
-    handleTopupCredits,
     handleDevMockSubscribe,
     handleDevMockTopup,
 
@@ -195,7 +187,6 @@ export function ProfilePage({
               isUnlimited={isUnlimited}
               onOpenProfile={handleOpenProfileEdit}
               onOpenAddress={handleOpenAddressEdit}
-              onOpenBilling={() => setViewMode('billing')}
               onOpenNotification={() => setViewMode('notification')}
               onOpenPrivacy={() => setViewMode('privacy')}
               onDisconnect={onDisconnect}
@@ -222,24 +213,6 @@ export function ProfilePage({
               onPhoneInputChange={handlePhoneInputChange}
               onSaveProfile={handleSaveProfile}
               onOpenDeleteModal={() => setShowDeleteModal(true)}
-            />
-          )}
-
-          {viewMode === 'billing' && (
-            <BillingSubView
-              theme={theme}
-              billingState={billingState}
-              currentTier={currentTier}
-              isUnlimited={isUnlimited}
-              agentCredits={agentCredits}
-              selectedTopup={selectedTopup}
-              setSelectedTopup={setSelectedTopup}
-              isPayAsYouGoUnlocked={isPayAsYouGoUnlocked}
-              isProcessing={isProcessing}
-              onSubscribePass={handleSubscribePass}
-              onTopupCredits={handleTopupCredits}
-              onDevMockSubscribe={handleDevMockSubscribe}
-              onDevMockTopup={handleDevMockTopup}
             />
           )}
 
@@ -273,7 +246,7 @@ export function ProfilePage({
         </div>
       </main>
 
-      {/* Modal Konfirmasi Layanan */}
+      {/* Service Confirmation Modal */}
       <ConfirmServiceModal
         theme={theme}
         balanceModal={balanceModal}
@@ -282,7 +255,7 @@ export function ProfilePage({
         onDevMockTopup={handleDevMockTopup}
       />
 
-      {/* Modal Konfirmasi Hapus Akun */}
+      {/* Delete Account Confirmation Modal */}
       <DeleteAccountModal
         theme={theme}
         isOpen={showDeleteModal}
@@ -291,7 +264,7 @@ export function ProfilePage({
         onConfirmDelete={handleConfirmDeleteAccount}
       />
 
-      {/* Modal Titik Lokasi Peta Alamat */}
+      {/* Delivery Address Map Picker Modal */}
       <StoreLocationPickerModal
         isOpen={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}

@@ -23,8 +23,6 @@ export function ProfileTopBar({
         return 'Profile';
       case 'address':
         return 'Address';
-      case 'billing':
-        return 'Billing';
       case 'privacy':
         return 'Privacy';
       case 'notification':
@@ -85,8 +83,8 @@ export function ProfileTopBar({
         <button
           type="button"
           onClick={() => onModeChange(mode === 'dark' ? 'light' : 'dark')}
-          aria-label={mode === 'dark' ? 'Mode Terang' : 'Mode Gelap'}
-          title={mode === 'dark' ? 'Mode Terang' : 'Mode Gelap'}
+          aria-label={mode === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          title={mode === 'dark' ? 'Light Mode' : 'Dark Mode'}
           style={{
             border: 'none',
             background: 'transparent',

@@ -1,7 +1,5 @@
 import {
   User,
-  Sliders,
-  CreditCard,
   ShieldCheck,
   MapPin,
   ChevronRight,
@@ -19,7 +17,6 @@ interface ProfileMainViewProps {
   isUnlimited: boolean;
   onOpenProfile: () => void;
   onOpenAddress: () => void;
-  onOpenBilling: () => void;
   onOpenNotification: () => void;
   onOpenPrivacy: () => void;
   onDisconnect: () => void;
@@ -34,7 +31,6 @@ export function ProfileMainView({
   isUnlimited,
   onOpenProfile,
   onOpenAddress,
-  onOpenBilling,
   onOpenNotification,
   onOpenPrivacy,
   onDisconnect,
@@ -156,30 +152,10 @@ export function ProfileMainView({
                 : '10,000 Daily Tokens'}
             </span>
           </div>
-
-          <button
-            onClick={onOpenBilling}
-            style={{
-              background: theme.ink,
-              color: theme.bg,
-              border: 'none',
-              borderRadius: 20,
-              padding: '7px 18px',
-              fontSize: 12.5,
-              fontWeight: 700,
-              cursor: 'pointer',
-              transition: 'opacity 0.15s ease',
-              flexShrink: 0,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-          >
-            Upgrade
-          </button>
         </div>
       </div>
 
-      {/* Menu Group 1: Profile, Address, Billing */}
+      {/* Menu Group 1: Profile, Address */}
       <div
         style={{
           background: theme.surface,
@@ -233,33 +209,9 @@ export function ProfileMainView({
           </div>
           <ChevronRight size={18} color={theme.inkSoft} />
         </div>
-
-        <div style={{ height: 1, background: theme.border, margin: '0 20px' }} />
-
-        <div
-          onClick={onOpenBilling}
-          style={{
-            padding: '16px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            cursor: 'pointer',
-            transition: 'background 0.15s ease',
-          }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = theme.surface2)}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
-              <CreditCard size={22} />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Billing</div>
-          </div>
-          <ChevronRight size={18} color={theme.inkSoft} />
-        </div>
       </div>
 
-      {/* Menu Group 2: Capabilities, Privacy, Logout */}
+      {/* Menu Group 2: Notifications, Privacy, Sign Out */}
       <div
         style={{
           background: theme.surface,
@@ -268,30 +220,6 @@ export function ProfileMainView({
           overflow: 'hidden',
         }}
       >
-        <div
-          onClick={onOpenBilling}
-          style={{
-            padding: '16px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            cursor: 'pointer',
-            transition: 'background 0.15s ease',
-          }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = theme.surface2)}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{ color: theme.ink, display: 'flex', alignItems: 'center' }}>
-              <Sliders size={22} />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: theme.ink }}>Capabilities</div>
-          </div>
-          <ChevronRight size={18} color={theme.inkSoft} />
-        </div>
-
-        <div style={{ height: 1, background: theme.border, margin: '0 20px' }} />
-
         <div
           onClick={onOpenNotification}
           style={{

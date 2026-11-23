@@ -1,6 +1,6 @@
 import type { AddressData } from './AddressSubView';
 
-export type ProfileViewMode = 'main' | 'profile' | 'billing' | 'privacy' | 'address' | 'notification';
+export type ProfileViewMode = 'main' | 'profile' | 'privacy' | 'address' | 'notification';
 
 export interface StatusFeedback {
   type: 'success' | 'error' | 'info';
