@@ -67,6 +67,7 @@ export interface NanoDiagnosticState {
   appCheckActive: boolean;
   isOnline: boolean;
   detailMessage: string;
+  promptApiRequiresSimpleCreate?: boolean;
 }
 
 export interface HybridCapabilitiesStatus {
@@ -155,7 +156,7 @@ export function getRuntimeFirebaseConfig(): FirebaseRuntimeConfig | null {
       messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID?.trim(),
       appId: import.meta.env.VITE_FIREBASE_APP_ID?.trim() || '1:000000000000:web:nanomind',
       recaptchaSiteKey: import.meta.env.VITE_FIREBASE_RECAPTCHA_SITE_KEY?.trim(),
-      appCheckDebugToken: import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN?.trim() || 'true',
+      appCheckDebugToken: import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN?.trim() || undefined,
     };
   }
 
@@ -170,7 +171,7 @@ export function getRuntimeFirebaseConfig(): FirebaseRuntimeConfig | null {
         messagingSenderId: saved.messagingSenderId?.trim(),
         appId: saved.appId?.trim() || '1:000000000000:web:nanomind',
         recaptchaSiteKey: saved.recaptchaSiteKey?.trim(),
-        appCheckDebugToken: saved.appCheckDebugToken?.trim() || 'true',
+        appCheckDebugToken: saved.appCheckDebugToken?.trim() || undefined,
       };
     }
   }
@@ -200,7 +201,7 @@ function ensureCloudFirebaseInitialized(): { app: FirebaseApp | null; appCheckAc
 
   const signature = `${cfg.apiKey}:${cfg.projectId}:${cfg.appId || ''}`;
   if (cachedCloudApp && cachedConfigKey === signature) {
-    return { app: cachedCloudApp, appCheckActive: Boolean(cachedAppCheck || (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN) };
+    return { app: cachedCloudApp, appCheckActive: Boolean(cachedAppCheck) };
   }
 
   try {
@@ -220,11 +221,12 @@ function ensureCloudFirebaseInitialized(): { app: FirebaseApp | null; appCheckAc
     cachedConfigKey = signature;
 
     if (typeof window !== 'undefined' && !cachedAppCheck && cfg.recaptchaSiteKey) {
-      const debugSetting = cfg.appCheckDebugToken;
-      if (debugSetting === 'true') {
-        (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-      } else if (debugSetting) {
-        (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = debugSetting;
+      const isLocalhost =
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1';
+      if (isLocalhost && cfg.appCheckDebugToken) {
+        (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN =
+          cfg.appCheckDebugToken === 'true' ? true : cfg.appCheckDebugToken;
       }
 
       try {
@@ -277,32 +279,63 @@ export async function probeNanoDiagnosticState(): Promise<NanoDiagnosticState> {
   const hasLegacyAiGlobal = typeof window !== 'undefined' && Boolean((window as any).ai?.languageModel);
 
   let availability: NanoModelAvailability = 'api_missing';
+  let promptApiRequiresSimpleCreate = false;
   let detailMessage =
     'Chrome Built-in Prompt API (window.LanguageModel) is not exposed in this browser session.';
 
   if (hasLanguageModelGlobal) {
     try {
       const lm = (self as any).LanguageModel;
-      const status =
-        typeof lm.availability === 'function'
-          ? await lm.availability({
-              expectedInputs: [{ type: 'text', languages: ['en'] }],
-              expectedOutputs: [{ type: 'text', languages: ['en'] }],
-            })
-          : 'available';
+      let rawStatus: string | undefined;
+      let threwMsg: string | undefined;
 
-      if (status === 'available' || status === 'readily') {
+      if (typeof lm.availability === 'function') {
+        try {
+          rawStatus = await lm.availability({
+            expectedInputs: [{ type: 'text', languages: ['en'] }],
+            expectedOutputs: [{ type: 'text', languages: ['en'] }],
+          });
+        } catch (err: any) {
+          threwMsg = err?.message || String(err);
+        }
+
+        if (!rawStatus || rawStatus === 'unavailable' || rawStatus === 'no') {
+          try {
+            const plainStatus = await lm.availability();
+            if (plainStatus) {
+              if (
+                plainStatus !== 'unavailable' &&
+                plainStatus !== 'no' &&
+                (!rawStatus || rawStatus === 'unavailable' || rawStatus === 'no')
+              ) {
+                promptApiRequiresSimpleCreate = true;
+              }
+              rawStatus = plainStatus;
+            }
+          } catch (err: any) {
+            if (!threwMsg) {
+              threwMsg = err?.message || String(err);
+            }
+          }
+        }
+      } else {
+        rawStatus = 'available';
+      }
+
+      if (rawStatus === 'available' || rawStatus === 'readily') {
         availability = 'available';
         detailMessage = 'Gemini Nano weights are downloaded and ready for 100% on-device inference.';
-      } else if (status === 'downloadable' || status === 'after-download') {
+      } else if (rawStatus === 'downloadable' || rawStatus === 'after-download') {
         availability = 'downloadable';
         detailMessage = 'Gemini Nano is supported and downloadable. Click Initialize to download weights.';
-      } else if (status === 'downloading') {
+      } else if (rawStatus === 'downloading') {
         availability = 'downloading';
         detailMessage = 'Gemini Nano weights are currently downloading in Chrome.';
       } else {
         availability = 'unavailable';
-        detailMessage = `Chrome reported LanguageModel.availability() = "${status}". Check Chrome flags or GPU/disk requirements.`;
+        detailMessage = rawStatus
+          ? `Chrome reported LanguageModel.availability() = "${rawStatus}". Check Chrome flags or GPU/disk requirements.`
+          : `LanguageModel.availability() threw: ${threwMsg || 'unknown error'}`;
       }
     } catch (err: any) {
       availability = 'unavailable';
@@ -346,6 +379,7 @@ export async function probeNanoDiagnosticState(): Promise<NanoDiagnosticState> {
     appCheckActive: Boolean(cfg && appCheckActive),
     isOnline,
     detailMessage,
+    promptApiRequiresSimpleCreate,
   };
 }
 
@@ -353,6 +387,7 @@ export async function initializeNanoModelManually(
   onProgress?: (percent: number) => void
 ): Promise<NanoDiagnosticState> {
   if (typeof window !== 'undefined' && (self as any).LanguageModel) {
+    let sdkThrew = false;
     try {
       const localApp = ensureLocalOnDeviceFirebaseApp();
       const ai = getAI(localApp, { backend: new GoogleAIBackend() });
@@ -369,7 +404,33 @@ export async function initializeNanoModelManually(
         onProgress?.(Math.round(progressValue * 100));
       });
     } catch (err) {
+      sdkThrew = true;
       console.warn('[FirebaseHybridAI] initializeDeviceModel notice:', err);
+    }
+
+    const postDiag = await probeNanoDiagnosticState();
+    if (
+      sdkThrew ||
+      postDiag.availability === 'downloadable' ||
+      postDiag.availability === 'downloading'
+    ) {
+      try {
+        const lm = (self as any).LanguageModel;
+        if (typeof lm.create === 'function') {
+          const tempSession = await lm.create({
+            monitor(m: any) {
+              m?.addEventListener?.('downloadprogress', (e: any) => {
+                if (typeof e?.loaded === 'number') {
+                  onProgress?.(Math.round(e.loaded * 100));
+                }
+              });
+            },
+          });
+          tempSession?.destroy?.();
+        }
+      } catch (fallbackErr) {
+        console.warn('[FirebaseHybridAI] Direct LanguageModel init fallback notice:', fallbackErr);
+      }
     }
   }
   return probeNanoDiagnosticState();
@@ -519,6 +580,56 @@ function buildCompactSystemInstruction(snapshot: ReturnType<typeof buildCommerce
   ].join('\n');
 }
 
+function buildOnDevicePrompt(
+  snapshot: ReturnType<typeof buildCommerceContextSnapshot>,
+  userText: string,
+  history?: Array<{ role: string; content?: string }>,
+  documents?: Array<{ name?: string; filename?: string; content?: string; text?: string }>
+): string {
+  const productLines = snapshot.products
+    .slice(0, 12)
+    .map((p) => `- ${p.name} [${p.id}]: Rp ${Number(p.price).toLocaleString('id-ID')}, stock=${p.stock}`)
+    .join('\n');
+
+  const shiftText = snapshot.posShift
+    ? `POS ${snapshot.posShift.status}: cashier=${snapshot.posShift.cashierName}, txs=${snapshot.posShift.transactionCount}, sales=Rp ${snapshot.posShift.totalSales.toLocaleString('id-ID')}`
+    : 'POS: closed';
+
+  const courierText = snapshot.courier
+    ? `Courier: ${snapshot.courier.name}, stops=${snapshot.courier.activeStopsCount}, COD=Rp ${snapshot.courier.codToCollect.toLocaleString('id-ID')}`
+    : 'Courier: unlinked';
+
+  const recentHistory =
+    Array.isArray(history) && history.length > 0
+      ? history
+          .slice(-2)
+          .map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${String(m.content || '').slice(0, 100)}`)
+          .join('\n')
+      : '';
+
+  const docText =
+    documents && documents.length > 0
+      ? `Docs: ${documents
+          .map((d) => `${d.name || d.filename}: ${(d.content || d.text || '').slice(0, 200)}`)
+          .join(' | ')}`
+      : '';
+
+  return [
+    'You are SERA NanoMind, an offline-first hybrid AI commerce assistant.',
+    'Reply strictly in the language of Latest User Request (default English). Be concise, accurate to live store data, and never use em-dashes or en-dashes.',
+    `Store: ${snapshot.store.name} (${snapshot.store.city}, open=${snapshot.store.isOpen}) | Orders: ${snapshot.orders.pendingOrProcessing.length} pending, ${snapshot.orders.shippedWithCourier.length} shipped`,
+    `Catalog:\n${productLines}`,
+    `${shiftText} | ${courierText}`,
+    'Mutation rule: Never claim a change is applied yet; prepare a pending proposal and ask the user to click Approve. Only if explicitly asked to mutate store/POS/goals, append ONE tag at the end wrapped in <<<PROPOSAL and PROPOSAL>>>:',
+    'CREATE_PRODUCT {"intent":"CREATE_PRODUCT","parameters":{"productName":"","price":25000,"stock":20,"category":"Signature Coffee"}} | UPDATE_STOCK {"intent":"UPDATE_STOCK","parameters":{"productId":"","productName":"","previousStock":25,"newStock":37}} | CREATE_POS_ORDER {"intent":"CREATE_POS_ORDER","parameters":{"tableOrQueueNumber":"Table 1","paymentMethod":"CASH","items":[{"name":"","quantity":1,"price":25000}],"totalAmount":25000}} | SCHEDULE_GOAL {"intent":"SCHEDULE_GOAL","parameters":{"goalName":"","cronExpression":"0 21 * * *","description":""}}',
+    recentHistory ? `Recent:\n${recentHistory}` : '',
+    docText,
+    `Latest User Request:\n${userText}`,
+  ]
+    .filter(Boolean)
+    .join('\n');
+}
+
 function extractProposalFromText(rawText: string): { cleanText: string; proposal?: HybridProposalData } {
   const match = rawText.match(/<<<PROPOSAL\s*([\s\S]*?)\s*PROPOSAL>>>/i);
   if (!match) {
@@ -571,30 +682,37 @@ function formatIdr(amount: number): string {
 async function tryChromeDirectPromptApi(
   userPrompt: string,
   systemPrompt: string,
-  onDownloadProgress?: (pct: number) => void
+  onDownloadProgress?: (pct: number) => void,
+  compactPrompt?: string
 ): Promise<{ text: string | null; error?: string }> {
   if (typeof window === 'undefined') {
     return { text: null, error: 'Window unavailable' };
   }
 
-  const combinedPrompt = `${systemPrompt}\n\n---\nUser request: ${userPrompt}`;
+  const combinedPrompt = compactPrompt || `${systemPrompt}\n\n---\nUser request: ${userPrompt}`;
 
   // Path A: Standard W3C / Chrome 138+ `self.LanguageModel`
   if ((self as any).LanguageModel) {
     try {
       const lm = (self as any).LanguageModel;
+      const monitor = (m: any) => {
+        m?.addEventListener?.('downloadprogress', (e: any) => {
+          if (typeof e?.loaded === 'number') {
+            onDownloadProgress?.(Math.round(e.loaded * 100));
+          }
+        });
+      };
       const createOpts: Record<string, any> = {
         expectedInputs: [{ type: 'text', languages: ['en'] }],
         expectedOutputs: [{ type: 'text', languages: ['en'] }],
-        monitor(m: any) {
-          m?.addEventListener?.('downloadprogress', (e: any) => {
-            if (typeof e?.loaded === 'number') {
-              onDownloadProgress?.(Math.round(e.loaded * 100));
-            }
-          });
-        },
+        monitor,
       };
-      const session = await lm.create(createOpts);
+      let session: any;
+      try {
+        session = await lm.create(createOpts);
+      } catch {
+        session = await lm.create({ monitor });
+      }
       let answer: string;
       try {
         // Newer Chrome Prompt API accepts plain string or message array
@@ -688,8 +806,13 @@ export async function runHybridCommerceTurn(input: HybridTurnInput): Promise<Hyb
   const fullUserPrompt = `${historyContext ? `Recent chat (background context only; always match the language of Latest User Request below):\n${historyContext}\n\n` : ''}Latest User Request:\n${input.text}${docContext}`.trim();
 
   // For on-device ChromeAdapterImpl (which does not forward request.systemInstruction to session.prompt),
-  // embed compact store context directly inside the prompt sent to generateContent.
-  const promptWithEmbeddedContext = `${systemInstruction}\n\nUser: ${fullUserPrompt}`;
+  // Android AICore, and direct Chrome Prompt API, send a compact prompt sized for small Nano token quotas.
+  const promptWithEmbeddedContext = buildOnDevicePrompt(
+    snapshot,
+    input.text,
+    input.history,
+    input.documents
+  );
 
   input.onActivity?.({
     phase: 'THINKING',
@@ -708,6 +831,49 @@ export async function runHybridCommerceTurn(input: HybridTurnInput): Promise<Hyb
   });
 
   let lastSdkError = '';
+
+  // 0b. When Chrome's Prompt API requires bare availability/create (without expectedOutputs)
+  // and model is already ready locally, run direct on-device inference before cloud fallback.
+  if (
+    !hasImages &&
+    modelTier !== 'high' &&
+    diag.hasLanguageModelGlobal &&
+    diag.promptApiRequiresSimpleCreate &&
+    diag.availability === 'available'
+  ) {
+    const directFirst = await tryChromeDirectPromptApi(
+      fullUserPrompt,
+      systemInstruction,
+      undefined,
+      promptWithEmbeddedContext
+    );
+    if (directFirst.text) {
+      const { cleanText, proposal } = extractProposalFromText(directFirst.text);
+      const durationSeconds = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+      return {
+        content: cleanText,
+        proposal,
+        durationSeconds,
+        hadTools: true,
+        executionEngine: 'CHROME_NANO_DIRECT',
+        cognitiveSteps: [
+          {
+            title: 'Executed On-Device via Chrome Gemini Nano',
+            detail: `Adaptive Prompt API fallback · $0 cloud cost · Offline-ready (${durationSeconds}s)`,
+            status: 'completed',
+          },
+          {
+            title: 'Live Commerce State Grounded',
+            detail: `${snapshot.store.name}: ${snapshot.products.length} products · ${snapshot.posShift?.transactionCount || 0} POS txs`,
+            status: 'completed',
+          },
+        ],
+      };
+    }
+    if (directFirst.error) {
+      lastSdkError = directFirst.error;
+    }
+  }
 
   // 0. Android Native AICore On-Device Bridge (Capacitor Android)
   if (
@@ -957,13 +1123,18 @@ export async function runHybridCommerceTurn(input: HybridTurnInput): Promise<Hyb
       ],
     });
 
-    const direct = await tryChromeDirectPromptApi(fullUserPrompt, systemInstruction, (pct) => {
-      input.onActivity?.({
-        phase: 'WORKING',
-        subText: `Downloading Gemini Nano (${pct}%)...`,
-        startTime,
-      });
-    });
+    const direct = await tryChromeDirectPromptApi(
+      fullUserPrompt,
+      systemInstruction,
+      (pct) => {
+        input.onActivity?.({
+          phase: 'WORKING',
+          subText: `Downloading Gemini Nano (${pct}%)...`,
+          startTime,
+        });
+      },
+      promptWithEmbeddedContext
+    );
 
     if (direct.text) {
       const { cleanText, proposal } = extractProposalFromText(direct.text);
